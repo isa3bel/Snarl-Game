@@ -9,6 +9,7 @@ The module must support these operations:
 - a query whether a specified character can reach a designated town without running into any other characters.
 
 Specification in English with Java specific vocab as necessary.
+
 --------------------------------------------------------------------------------------------------------------------
 
 Java 1.8
