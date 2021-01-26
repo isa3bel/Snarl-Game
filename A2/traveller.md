@@ -5,10 +5,13 @@ Java 1.8
 ## Specifies the entry point for the Traveler game
 
 ## Suggested implementation details
-### Implementation of Traveller interface
+### Implementation of Traveller
 
 
-### Town interface
+### Town representation
+Towns should have a concept of the other towns that are directly reachable from that Town, as well as the characters currently occupying the Town. Therefore, we might expect for a Town to have a public interface with methods that check if a Town has a character with a given name or calculates whether another town is reachable without seeing any characters.  
+  
+Some challenges might be in making sure that Towns are not while traversing the map, so it is crucial to make sure that the implementation details account for keeping track of visited Towns in the network.
 
-
-### Character interface
+### Character representation
+The character interface should be relatively simple. The primary feature of this interface should be a method to confirm that some Character has a given identity, e.g. in the case of this application, that some Character has a given name.  
