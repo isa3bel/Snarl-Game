@@ -1,5 +1,5 @@
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,47 +9,80 @@ import java.util.Scanner;
 public class A2 {
 
   public static void main(String[] args) throws IOException {
-    ArrayList<JsonElement> parsedInput = A2.parseInput(System.in);
+    ArrayList<NumJson> parsedInput = A2.parseInput(System.in);
+    Function<Integer> function = A2.getFunctionFromArg(args[1]);
+    for (NumJson numJson : parsedInput) {
+      int total = numJson.calculateTotal(function);
+      Result result = new Result(numJson, total);
 
+      // should be like "gson.serialize(result)" but i have not set that up yet
+      System.out.println(result.toString());
+    }
   }
 
-  // ASSUMPTION: additional whitespace can be ignored, but there is always at least 1 whitespace
-  private static ArrayList<JsonElement> parseInput(InputStream input) throws IOException {
+  private static Function<Integer> getFunctionFromArg(String functionType) throws IOException {
+    switch (functionType) {
+      case "--sum":
+        return new Sum();
+      case "--product":
+        return new Product();
+      default:
+        throw new IOException("expected");
+    }
+  }
+
+  private static ArrayList<NumJson> parseInput(InputStream input) throws IOException {
     Scanner scanner = new Scanner(input);
-    ArrayList<JsonElement> numJsons = new ArrayList<>();
+    ArrayList<NumJson> numJsons = new ArrayList<>();
 
     while (scanner.hasNext()) {
-      /**
-       * problem described here: https://piazza.com/class/kjj18tz29a76p2?cid=54
-       * if we could have a delimeter this would be easier
-       * or if we only got a single piece of json at a time, would also be easier
-       *
-       * ideally need to do something like:
-       * https://stackoverflow.com/questions/20327670/deserialize-recursive-polymorphic-class-in-gson
-       */
-      String jsonString = A2.readJsonString(scanner, 0, 0);
-      JsonElement parsed = JsonParser.parseString(jsonString);
-      numJsons.add(parsed);
+      String jsonString = A2.readJsonString(scanner, 0, 0, false);
+      Gson gson = new GsonBuilder()
+          .registerTypeAdapter(NumJson.class, new NumJsonDeserializer())
+          .create();
+
+      NumJson nextNumJson = gson.fromJson(jsonString, NumJson.class);
+      numJsons.add(nextNumJson);
     }
 
     return numJsons;
   }
 
-  private static String readJsonString(Scanner scanner, int arrBalance, int objBalance)
+  private static String readJsonString(Scanner scanner, int arrBalance, int objBalance, boolean isInString)
       throws IOException {
-    if (arrBalance == 0 && objBalance == 0) return "";
-    if (!scanner.hasNext()) {
-      throw new IOException("invalid json - expected closing bracket for array or object.");
+    String next = scanner.next();
+    int nextArrBalance = arrBalance;
+    int nextObjBalance = objBalance;
+    boolean nextIsInString = isInString;
+    for (int idx = 0; idx < next.length(); idx++) {
+      char c = next.charAt(idx);
+      boolean test = c == '[';
+      switch (c) {
+        case '"':
+          nextIsInString = !nextIsInString;
+          break;
+        case '[':
+          nextArrBalance += isInString ? 0 : 1;
+          break;
+        case ']':
+          nextArrBalance += isInString ? 0 : -1;
+          break;
+        case '{':
+          nextObjBalance += isInString ? 0 : 1;
+          break;
+        case '}':
+          nextObjBalance += isInString ? 0 : -1;
+          break;
+        default: continue;
+      }
     }
 
-    String next = scanner.next();
-
-    // ASSUMPTION: no "[", "]", "{", or "}" in json strings
-    if (next.contains("[")) arrBalance++;
-    if (next.contains("{")) objBalance++;
-    if (next.contains("]")) arrBalance--;
-    if (next.contains("}")) objBalance--;
-
-    return next + A2.readJsonString(scanner, arrBalance, objBalance);
+    boolean isJsonComplete = nextArrBalance == 0 && nextObjBalance == 0 && !nextIsInString;
+    if (!isJsonComplete && !scanner.hasNext()) {
+      throw new IOException("invalid json - expected closing bracket for array or object.");
+    }
+    return isJsonComplete
+        ? next
+        : next + A2.readJsonString(scanner, nextArrBalance, nextObjBalance, nextIsInString);
   }
 }
