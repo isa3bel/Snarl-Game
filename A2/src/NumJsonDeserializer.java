@@ -3,6 +3,9 @@ import javafx.util.Pair;
 
 import java.lang.reflect.Type;
 
+/**
+ * Converts JsonElements to NumJson.
+ */
 class NumJsonDeserializer implements JsonDeserializer<NumJson> {
 
   @Override
@@ -27,7 +30,13 @@ class NumJsonDeserializer implements JsonDeserializer<NumJson> {
     }
   }
 
-  private NumJson primitiveToNumJsonPrimitive(JsonPrimitive primitive) {
+  /**
+   * Converts a json number or string to a NumJson object
+   * @param primitive the JsonPrimitive to convert to NumJson
+   * @return a NumJson version of the JsonPrimitive
+   * @throws JsonParseException if the JsonPrimitive is not a valid NumJson (must be String or Integer)
+   */
+  private NumJson primitiveToNumJsonPrimitive(JsonPrimitive primitive) throws JsonParseException {
     try {
       return new NumJsonNumber(primitive.getAsInt());
     } catch (NumberFormatException notNum) {
@@ -40,6 +49,12 @@ class NumJsonDeserializer implements JsonDeserializer<NumJson> {
     }
   }
 
+  /**
+   * Converts a json array to a valid NumJsonArray
+   * @param array the JsonArray to convert to NumJson
+   * @param context the context in which to convert the values of the json array
+   * @return a NumJson version of the JsonArray
+   */
   private NumJsonArray arrayToNumJsonArray(JsonArray array, JsonDeserializationContext context) {
     NumJson[] numJsons = new NumJson[array.size()];
 
@@ -51,6 +66,12 @@ class NumJsonDeserializer implements JsonDeserializer<NumJson> {
     return new NumJsonArray(numJsons);
   }
 
+  /**
+   * Converts a json object to a valid NumJsonObject
+   * @param object the JsonObject to convert to NumJson
+   * @param context the context in which to convert the values of the json object
+   * @return a NumJson version of the JsonObject
+   */
   private NumJsonObject objectToNumJsonObject(JsonObject object, JsonDeserializationContext context) {
     Pair<String, NumJson>[] pairs = new Pair[object.size()];
     int idx = 0;

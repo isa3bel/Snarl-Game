@@ -1,11 +1,7 @@
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * Runner for Warm-up Assignment 2
@@ -13,14 +9,14 @@ import java.util.Scanner;
 public class A2 {
 
   /**
-   *
+   * Takes the input, calculates the sum/product, and prints the result.
    * @param args an array with input args to the program
    *             expecting [ filename, typeOfSum ]
-   * @throws IOException
+   * @throws IOException when System.in is garbage
    */
   public static void main(String[] args) throws IOException {
-    // TODO: move parse input and accompanying stuff to a new class
-    ArrayList<NumJson> parsedInput = A2.parseInput(System.in);
+    InputConverter inputConverter = new InputConverter(System.in);
+    ArrayList<NumJson> parsedInput = inputConverter.parseInput();
     Function<Integer> function = A2.getFunctionFromArg(args[0]);
 
     for (NumJson numJson : parsedInput) {
@@ -42,61 +38,7 @@ public class A2 {
       case "--product":
         return new Product();
       default:
-        // TODO: better error here
-        throw new IOException("unexpected ...");
+        throw new IOException("unexpected argument - expected '--sum' or '--product', got: " + functionType);
     }
-  }
-
-  private static ArrayList<NumJson> parseInput(InputStream input) throws IOException {
-    Scanner scanner = new Scanner(input);
-    ArrayList<NumJson> numJsons = new ArrayList<>();
-    Gson gson = new GsonBuilder()
-        .registerTypeAdapter(NumJson.class, new NumJsonDeserializer())
-        .create();
-
-    while (scanner.hasNext()) {
-      String jsonString = A2.readJsonString(scanner, 0, 0, false);
-      NumJson nextNumJson = gson.fromJson(jsonString, NumJson.class);
-      numJsons.add(nextNumJson);
-    }
-
-    return numJsons;
-  }
-
-  private static String readJsonString(Scanner scanner, int arrBalance, int objBalance, boolean isInString)
-      throws IOException {
-    String next = scanner.next();
-    int nextArrBalance = arrBalance;
-    int nextObjBalance = objBalance;
-    boolean nextIsInString = isInString;
-    for (int idx = 0; idx < next.length(); idx++) {
-      switch (next.charAt(idx)) {
-        case '"':
-          nextIsInString = !nextIsInString;
-          break;
-        case '[':
-          nextArrBalance += nextIsInString ? 0 : 1;
-          break;
-        case ']':
-          nextArrBalance += nextIsInString ? 0 : -1;
-          break;
-        case '{':
-          nextObjBalance += nextIsInString ? 0 : 1;
-          break;
-        case '}':
-          nextObjBalance += nextIsInString ? 0 : -1;
-          break;
-        default:
-          continue;
-      }
-    }
-
-    boolean isJsonComplete = nextArrBalance == 0 && nextObjBalance == 0 && !nextIsInString;
-    if (!isJsonComplete && !scanner.hasNext()) {
-      throw new IOException("invalid json - expected closing bracket for array or object.");
-    }
-    return isJsonComplete
-        ? next
-        : next + A2.readJsonString(scanner, nextArrBalance, nextObjBalance, nextIsInString);
   }
 }
