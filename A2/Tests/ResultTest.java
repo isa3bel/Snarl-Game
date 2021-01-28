@@ -1,5 +1,6 @@
 import static org.junit.Assert.*;
 
+import javafx.util.Pair;
 import org.junit.Test;
 
 public class ResultTest {
@@ -20,11 +21,24 @@ public class ResultTest {
 
   @Test
   public void testToStringArray() {
+    NumJson[] j = {new NumJsonNumber(6), new NumJsonNumber(5), new NumJsonString("5")};
+    NumJsonArray arr = new NumJsonArray(j);
+    Result r = new Result(arr, 11);
+    String s = r.toString();
 
+    assertEquals(s, "{ \"object\": [ 6, 5, \"5\" ], \"total\": 11 }");
   }
 
   @Test
   public void testToStringObject() {
+    Function<Integer> product = new Product();
+    Pair<String, NumJson> payloadPair = new Pair("payload", new NumJsonNumber(3));
+    Pair<String, NumJson> payloadPairBad = new Pair("bad", new NumJsonNumber(3));
+    Pair[] pairs = {payloadPair, payloadPairBad};
+    NumJson obj = new NumJsonObject(pairs);
 
+    Result r = new Result(obj, 3);
+    String s = r.toString();
+    assertEquals(s, "{ \"object\": { \"payload\": 3, \"bad\": 3 }, \"total\": 3 }");
   }
 }
