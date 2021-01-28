@@ -24,10 +24,12 @@ public class NumJsonObject implements NumJson {
   @Override
   public String toString() {
     String contents = "";
-    for (Pair<String, NumJson> pair : this.pairs) {
-      NumJson numJson = pair.getValue();
-      contents += "\"" + pair.getKey() + "\": " + numJson.toString() + ", ";
+    NumJson numJson;
+    for (int i = 0; i < pairs.length - 1; i++) {
+      numJson = pairs[i].getValue();
+      contents += "\"" + pairs[i].getKey() + "\": " + numJson.toString() + ", ";
     }
-    return "{ " + contents + "}";
+    numJson = pairs[pairs.length - 1].getValue();
+    return "{ " + contents + "\"" + pairs[pairs.length - 1].getKey() + "\": " + numJson.toString() + " }";
   }
 }

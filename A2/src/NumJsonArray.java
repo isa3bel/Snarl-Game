@@ -23,9 +23,9 @@ public class NumJsonArray implements NumJson {
   @Override
   public String toString() {
     String contents = "";
-    for (NumJson numJson : this.array) {
-      contents += numJson.toString() + ", ";
+    for (int i = 0; i < array.length - 1; i++) {
+      contents += array[i].toString() + ", ";
     }
-    return "[ " + contents + "]";
+    return "[ " + contents + array[array.length - 1].toString() + " ]";
   }
 }

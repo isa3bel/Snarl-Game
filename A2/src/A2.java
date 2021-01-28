@@ -31,7 +31,6 @@ public class A2 {
       int total = numJson.calculateTotal(function);
       Result result = new Result(numJson, total);
 
-      // TODO: should be like "gson.serialize(result)" but i have not set that up yet
       System.out.println(result.toString());
     }
   }

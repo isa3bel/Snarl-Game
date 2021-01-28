@@ -27,7 +27,9 @@ public class Product implements Function<Integer> {
     Integer product = 1;
     for (Pair<String, NumJson> pair : val) {
       NumJson numJson = pair.getValue();
-      product += numJson.calculateTotal(this);
+      if (pair.getKey().equals("payload")) {
+        product += numJson.calculateTotal(this);
+      }
     }
     return product;
   }

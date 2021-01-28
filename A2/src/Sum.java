@@ -27,7 +27,9 @@ public class Sum implements Function<Integer> {
     for (int idx = 0; idx < val.length; idx++) {
       Pair<String, NumJson> pair = val[idx];
       NumJson numJson = pair.getValue();
-      sum += numJson.calculateTotal(this);
+      if (pair.getKey().equals("payload")) {
+        sum += numJson.calculateTotal(this);
+      }
     }
     return sum;
   }
