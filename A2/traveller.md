@@ -9,11 +9,11 @@ For designing the Traveler module, we decided that the best approach would be to
 - public void placeCharacter(String characterName, String townName) - places the given character in the given town
 - public boolean canReachTownAlone(String characterName, String townName) - determines if the given character can reach the given town without running into another character
 
-Upon instantiating an object of this “Traveler” class, we suggest that the constructor take in a way to represent the network. This could be a long string such as:
+Upon instantiating an object of this “Traveler” class, we suggest that the constructor take in a way to represent the network. This could be a string such as:
 
 "TownB: TownA; TownC: TownA, TownD"
 
-which could then be parsed. Given the network specification, the “towns” or “nodes” should be created. The network of towns is suggested to be an ArrayList of towns or nodes. 
+which could then be parsed. In this example, the "town name" would come before a colon. The reachable towns from that town would be listed, separated by commas. The towns and their reachable nodes would be separated by semi-colons. Given the network specification, the “towns” or “nodes” should be created. The network of towns is suggested to be an ArrayList of towns or nodes. 
 
 ## Suggested implementation details
 ### Implementation of Traveller
