@@ -88,7 +88,7 @@ public class SumTest {
 
     NumJson[] nestingArr = {new NumJsonNumber(4), new NumJsonString("garbage"), numJsonArray};
     NumJsonArray numJsonArray2 = new NumJsonArray(nestingArr);
-    Pair<String, NumJson> notPayloadPair = new Pair("payload", numJsonArray2);
+    Pair<String, NumJson> notPayloadPair = new Pair("not payload", numJsonArray2);
     Pair<String, NumJson> outerPayloadPair = new Pair("payload", new NumJsonNumber(2));
     Pair[] outerPairs = {notPayloadPair, outerPayloadPair};
 
