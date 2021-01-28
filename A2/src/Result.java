@@ -9,6 +9,6 @@ public class Result {
   }
 
   public String toString() {
-    return "{ object: " + this.object.toString() + ", total: " + this.total + " }";
+    return "{ \"object\": " + this.object.toString() + ", \"total\": " + this.total + " }";
   }
 }
