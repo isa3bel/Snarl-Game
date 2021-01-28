@@ -1,11 +1,18 @@
 import com.google.gson.JsonParseException;
-import javafx.util.Pair;
 
+/**
+ * A list of NumJson.
+ */
 public class NumJsonArray implements NumJson {
 
   private NumJson[] array;
 
-  NumJsonArray(NumJson[] array) {
+  /**
+   * Creates a NumJsonAray with the given array elements.
+   * @param array the NumJson elements of the array
+   * @throws JsonParseException if any array element is invalid NumJson (e.g. null)
+   */
+  NumJsonArray(NumJson[] array) throws JsonParseException {
     for (NumJson numJson : array) {
       if (numJson == null) {
         throw new JsonParseException("received invalid NumJson to NumJsonArray: null");
