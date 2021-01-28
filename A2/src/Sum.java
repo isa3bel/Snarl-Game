@@ -1,6 +1,6 @@
 import javafx.util.Pair;
 
-public class Sum extends Function<Integer> {
+public class Sum implements Function<Integer> {
 
   @Override
   public Integer calculateNumber(Integer val) {

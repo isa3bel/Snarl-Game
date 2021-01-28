@@ -1,21 +1,37 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Runner for Warm-up Assignment 2
+ */
 public class A2 {
 
+  /**
+   *
+   * @param args an array with input args to the program
+   *             expecting [ filename, typeOfSum ]
+   * @throws IOException
+   */
   public static void main(String[] args) throws IOException {
+    // TODO: move parse input and accompanying stuff to a new class
     ArrayList<NumJson> parsedInput = A2.parseInput(System.in);
-    Function<Integer> function = A2.getFunctionFromArg(args[1]);
+    Function<Integer> function = A2.getFunctionFromArg(args[0]);
+
     for (NumJson numJson : parsedInput) {
+      if (numJson == null) {
+        throw new JsonParseException("received invalid NumJson: null");
+      }
+
       int total = numJson.calculateTotal(function);
       Result result = new Result(numJson, total);
 
-      // should be like "gson.serialize(result)" but i have not set that up yet
+      // TODO: should be like "gson.serialize(result)" but i have not set that up yet
       System.out.println(result.toString());
     }
   }
@@ -27,20 +43,20 @@ public class A2 {
       case "--product":
         return new Product();
       default:
-        throw new IOException("expected");
+        // TODO: better error here
+        throw new IOException("unexpected ...");
     }
   }
 
   private static ArrayList<NumJson> parseInput(InputStream input) throws IOException {
     Scanner scanner = new Scanner(input);
     ArrayList<NumJson> numJsons = new ArrayList<>();
+    Gson gson = new GsonBuilder()
+        .registerTypeAdapter(NumJson.class, new NumJsonDeserializer())
+        .create();
 
     while (scanner.hasNext()) {
       String jsonString = A2.readJsonString(scanner, 0, 0, false);
-      Gson gson = new GsonBuilder()
-          .registerTypeAdapter(NumJson.class, new NumJsonDeserializer())
-          .create();
-
       NumJson nextNumJson = gson.fromJson(jsonString, NumJson.class);
       numJsons.add(nextNumJson);
     }
@@ -55,25 +71,24 @@ public class A2 {
     int nextObjBalance = objBalance;
     boolean nextIsInString = isInString;
     for (int idx = 0; idx < next.length(); idx++) {
-      char c = next.charAt(idx);
-      boolean test = c == '[';
-      switch (c) {
+      switch (next.charAt(idx)) {
         case '"':
           nextIsInString = !nextIsInString;
           break;
         case '[':
-          nextArrBalance += isInString ? 0 : 1;
+          nextArrBalance += nextIsInString ? 0 : 1;
           break;
         case ']':
-          nextArrBalance += isInString ? 0 : -1;
+          nextArrBalance += nextIsInString ? 0 : -1;
           break;
         case '{':
-          nextObjBalance += isInString ? 0 : 1;
+          nextObjBalance += nextIsInString ? 0 : 1;
           break;
         case '}':
-          nextObjBalance += isInString ? 0 : -1;
+          nextObjBalance += nextIsInString ? 0 : -1;
           break;
-        default: continue;
+        default:
+          continue;
       }
     }
 

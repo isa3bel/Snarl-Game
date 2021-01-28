@@ -7,7 +7,11 @@ public class NumJsonString implements NumJson {
   }
 
   @Override
-  public void calculateTotal(Function<Integer> function) {
-    function.calculateString(this.string);
+  public <T> T calculateTotal(Function<T> function) {
+    return function.calculateString(this.string);
+  }
+
+  public String toString() {
+    return "\"" + this.string + "\"";
   }
 }

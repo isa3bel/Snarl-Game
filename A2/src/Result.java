@@ -7,4 +7,8 @@ public class Result {
     this.object = object;
     this.total = total;
   }
+
+  public String toString() {
+    return "{ object: " + this.object.toString() + ", total: " + this.total + " }";
+  }
 }

@@ -8,6 +8,7 @@ class NumJsonDeserializer implements JsonDeserializer<NumJson> {
   @Override
   public NumJson deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
       throws JsonParseException {
+
     if (json.isJsonPrimitive()) {
       JsonPrimitive primitive = (JsonPrimitive) json;
       return this.primitiveToNumJsonPrimitive(primitive);
@@ -29,7 +30,7 @@ class NumJsonDeserializer implements JsonDeserializer<NumJson> {
   private NumJson primitiveToNumJsonPrimitive(JsonPrimitive primitive) {
     try {
       return new NumJsonNumber(primitive.getAsInt());
-    } catch (JsonParseException notNum) {
+    } catch (NumberFormatException notNum) {
       try {
         return new NumJsonString(primitive.getAsString());
       } catch (JsonParseException notNumAndNotString) {
@@ -60,6 +61,7 @@ class NumJsonDeserializer implements JsonDeserializer<NumJson> {
       pairs[idx] = new Pair(key, numJson);
       idx++;
     }
+
     return new NumJsonObject(pairs);
   }
 }

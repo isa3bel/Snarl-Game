@@ -1,13 +1,13 @@
 import javafx.util.Pair;
 
-public abstract class Function<T> {
+public interface Function<T> {
 
-  public abstract T calculateNumber(Integer val);
+   T calculateNumber(Integer val);
 
-  public abstract T calculateString(String val);
+   T calculateString(String val);
 
-  public abstract T calculateArray(NumJson[] val);
+   T calculateArray(NumJson[] val);
 
-  public abstract T calculateObject(Pair<String, NumJson>[] val);
+   T calculateObject(Pair<String, NumJson>[] val);
 
 }

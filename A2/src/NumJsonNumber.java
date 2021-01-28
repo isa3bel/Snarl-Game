@@ -10,4 +10,9 @@ public class NumJsonNumber implements NumJson {
   public <T> T calculateTotal(Function<T> function) {
     return function.calculateNumber(this.number);
   }
+
+  @Override
+  public String toString() {
+    return "" + this.number;
+  }
 }

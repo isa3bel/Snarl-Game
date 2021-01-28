@@ -1,6 +1,7 @@
+import com.google.gson.JsonParseException;
 import javafx.util.Pair;
 
-public class Product extends Function<Integer> {
+public class Product implements Function<Integer> {
 
   @Override
   public Integer calculateNumber(Integer val) {
@@ -15,8 +16,8 @@ public class Product extends Function<Integer> {
   @Override
   public Integer calculateArray(NumJson[] val) {
     Integer product = 1;
-    for (int idx = 0; idx < val.length; idx++) {
-      product *= val[idx].calculateTotal(this);
+    for (NumJson numJson : val) {
+      product *= numJson.calculateTotal(this);
     }
     return product;
   }
@@ -24,8 +25,7 @@ public class Product extends Function<Integer> {
   @Override
   public Integer calculateObject(Pair<String, NumJson>[] val) {
     Integer product = 1;
-    for (int idx = 0; idx < val.length; idx++) {
-      Pair<String, NumJson> pair = val[idx];
+    for (Pair<String, NumJson> pair : val) {
       NumJson numJson = pair.getValue();
       product += numJson.calculateTotal(this);
     }
