@@ -1,5 +1,4 @@
 import com.google.gson.JsonParseException;
-import javafx.util.Pair;
 
 /**
  * An object wih String keys and NumJson elements as the values for those keys.

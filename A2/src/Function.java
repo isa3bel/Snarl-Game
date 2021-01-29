@@ -1,5 +1,3 @@
-import javafx.util.Pair;
-
 public interface Function<T> {
 
    T calculateNumber(Integer val);

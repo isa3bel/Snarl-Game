@@ -1,9 +1,7 @@
 import static org.junit.Assert.*;
 
 import java.io.IOException;
-import javafx.util.Pair;
 import org.junit.Test;
-import java.util.*;
 
 public class ProductTests {
 

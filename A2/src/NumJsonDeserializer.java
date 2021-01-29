@@ -1,6 +1,4 @@
 import com.google.gson.*;
-import javafx.util.Pair;
-
 import java.lang.reflect.Type;
 
 /**

@@ -1,4 +1,3 @@
-import javafx.util.Pair;
 
 /**
  * Function object that calculates the sum of all the numbers in a NumJson.

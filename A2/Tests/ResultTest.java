@@ -1,6 +1,4 @@
 import static org.junit.Assert.*;
-
-import javafx.util.Pair;
 import org.junit.Test;
 
 public class ResultTest {

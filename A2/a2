@@ -1,4 +1,4 @@
 #!/bin/bash
 
-java -jar Edhelen.jar $1
+java -jar A2.jar $1
 
