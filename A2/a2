@@ -1,4 +1,0 @@
-#!/bin/bash
-
-java -jar A2.jar $1
-
