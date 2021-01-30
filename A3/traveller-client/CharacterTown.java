@@ -7,4 +7,8 @@ public class CharacterTown {
     this.character = character;
     this.town = town;
   }
+
+  public String toString() {
+    return this.character + ", " + this.town;
+  }
 }

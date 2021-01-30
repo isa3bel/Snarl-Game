@@ -6,4 +6,7 @@ public class PlaceCharacter implements Command {
     this.characterTown = characterTown;
   }
 
+  public String toString() {
+    return "place: " + this.characterTown.toString();
+  }
 }

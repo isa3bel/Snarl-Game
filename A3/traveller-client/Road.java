@@ -8,4 +8,11 @@ public class Road {
     this.to = to;
   }
 
+  public String getFrom() {
+    return from;
+  }
+
+  public String getTo() {
+    return to;
+  }
 }

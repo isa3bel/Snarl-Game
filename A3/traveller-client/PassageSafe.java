@@ -5,4 +5,9 @@ public class PassageSafe implements Command {
   PassageSafe(CharacterTown characterTown) {
     this.characterTown = characterTown;
   }
+
+  public String toString() {
+    return "safe: " + characterTown.toString();
+  }
+
 }
