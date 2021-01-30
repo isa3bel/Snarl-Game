@@ -3,68 +3,55 @@ import java.net.*;
 
 public class Client {
 
-  private Socket socket = null;
-  private BufferedReader input = null;
-  private DataOutputStream out = null;
+  private Socket socket;
+  private BufferedReader in;
+  private PrintWriter out;
 
-  public Client(String host, int port) {
+  Client(String host, int port) throws IOException {
+    this.socket = new Socket(host, port);
 
-    // establish a connection
-    try {
-      socket = new Socket(host, port);
-      System.out.println("Connected");
+    InputStreamReader inputReader = new InputStreamReader(this.socket.getInputStream());
+    this.in = new BufferedReader(inputReader);
 
-      input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-      out = new DataOutputStream((socket.getOutputStream()));
-    } catch (IOException i) {
-      System.out.print(i);
+    OutputStream output = this.socket.getOutputStream();
+    this.out = new PrintWriter(output, true);
+  }
+
+  private void sendMessageToServer(String message) throws IOException {
+    System.out.println("sending message: " + message);
+    this.out.println(message);
+  }
+
+  private String readMessages() throws IOException {
+    String messages = "";
+    String current = "";
+
+    while(current != null && !current.equals("END")) {
+      messages += current;
+      current = this.in.readLine();
     }
 
-    String line = "";
+    return messages;
+  }
 
-    while(!line.equals("END")) {
-      System.out.print("gets here");
-      try {
-        line = input.readLine();
-        out.writeUTF(line);
-      } catch(IOException exception) {
-        System.out.println(exception);
-      }
-    }
-
-    try {
-      input.close();
-      out.close();
-      socket.close();
-    } catch(IOException exception) {
-      System.out.println(exception);
-    }
+  private void closeConnection() throws IOException {
+    this.in.close();
+    this.out.close();
+    this.socket.close();
   }
 
   public static void main(String[] args) throws IOException {
-    Client c = new Client("localhost", 8080);
-
+    Client client = new Client("localhost", 8000);
+    System.out.println("client created");
+    client.sendMessageToServer("12        [2, \"foo\", \n" +
+        "4]  { \"name\" : \"SwDev\", \"payload\" : \n" +
+        "  [12, 33]     , \n" +
+        "        \"other\" : { \"payload\" : [ 4, 7 ] } }");
+    client.sendMessageToServer("END");
+    String received = client.readMessages();
+    System.out.println("received from server: " + received);
+    System.out.println("closing connection");
+    client.closeConnection();
   }
 
 }
-
-//import java.net.*;
-//import java.io.*;
-//
-//public class Client {
-//  public static void main(String[] args) throws IOException {
-//    Socket s= new Socket("localhost", 8080);
-//
-//    PrintWriter pr = new PrintWriter(s.getOutputStream());
-//    pr.println("hello");
-//    pr.flush();
-//
-//    InputStreamReader in = new InputStreamReader(s.getInputStream());
-//    BufferedReader bf = new BufferedReader(in);
-//
-//    String str = bf.readLine();
-//    System.out.println("client : " + str);
-//
-//
-//  }
-//}
