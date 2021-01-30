@@ -48,7 +48,7 @@ public class TravellerClient {
     System.out.println("client created");
 
     // read from STDIN, convert JSON to strings for client
-    InputReader<Command> reader = new InputReader<>(System.in, Command.class);
+    InputReader<Command> reader = new InputReader<>(System.in, Command.class, new CommandDeserialization());
     ArrayList<Command> commands = reader.parseInput();
 
     commands.stream().forEach(command -> {
