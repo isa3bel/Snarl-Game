@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +9,16 @@ public class MakeTown implements Command {
 
   private Road[] roads;
 
-  MakeTown(Road[] roads) {
+  /**
+   * Makes a command to create a town network with the given roads.
+   * @param roads the roads of the town network
+   * @throws IllegalArgumentException if any of the roads do not have both a to and from
+   */
+  MakeTown(Road[] roads) throws IllegalArgumentException {
+    if (Arrays.stream(roads).anyMatch(road -> road.getFrom() == null || road.getTo() == null)) {
+      throw new IllegalArgumentException("to make a town, all roads must have a non-null to and from field");
+    }
+
     this.roads = roads;
   }
 
@@ -27,8 +37,8 @@ public class MakeTown implements Command {
     }
 
     String serverString = this.makeStringForServer();
-    // use the server to make the town network, return that value
-    return null;
+    ClientTownNetworkGarbagePlaceholder createdTownNetwork = new ClientTownNetworkGarbagePlaceholder(serverString);
+    return createdTownNetwork;
   }
 
   /**
@@ -60,8 +70,10 @@ public class MakeTown implements Command {
   private String makeStringForServer() {
     Map<String, String> reachable = this.getReachableRoadsByTown();
     String result = "";
+    int idx = 0;
     for (String townList : reachable.values()) {
-      result += townList + "; ";
+      result += townList;
+      result += idx++ < reachable.size() - 1 ? "; " : "";
     }
     return result;
   }

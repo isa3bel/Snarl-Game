@@ -1,18 +1,16 @@
+/**
+ * A connector between two towns in the RPG.
+ */
 public class Road {
 
   private String from;
   private String to;
 
-  Road(String from, String to) {
-    this.from = from;
-    this.to = to;
-  }
-
   public String getFrom() {
-    return from;
+    return this.from;
   }
 
   public String getTo() {
-    return to;
+    return this.to;
   }
 }

@@ -6,11 +6,6 @@ public class PassageSafe implements Command {
   private String character;
   private String town;
 
-  PassageSafe(String character, String town) {
-    this.character = character;
-    this.town = town;
-  }
-
   /**
    * Executes asking if the passage is safe and prints the result from the server.
    * @param townNetwork the town network on which to do the command
@@ -24,8 +19,12 @@ public class PassageSafe implements Command {
       throw new IllegalArgumentException("must create a town network before executing commands on the network");
     }
 
-    boolean isReachable = townNetwork.canReachTownAlone(this.character, this.town);
-    System.out.println(isReachable);
+    if (this.character != null && this.town != null) {
+      // do only the valid commands
+      boolean isReachable = townNetwork.canReachTownAlone(this.character, this.town);
+      System.out.println(isReachable);
+    }
+
     return townNetwork;
   }
 }
