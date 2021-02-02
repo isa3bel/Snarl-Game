@@ -2,6 +2,9 @@ import com.google.gson.*;
 
 import java.lang.reflect.Type;
 
+/**
+ * Processes and deserializes the json commands from System.in
+ */
 public class CommandDeserialization implements JsonDeserializer<Command> {
   @Override
   public Command deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context)
@@ -16,16 +19,20 @@ public class CommandDeserialization implements JsonDeserializer<Command> {
         Road[] roads = context.deserialize(paramsElement, Road[].class);
         return new MakeTown(roads);
       case "place":
-        CharacterTown place = context.deserialize(paramsElement, CharacterTown.class);
-        return new PlaceCharacter(place);
+        return context.deserialize(paramsElement, PlaceCharacter.class);
       case "passage-safe?":
-        CharacterTown isSafe = context.deserialize(paramsElement, CharacterTown.class);
-        return new PassageSafe(isSafe);
+        return context.deserialize(paramsElement, PassageSafe.class);
       default:
-        throw new JsonParseException("unexpacted command type, received: " + commandType);
+        throw new JsonParseException("unexpected command type, received: " + commandType);
     }
   }
 
+  /**
+   * Gets the given json element as an object with an error wrapper
+   * @param jsonElement
+   * @return json object version of element
+   * @throws JsonParseException if not an object
+   */
   private JsonObject getObject(JsonElement jsonElement) throws JsonParseException {
     try {
       return jsonElement.getAsJsonObject();
@@ -34,6 +41,12 @@ public class CommandDeserialization implements JsonDeserializer<Command> {
     }
   }
 
+  /**
+   * Gets the given json element as a string with an error wrapper
+   * @param jsonElement
+   * @return string version of element
+   * @throws JsonParseException if not a string
+   */
   private String getString(JsonElement jsonElement) throws JsonParseException {
     try {
       return jsonElement.getAsString();

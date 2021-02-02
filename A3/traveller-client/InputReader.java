@@ -13,12 +13,6 @@ public class InputReader<T> {
   private Class<T> classOfT;
   private Gson gson;
 
-  InputReader(InputStream input, Class<T> classOfT) {
-    this.scanner = new Scanner(input);
-    this.classOfT = classOfT;
-    this.gson = new GsonBuilder().create();
-  }
-
   InputReader(InputStream input, Class<T> classOfT, JsonDeserializer<T> deserializer) {
     this.scanner = new Scanner(input);
     this.classOfT = classOfT;
