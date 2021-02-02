@@ -1,5 +1,7 @@
+package travellerServer;
+
 /**
- * A Town in the RPG.
+ * A travellerServer.Town in the RPG.
  */
 public class Town {
   private String name;
@@ -46,7 +48,7 @@ public class Town {
    * @param character the character to set
    */
   public void setCharacter(Character character) {
-    if (character == null) throw new IllegalArgumentException("Character cannot be null");
+    if (character == null) throw new IllegalArgumentException("travellerServer.Character cannot be null");
     this.character = character;
   }
 

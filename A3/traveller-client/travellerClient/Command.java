@@ -1,3 +1,5 @@
+package travellerClient;
+
 public interface Command {
 
   /**

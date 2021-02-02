@@ -1,17 +1,18 @@
+package travellerClient;
+
 /**
- * Command to place a character at a given town.
+ * Executes the command to query if a passage is safe.
  */
-public class PlaceCharacter implements Command {
+public class PassageSafe implements Command {
 
   private String character;
   private String town;
 
   /**
-   * Executes the server's placeCharacter method.
+   * Executes asking if the passage is safe and prints the result from the server.
    * @param townNetwork the town network on which to do the command
-   * @return the town network after the character has been placed
-   * @throws IllegalArgumentException if the town network has not been created before trying to execute this command
-   *   (e.g. townNetwork is null)
+   * @return the townNetwork after executing the command
+   * @throws IllegalArgumentException when townNetwork does not exist (is null)
    */
   @Override
   public ClientTownNetworkGarbagePlaceholder doCommand(ClientTownNetworkGarbagePlaceholder townNetwork)
@@ -22,7 +23,8 @@ public class PlaceCharacter implements Command {
 
     if (this.character != null && this.town != null) {
       // do only the valid commands
-      townNetwork.placeCharacter(this.character, this.town);
+      boolean isReachable = townNetwork.canReachTownAlone(this.character, this.town);
+      System.out.println(isReachable);
     }
 
     return townNetwork;

@@ -1,3 +1,5 @@
+package travellerServer;
+
 /**
  * A character in the RPG.
  */

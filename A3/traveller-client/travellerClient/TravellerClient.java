@@ -1,3 +1,8 @@
+package travellerClient;
+
+import travellerClient.ClientTownNetworkGarbagePlaceholder;
+import travellerClient.Command;
+
 import java.io.IOException;
 import java.util.ArrayList;
 

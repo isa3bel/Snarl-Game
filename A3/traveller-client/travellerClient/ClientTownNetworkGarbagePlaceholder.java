@@ -1,3 +1,5 @@
+package travellerClient;
+
 /**
  * Placeholder interface while waiting for the server library.
  * Methods here specified in the Traveller.md file in A2, therefore are expected.
@@ -11,7 +13,7 @@ public class ClientTownNetworkGarbagePlaceholder {
   public String placeCharacter;
   public String canReachTownAlone;
 
-  ClientTownNetworkGarbagePlaceholder(String constructor) {
+  public ClientTownNetworkGarbagePlaceholder(String constructor) {
     // garbage mock for tests
     this.constructor = constructor;
   }

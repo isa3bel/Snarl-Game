@@ -1,9 +1,11 @@
+package travellerClient;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Command to make a town network using the server.
+ * travellerClient.Command to make a town network using the server.
  */
 public class MakeTown implements Command {
 

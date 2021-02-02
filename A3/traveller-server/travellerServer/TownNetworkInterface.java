@@ -1,21 +1,23 @@
+package travellerServer;
+
 import java.util.List;
 
 import javafx.util.Pair;
 
 /**
- * A TownNetwork in the RPG.
+ * A travellerServer.TownNetwork in the RPG.
  */
 public interface TownNetworkInterface {
 
   // DESIGN DECISION: this method is static so that it can be on the interface and we don't need to expose a bogus
   // constructor. the specification provided to us did not explicitly ask for this to be static, but it also did not
-  // provide an outline of a constructor, so this is meant to expose ONLY TownNetworkInterface (as TownNetwork can
+  // provide an outline of a constructor, so this is meant to expose ONLY travellerServer.TownNetworkInterface (as travellerServer.TownNetwork can
   // now be package public and not externally exposed)
   /**
-   * Makes a TownNetworkInterface with the given towns and roads
+   * Makes a travellerServer.TownNetworkInterface with the given towns and roads
    * @param towns the towns to put in this network
    * @param roads the roads to connect the towns
-   * @return a TownNetworkInterface with the given towns and roads
+   * @return a travellerServer.TownNetworkInterface with the given towns and roads
    * @throws IllegalArgumentException if the roads contain a town that is not in the network
    *   or if either roads or towns is null
    */

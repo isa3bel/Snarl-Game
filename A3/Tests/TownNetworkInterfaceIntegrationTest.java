@@ -1,5 +1,8 @@
 import javafx.util.Pair;
 import org.junit.Test;
+import travellerServer.Character;
+import travellerServer.Town;
+import travellerServer.TownNetworkInterface;
 
 import java.util.ArrayList;
 import java.util.List;

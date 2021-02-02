@@ -5,6 +5,9 @@ import static org.junit.Assert.*;
 import com.google.gson.JsonParseException;
 import org.junit.Before;
 import org.junit.Test;
+import travellerClient.ClientTownNetworkGarbagePlaceholder;
+import travellerClient.Command;
+import travellerClient.CommandDeserialization;
 
 public class CommandIntegrationTest {
 

@@ -1,3 +1,5 @@
+package travellerServer;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +18,7 @@ class TownNetwork implements TownNetworkInterface {
   private List<Pair<String, String>> roads;
 
   /**
-   * Creates a TownNetwork with the given towns and roads.
+   * Creates a travellerServer.TownNetwork with the given towns and roads.
    * @param towns the towns in this network
    * @param roads the roads connecting the towns
    * @throws IllegalArgumentException if the roads contain a town that is not in the network
@@ -152,7 +154,7 @@ class TownNetwork implements TownNetworkInterface {
    * Gets the town in the network with the given name or the town the given character name is in.
    * @param questionToAsk the function to use to find the town
    * @param errorSupplier function to get the error to throw if town is not found
-   * @return the Town
+   * @return the travellerServer.Town
    */
   private Town getTownWithParam(Predicate<Town> questionToAsk, Supplier<IllegalStateException> errorSupplier) {
     // DESIGN DECISION: multiple towns may match the criteria of having the same name or having a given character.

@@ -1,3 +1,5 @@
+package travellerClient;
+
 /**
  * A connector between two towns in the RPG.
  */
