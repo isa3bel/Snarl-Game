@@ -5,6 +5,7 @@ import travellerClient.Command;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 /**
  * Runs the traveller client by reading input from System.in and passing commands to server.
@@ -22,15 +23,22 @@ public class TravellerClient {
    * @throws IOException is System.in is closed
    */
   public static void main(String[] args) throws IOException {
-    InputReader<Command> reader = new InputReader<>(System.in, Command.class, new CommandDeserialization());
-    ArrayList<Command> commands = reader.parseInput();
+    InputReader<Command> reader = new InputReader<>(System.in, Command.class, new CommandDeserialization(), new DoCommand());
 
-    /** TODO: confirm that the input will actually close
-     * (otherwise we need to make "doCommand" happen at the
-     * sametime as the parsing) */
-    ClientTownNetworkGarbagePlaceholder townNetwork = null;
-    for (Command command : commands) {
-      townNetwork = command.doCommand(townNetwork);
+    // DESIGN DECISION: STDIN does not have to close before the code is actually run
+    // this means that "passage-safe?" will receive an immediate answer
+    reader.parseInput();
+  }
+
+  /**
+   * Mutable function for commands that runs a command and updates the townNetwork.
+   */
+  private static class DoCommand implements Consumer<Command> {
+
+    private ClientTownNetworkGarbagePlaceholder townNetwork;
+
+    public void accept(Command command) {
+      this.townNetwork = command.doCommand(townNetwork);
     }
   }
 
