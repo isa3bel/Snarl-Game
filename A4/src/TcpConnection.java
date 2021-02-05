@@ -11,7 +11,7 @@ class TcpConnection implements Tcp {
 
   TcpConnection(String host, int port) throws IOException {
     this.socket = new Socket(host, port);
-    this.socket.setSoTimeout(5000);
+    this.socket.setSoTimeout(10000);
 
     InputStreamReader inputReader = new InputStreamReader(this.socket.getInputStream());
     this.in = new BufferedReader(inputReader);

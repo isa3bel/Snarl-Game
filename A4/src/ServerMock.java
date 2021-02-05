@@ -3,7 +3,6 @@ package src;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class ServerMock {
 
@@ -37,15 +36,15 @@ public class ServerMock {
   }
 
   public static void main(String[] args) throws IOException {
-    ServerMock server = new ServerMock(8000);
-    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    ServerMock server = new ServerMock(8080);
+    BufferedReader stdinReader = new BufferedReader(new InputStreamReader(System.in));
 
 
     while (true) {
       String messages = server.readMessages();
       System.out.println("message received:" + messages);
 
-      String stdin= reader.readLine();
+      String stdin = stdinReader.readLine();
       if (stdin == null) break;
       if (stdin.equals(" ")) continue;
       System.out.println("sending: " + stdin);
