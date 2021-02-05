@@ -59,7 +59,6 @@ class DoCommand implements Consumer<Command>, Command.Visitor {
     if (!this.townHasBeenCreated) {
       throw new IllegalStateException("town must be created before placing a character");
     }
-    System.out.println("visiting place character");
     this.batchRequest.add(placeCharacter);
   }
 
@@ -69,7 +68,6 @@ class DoCommand implements Consumer<Command>, Command.Visitor {
       throw new IllegalStateException("town must be created before querying a passage");
     }
 
-    System.out.println("visiting passage safe");
     this.sendBatchRequest(passageSafe);
     Response response = this.receiveResponse();
     response.print(passageSafe);
