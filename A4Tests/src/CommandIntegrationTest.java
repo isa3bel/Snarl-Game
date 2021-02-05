@@ -126,24 +126,6 @@ public class CommandIntegrationTest {
 
   // PlaceCharacter
   @Test
-  public void deserializeInvalidPlaceCharacterDoesntError() {
-    TcpMock mock = new TcpMock();
-    DoCommand doCommand = new DoCommand(mock);
-
-    String makeTownJson = "{ \"command\": \"roads\", \"params\": [ { \"from\": \"A\", \"to\": \"B\" } ] }";
-    Command makeTown = this.gson.fromJson(makeTownJson, Command.class);
-    doCommand.accept(makeTown);
-
-    String json = "{ \"command\": \"place\", \"params\": { \"notCharacter\": \"Ferd\", \"town\": \"Boston\" } }";
-    Command command = this.gson.fromJson(json, Command.class);
-    doCommand.accept(command);
-
-
-
-    // TODO: what should we actually test here
-  }
-
-  @Test
   public void placeCharacterDoesntSendMessage() {
     String makeTownJson = "{ \"command\": \"roads\", \"params\": [ { \"from\": \"A\", \"to\": \"B\" } ] }";
     Command makeTown = this.gson.fromJson(makeTownJson, Command.class);
@@ -179,25 +161,6 @@ public class CommandIntegrationTest {
   }
 
   // PassageSafe
-  @Test
-  public void deserializeInvalidPassageSafeDoesntError() {
-    String response = "{ \"invalid\" : [],\n  \"response\" :  true }";
-    TcpMock mock = new TcpMock("", response);
-    DoCommand doCommand = new DoCommand(mock);
-
-    String makeTownJson = "{ \"command\": \"roads\", " +
-        "\"params\": [ { \"from\": \"A\", \"to\": \"B\" } ] }";
-    Command makeTown = this.gson.fromJson(makeTownJson, Command.class);
-    doCommand.accept(makeTown);
-
-    String json = "{ \"command\": \"passage-safe?\", \"params\": { \"notCharacter\": \"Ferd\", \"town\": \"Boston\" } }";
-    Command command = this.gson.fromJson(json, Command.class);
-    doCommand.accept(command);
-
-    // TODO: what should we actually test here
-
-  }
-
   @Test
   public void passageSafeSendsAMessage() {
     String response = "{ \"invalid\" : [],\n  \"response\" :  true }";
