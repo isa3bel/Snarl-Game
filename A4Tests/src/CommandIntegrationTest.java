@@ -24,18 +24,6 @@ public class CommandIntegrationTest {
         .create();
   }
 
-  public void setupReadWrite() {
-    PipedOutputStream out = new PipedOutputStream();
-    this.stream = new PrintStream(out);
-    try {
-      PipedInputStream in = new PipedInputStream(out);
-      this.reader = new BufferedReader(new InputStreamReader(in));
-    }
-    catch (IOException ioException) {
-      fail();
-    }
-  }
-
   // CommandDeserialization
   @Test
   public void invalidCommandType() {

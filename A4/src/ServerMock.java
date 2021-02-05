@@ -39,7 +39,6 @@ public class ServerMock {
     ServerMock server = new ServerMock(8080);
     BufferedReader stdinReader = new BufferedReader(new InputStreamReader(System.in));
 
-
     while (true) {
       String messages = server.readMessages();
       System.out.println("message received:" + messages);
