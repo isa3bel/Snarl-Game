@@ -226,72 +226,91 @@ public class CommandIntegrationTest {
 
   @Test
   public void passageSafeCombinesAllPlaceCharacterToBatchRequest() {
+    String response = "{ \"invalid\" : [],\n  \"response\" :  true }";
+    TcpMock mock = new TcpMock("", response);
+    DoCommand doCommand = new DoCommand(mock, this.stream);
+
+    String makeTownJson = "{ \"command\": \"roads\", " +
+        "\"params\": [ { \"from\": \"A\", \"to\": \"B\" }, " +
+        "{ \"from\": \"B\", \"to\": \"C\" }, " +
+        "{ \"from\": \"A\", \"to\": \"D\" }, " +
+        "{ \"from\": \"C\", \"to\": \"E\" } ] }";
+    Command makeTown = this.gson.fromJson(makeTownJson, Command.class);
+    doCommand.accept(makeTown);
+
+    String placeCharacterJson = "{ \"command\": \"place\", " +
+        "\"params\": { \"character\": \"Ferd\", \"town\": \"B\" } }";
+    Command placeCharacter = this.gson.fromJson(placeCharacterJson, Command.class);
+    doCommand.accept(placeCharacter);
+
+    String placeCharacterJson2 = "{ \"command\": \"place\", " +
+        "\"params\": { \"character\": \"Other\", \"town\": \"A\" } }";
+    Command placeCharacter2 = this.gson.fromJson(placeCharacterJson2, Command.class);
+    doCommand.accept(placeCharacter2);
+
+    String placeCharacterJson3 = "{ \"command\": \"place\", " +
+        "\"params\": { \"character\": \"Third\", \"town\": \"E\" } }";
+    Command placeCharacter3 = this.gson.fromJson(placeCharacterJson3, Command.class);
+    doCommand.accept(placeCharacter3);
+
+    String passageSafeJson = "{ \"command\": \"passage-safe?\", " +
+        "\"params\": { \"character\": \"Ferd\", \"town\": \"C\" } }";
+    Command passageSafe = this.gson.fromJson(passageSafeJson, Command.class);
+    doCommand.accept(passageSafe);
+
+    String expected = "{\"characters\":[{\"name\":\"Ferd\",\"town\":\"B\"}," +
+        "{\"name\":\"Other\",\"town\":\"A\"},{\"name\":\"Third\",\"town\":\"E\"}]," +
+        "\"query\":{\"character\":\"Ferd\",\"destination\":\"C\"}}";
+    assertEquals(expected, mock.sent);
   }
 
-//  @Test
-//  public void passageSafeFormatsResponse() {
-//    this.setupReadWrite();
-//    String response = "{ \"invalid\" : [],\n  \"response\" :  true }";
-//    TcpMock mock = new TcpMock("", response);
-//    DoCommand doCommand = new DoCommand(mock, this.stream);
-//
-//    String makeTownJson = "{ \"command\": \"roads\"," +
-//        "\"params\": [ { \"from\": \"A\", \"to\": \"B\" } ] }";
-//    Command makeTown = this.gson.fromJson(makeTownJson, Command.class);
-//    doCommand.accept(makeTown);
-//
-//    String placeCharacterJson = "{ \"command\": \"place\", " +
-//        "\"params\": { \"character\": \"Ferd\", \"town\": \"B\" } }";
-//    Command placeCharacter = this.gson.fromJson(placeCharacterJson, Command.class);
-//    doCommand.accept(placeCharacter);
-//
-//    String passageSafeJson = "{ \"command\": \"passage-safe?\", " +
-//        "\"params\": { \"character\": \"Ferd\", \"town\": \"A\" } }";
-//    Command passageSafe = this.gson.fromJson(passageSafeJson, Command.class);
-//    doCommand.accept(passageSafe);
-//
-//    String result = "";
-//    try {
-//      result = this.reader.readLine();
-//    }
-//    catch (IOException ioException) {
-//      fail();
-//    }
-//    assertEquals("{\"invalid\":[],\"response\":true}", result);
-//  }
 
-//  @Test
-//  public void passageSafeFormatsInvalidResponse() {
-//    this.setupReadWrite();
-//    String response = "{ \"invalid\" : [ { \"name\" : \"Ferd\", \"town\" : \"Boston\" } ],\n  " +
-//        "\"response\" :  true }";
-//    TcpMock mock = new TcpMock("", response);
-//    DoCommand doCommand = new DoCommand(mock, this.stream);
-//
-//    String makeTownJson = "{ \"command\": \"roads\", " +
-//        "\"params\": [ { \"from\": \"A\", \"to\": \"B\" } ] }";
-//    Command makeTown = this.gson.fromJson(makeTownJson, Command.class);
-//    doCommand.accept(makeTown);
-//
-//    String placeCharacterJson = "{ \"command\": \"place\", " +
-//        "\"params\": { \"character\": \"Ferd\", \"town\": \"Boston\" } }";
-//    Command placeCharacter = this.gson.fromJson(placeCharacterJson, Command.class);
-//    doCommand.accept(placeCharacter);
-//
-//    String passageSafeJson = "{ \"command\": \"passage-safe?\", " +
-//        "\"params\": { \"character\": \"Ferd\", \"town\": \"B\" } }";
-//    Command passageSafe = this.gson.fromJson(passageSafeJson, Command.class);
-//    doCommand.accept(passageSafe);
-//
-//    String result = "";
-//    try {
-//      result = this.reader.readLine();
-//    }
-//    catch (IOException ioException) {
-//      fail();
-//    }
-//    assertEquals("[\"invalid placement\", { \"name\" : \"Ferd\", \"town\" : \"Boston\" } ]", result);
-//  }
+  @Test
+  public void passageSafeResetsBatchRequest() {
+    String response = "{ \"invalid\" : [],\n  \"response\" :  true }";
+    TcpMock mock = new TcpMock("", response);
+    DoCommand doCommand = new DoCommand(mock, this.stream);
+
+    String makeTownJson = "{ \"command\": \"roads\", " +
+        "\"params\": [ { \"from\": \"A\", \"to\": \"B\" }, " +
+        "{ \"from\": \"B\", \"to\": \"C\" }, " +
+        "{ \"from\": \"A\", \"to\": \"D\" }, " +
+        "{ \"from\": \"C\", \"to\": \"E\" } ] }";
+    Command makeTown = this.gson.fromJson(makeTownJson, Command.class);
+    doCommand.accept(makeTown);
+
+    String placeCharacterJson = "{ \"command\": \"place\", " +
+        "\"params\": { \"character\": \"Ferd\", \"town\": \"B\" } }";
+    Command placeCharacter = this.gson.fromJson(placeCharacterJson, Command.class);
+    doCommand.accept(placeCharacter);
+
+    String placeCharacterJson2 = "{ \"command\": \"place\", " +
+        "\"params\": { \"character\": \"Other\", \"town\": \"A\" } }";
+    Command placeCharacter2 = this.gson.fromJson(placeCharacterJson2, Command.class);
+    doCommand.accept(placeCharacter2);
+
+    String placeCharacterJson3 = "{ \"command\": \"place\", " +
+        "\"params\": { \"character\": \"Third\", \"town\": \"E\" } }";
+    Command placeCharacter3 = this.gson.fromJson(placeCharacterJson3, Command.class);
+    doCommand.accept(placeCharacter3);
+
+    String passageSafeJson = "{ \"command\": \"passage-safe?\", " +
+        "\"params\": { \"character\": \"Ferd\", \"town\": \"C\" } }";
+    Command passageSafe = this.gson.fromJson(passageSafeJson, Command.class);
+    doCommand.accept(passageSafe);
+
+    String expected = "{\"characters\":[{\"name\":\"Ferd\",\"town\":\"B\"}," +
+        "{\"name\":\"Other\",\"town\":\"A\"},{\"name\":\"Third\",\"town\":\"E\"}]," +
+        "\"query\":{\"character\":\"Ferd\",\"destination\":\"C\"}}";
+    assertEquals(expected, mock.sent);
+
+    String passageSafeJson2 = "{ \"command\": \"passage-safe?\", " +
+        "\"params\": { \"character\": \"Ferd\", \"town\": \"D\" } }";
+    Command passageSafe2 = this.gson.fromJson(passageSafeJson2, Command.class);
+    doCommand.accept(passageSafe2);
+    String emptyBatch = "{\"characters\":[],\"query\":{\"character\":\"Ferd\",\"destination\":\"D\"}}";
+    assertEquals(emptyBatch, mock.sent);
+  }
 
   @Test
   public void passageSafeCannotBeCalledBeforeCreatingTown() {
