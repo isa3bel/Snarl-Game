@@ -64,9 +64,14 @@ class TcpConnection implements Tcp {
    * Closes the socket connection with the server.
    * @throws IOException sometimes?
    */
-  public void closeConnection() throws IOException {
-    this.in.close();
-    this.out.close();
-    this.socket.close();
+  public void closeConnection() {
+    try {
+      this.in.close();
+      this.out.close();
+      this.socket.close();
+    }
+    catch (IOException exception) {
+      System.out.println("failed to closed server connection");
+    }
   }
 }

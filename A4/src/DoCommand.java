@@ -35,6 +35,10 @@ class DoCommand implements Consumer<Command>, Command.Visitor {
     this.out = out;
   }
 
+  /**
+   * Visit the given command.
+   * @param command visit this command
+   */
   public void accept(Command command) {
     command.accept(this);
   }
@@ -66,46 +70,82 @@ class DoCommand implements Consumer<Command>, Command.Visitor {
     }
 
     this.sendBatchRequest(passageSafe);
-    this.receiveResponse();
+    Response response = this.receiveResponse();
+    response.print(passageSafe);
     this.batchRequest.clear();
   }
 
+  /**
+   * Assemble the batch request and send it to the server.
+   * @param passageSafe the passage safe command to query
+   */
   private void sendBatchRequest(PassageSafe passageSafe) {
     BatchRequest batchRequest = new BatchRequest(this.batchRequest, passageSafe);
     String jsonRequest = this.gson.toJson(batchRequest);
     this.tcpConnection.sendMessage(jsonRequest);
   }
 
-  private void receiveResponse() {
+  /**
+   * Read the response from the server.
+   */
+  private Response receiveResponse() {
     String serversMessage = "";
+
     try {
-      // TODO: need to actually handle this
       serversMessage = this.tcpConnection.readResponse();
     } catch (IOException ioException) {
-      ioException.printStackTrace();
+      this.tcpConnection.closeConnection();
+      System.out.println("server closed connection - invalid request sent");
     }
+
     Response response = this.gson.fromJson(serversMessage, Response.class);
-    response.printResponse();
+    return response;
   }
 
+  /**
+   * Represents a batch request to the server.
+   */
   private static class BatchRequest {
 
     private PlaceCharacter[] characters;
     private PassageSafe query;
 
+    /**
+     * Creates the batch request with the given characters and a query.
+     * @param characters the arraylist of PlaceCharacter commands
+     * @param query the passage safe query to make
+     */
     BatchRequest(ArrayList<PlaceCharacter> characters, PassageSafe query) {
       this.characters = characters.toArray(new PlaceCharacter[0]);
       this.query = query;
     }
   }
 
+  /**
+   * The response from the server to the batch request.
+   */
   private static class Response {
 
     private PlaceCharacter[] invalid;
     private boolean response;
 
-    public void printResponse() {
-      // TODO: this
+    /**
+     * Format and print the response for the user.
+     */
+    public void print(PassageSafe query) {
+      Gson gson = new Gson();
+      this.printInvalid(gson);
+      this.printResponse(gson, query);
+    }
+
+    private void printInvalid(Gson gson) {
+      for (PlaceCharacter placeCharacter : this.invalid) {
+        System.out.println("[\"invalid placement\", " + gson.toJson(placeCharacter) + " } ]");
+      }
+    }
+
+    private void printResponse(Gson gson, PassageSafe query) {
+      System.out.println("[\"the response for\", " + gson.toJson(query) + ", \"is\", " + this.response + "]");
     }
   }
 }

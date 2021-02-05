@@ -3,6 +3,7 @@ package src;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonParseException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,7 +59,15 @@ public class InputReader<T> {
 
     while (scanner.hasNext()) {
       String jsonString = this.readJsonString(0, 0, false);
-      T nextUnit = this.gson.fromJson(jsonString, this.classOfT);
+      T nextUnit = null;
+
+      try {
+        nextUnit = this.gson.fromJson(jsonString, this.classOfT);
+      }
+      catch (JsonParseException jsonParseException) {
+        System.out.println("{ \"error\": \"not a request\", \"object\":" + jsonString + " }");
+      }
+
       transformed.add(nextUnit);
       this.function.accept(nextUnit);
     }

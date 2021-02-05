@@ -27,31 +27,24 @@ public class TravellerClient {
    * @return a ServerCommunicator
    * @throws IOException if the user specifies more than 3 params
    */
-  private static Tcp setupTcp(String[] args) {
+  private static Tcp setupTcp(String[] args) throws IOException {
     String ipAddress = args.length < 1 ? "127.0.0.1" : args[0];
     int port = args.length < 2 ? 8000 : Integer.parseInt(args[1]);
     String name = args.length < 3 ? "Glorifrir Flintshoulder" : args[2];
 
-    Tcp tcpConnection = null;
-    try {
-      // TODO: handle this
-      tcpConnection = new TcpConnection(ipAddress, port);
-    } catch (IOException ioException) {
-      ioException.printStackTrace();
-    }
+    Tcp tcpConnection = new TcpConnection(ipAddress, port);
     registerName(tcpConnection, name);
 
     return tcpConnection;
   }
 
-  private static void registerName(Tcp tcpConnection, String name) {
+  private static void registerName(Tcp tcpConnection, String name) throws IOException {
     tcpConnection.sendMessage(name);
     String sessionId = "";
     try {
-      // TODO: handle this
       sessionId = tcpConnection.readMessage();
     } catch (IOException ioException) {
-      ioException.printStackTrace();
+      throw new IOException("invalid sign-up name");
     }
     System.out.println("[\"the server will call me\", " + sessionId + " ]");
   }

@@ -17,6 +17,9 @@ public class MakeTown implements Command {
    * @throws IllegalArgumentException if any of the roads do not have both a to and from
    */
   MakeTown(Road[] roads) throws IllegalArgumentException {
+    if (roads.length == 0) {
+      throw new IllegalArgumentException("town must be created with at least one road");
+    }
     if (Arrays.stream(roads).anyMatch(road -> road.getFrom() == null || road.getTo() == null)) {
       throw new IllegalArgumentException("to make a town, all roads must have a non-null to and from field");
     }

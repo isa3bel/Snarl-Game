@@ -18,7 +18,12 @@ public class CommandDeserialization implements JsonDeserializer<Command> {
     switch (commandType) {
       case "roads":
         Road[] roads = context.deserialize(paramsElement, Road[].class);
-        return new MakeTown(roads);
+        try {
+          return new MakeTown(roads);
+        }
+        catch (IllegalArgumentException exception) {
+          throw new JsonParseException("invalid create town request");
+        }
       case "place":
         return context.deserialize(paramsElement, PlaceCharacter.class);
       case "passage-safe?":

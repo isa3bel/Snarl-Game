@@ -66,8 +66,8 @@ public class CommandIntegrationTest {
       this.gson.fromJson(json, Command.class);
       fail();
     }
-    catch (IllegalArgumentException illegalArgumentException) {
-      assertEquals("to make a town, all roads must have a non-null to and from field", illegalArgumentException.getMessage());
+    catch (JsonParseException exception) {
+      assertEquals("invalid create town request", exception.getMessage());
     }
   }
 

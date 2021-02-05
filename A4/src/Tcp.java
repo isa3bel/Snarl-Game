@@ -10,6 +10,6 @@ public interface Tcp {
 
   String readResponse() throws IOException;
 
-  void closeConnection() throws IOException;
+  void closeConnection();
 
 }
