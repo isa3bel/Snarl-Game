@@ -1,0 +1,4 @@
+#!/usr/bin/bash
+
+java -jar a3.jar
+
