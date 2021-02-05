@@ -58,7 +58,7 @@ public class InputReader<T> {
     ArrayList<T> transformed = new ArrayList<>();
 
     while (scanner.hasNext()) {
-      String jsonString = this.readJsonString(0, 0, false);
+      String jsonString = this.scanner.nextLine();
       T nextUnit = null;
 
       try {
@@ -66,57 +66,12 @@ public class InputReader<T> {
       }
       catch (JsonParseException jsonParseException) {
         System.out.println("{ \"error\": \"not a request\", \"object\":" + jsonString + " }");
+        continue;
       }
-
       transformed.add(nextUnit);
       this.function.accept(nextUnit);
     }
 
     return transformed;
-  }
-
-  /**
-   * Make sure that the input is reading an
-   * @param arrBalance count of extra opening parens
-   * @param objBalance count of extra closing parens
-   * @param isInString is this currently reading inside a string?
-   * @return the total json unit read from the input stream
-   * @throws IOException if input closes
-   */
-  private String readJsonString(int arrBalance, int objBalance, boolean isInString)
-      throws IOException {
-    String next = this.scanner.next();
-    int nextArrBalance = arrBalance;
-    int nextObjBalance = objBalance;
-    boolean nextIsInString = isInString;
-    for (int idx = 0; idx < next.length(); idx++) {
-      switch (next.charAt(idx)) {
-        case '"':
-          nextIsInString = !nextIsInString;
-          break;
-        case '[':
-          nextArrBalance += nextIsInString ? 0 : 1;
-          break;
-        case ']':
-          nextArrBalance += nextIsInString ? 0 : -1;
-          break;
-        case '{':
-          nextObjBalance += nextIsInString ? 0 : 1;
-          break;
-        case '}':
-          nextObjBalance += nextIsInString ? 0 : -1;
-          break;
-        default:
-          continue;
-      }
-    }
-
-    boolean isJsonComplete = nextArrBalance == 0 && nextObjBalance == 0 && !nextIsInString;
-    if (!isJsonComplete && !this.scanner.hasNext()) {
-      throw new IOException("invalid json - expected closing bracket for array or object.");
-    }
-    return isJsonComplete
-        ? next
-        : next + this.readJsonString(nextArrBalance, nextObjBalance, nextIsInString);
   }
 }
