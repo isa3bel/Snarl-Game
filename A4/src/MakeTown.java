@@ -48,7 +48,14 @@ public class MakeTown implements Command {
    * @param visitor visitor to apply to this MakeTown
    */
   @Override
-  public void accept(Command.Visitor visitor) {
+  public void accept(Command.Visitor visitor) throws IllegalStateException {
+    if (this.towns == null || this.roads == null) {
+      throw new IllegalStateException("roads and towns must be non null");
+    }
+    if (this.towns.length == 0 || this.roads.length == 0) {
+      throw new IllegalStateException("roads and towns must be non empty");
+    }
+
     visitor.visitMakeTown(this);
   }
 

@@ -14,9 +14,17 @@ public class PassageSafe implements Command {
   /**
    * Accept a visitor to this PassageSafe.
    * @param visitor the visitor to act on this PassageSafe
+   * @throws IllegalStateException if this town or character does not exist
    */
   @Override
-  public void accept(Command.Visitor visitor) {
+  public void accept(Command.Visitor visitor) throws IllegalStateException {
+    if (this.character == null) {
+      throw new IllegalStateException("character must not be null");
+    }
+    if (this.town == null) {
+      throw new IllegalStateException("town must not be null");
+    }
+
     visitor.visitPassageSafe(this);
   }
 }

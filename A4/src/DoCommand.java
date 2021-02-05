@@ -38,8 +38,9 @@ class DoCommand implements Consumer<Command>, Command.Visitor {
   /**
    * Visit the given command.
    * @param command visit this command
+   * @throws IllegalStateException if any of the commands are ill formed
    */
-  public void accept(Command command) {
+  public void accept(Command command) throws IllegalStateException {
     if (command != null) command.accept(this);
   }
 

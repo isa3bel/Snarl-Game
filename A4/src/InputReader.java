@@ -44,32 +44,30 @@ public class InputReader<T> {
     this.gson = deserializer == null ?
         new Gson() :
         new GsonBuilder()
-        .registerTypeAdapter(classOfT, deserializer)
-        .create();
+          .registerTypeAdapter(classOfT, deserializer)
+          .create();
     this.function = function == null ? t -> {} : function;
   }
 
   /**
    * Parses input from the InputStream, transforms it, and calls function on the transformed input.
    * @return list of transformed inputs
-   * @throws IOException if input closes
    */
-  public ArrayList<T> parseInput() throws IOException {
+  public ArrayList<T> parseInput() {
     ArrayList<T> transformed = new ArrayList<>();
 
     while (scanner.hasNext()) {
       String jsonString = this.scanner.nextLine();
-      T nextUnit = null;
 
       try {
-        nextUnit = this.gson.fromJson(jsonString, this.classOfT);
+        T nextUnit = this.gson.fromJson(jsonString, this.classOfT);
+        transformed.add(nextUnit);
+        this.function.accept(nextUnit);
       }
-      catch (JsonParseException jsonParseException) {
+      catch (JsonParseException|IllegalStateException exception) {
         System.out.println("{ \"error\": \"not a request\", \"object\":" + jsonString + " }");
         continue;
       }
-      transformed.add(nextUnit);
-      this.function.accept(nextUnit);
     }
 
     return transformed;
