@@ -1,25 +1,31 @@
 package src;
 
+import java.util.ArrayList;
 import java.util.function.Function;
 
 public class ASCIIView implements View {
 
   @Override
-  public void draw(Level l) {
-    ArrayList<ArrayList<String>> list = l.map(new ASCIISpace());
-    // nested for loop, inner most print single string, outer loop print new line
+  public void draw(Level level) {
+    ArrayList<ArrayList<String>> list = level.map(new ASCIISpace());
+    for (ArrayList<String> arr : list) {
+      for (String s : arr) {
+        System.out.print(s);
+      }
+      System.out.println();
+    }
   }
 
   protected static class ASCIISpace implements SpaceVisitor, Function<Space, String> {
 
     @Override
-    public Object visitDoor(Door door) {
-      return "d";
+    public String visitDoor(Door door) {
+      return "D";
     }
 
     @Override
     public String visitExit(Exit exit) {
-
+      return "E";
     }
 
     @Override
@@ -28,8 +34,8 @@ public class ASCIIView implements View {
     }
 
     @Override
-    public Object visitTile(Tile tile) {
-      return null;
+    public String visitTile(Tile tile) {
+      return " ";
     }
 
     @Override

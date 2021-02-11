@@ -1,16 +1,13 @@
 package src;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import src.Command.Visitor;
 
 public class Level {
-  private ArrayList<ArrayList<Space>> spaces;
+  private final ArrayList<ArrayList<Space>> spaces;
 
-  private Level(ArrayList<ArrayList<Space>> spaces) {
-    this.spaces = spaces;
+  private Level(LevelBuilder builder) {
+    this.spaces = builder.spaces;
   }
 
   <T> ArrayList<ArrayList<T>> map(Function<Space, T> function) {
@@ -26,15 +23,18 @@ public class Level {
     return result;
   }
 
+  public static class LevelBuilder {
 
-  static class LevelBuilder {
+    private ArrayList<ArrayList<Space>> spaces;
 
-    public LevelBuilder() {
-
+    public LevelBuilder(ArrayList<ArrayList<Space>> spaces) {
+      this.spaces = spaces;
     }
 
     public Level createLevel() {
-      Level level = new Level();
+      Level level = new Level(this);
+
+      return level;
     }
 
   }

@@ -4,6 +4,6 @@ public class Wall extends Space {
 
   @Override
   <T> T acceptVisitor(SpaceVisitor<T> visitor) {
-    return null;
+    return visitor.visitWall(this);
   }
 }
