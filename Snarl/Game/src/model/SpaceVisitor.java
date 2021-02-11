@@ -1,4 +1,4 @@
-package src;
+package model;
 
 public interface SpaceVisitor<T> {
   T visitDoor(Door door);

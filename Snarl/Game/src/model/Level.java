@@ -1,4 +1,4 @@
-package src;
+package model;
 
 import java.util.ArrayList;
 import java.util.function.Function;
@@ -6,11 +6,11 @@ import java.util.function.Function;
 public class Level {
   private final ArrayList<ArrayList<Space>> spaces;
 
-  private Level(LevelBuilder builder) {
-    this.spaces = builder.spaces;
+  private Level(ArrayList<ArrayList<Space>> spaces) {
+    this.spaces = spaces;
   }
 
-  <T> ArrayList<ArrayList<T>> map(Function<Space, T> function) {
+  public <T> ArrayList<ArrayList<T>> map(Function<Space, T> function) {
     ArrayList<ArrayList<T>> result = new ArrayList<>();
     for(ArrayList<Space> row : spaces) {
       ArrayList<T> resultRow = new ArrayList();
@@ -32,7 +32,7 @@ public class Level {
     }
 
     public Level createLevel() {
-      Level level = new Level(this);
+      Level level = new Level(this.spaces);
 
       return level;
     }

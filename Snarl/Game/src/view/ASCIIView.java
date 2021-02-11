@@ -1,4 +1,6 @@
-package src;
+package view;
+
+import model.*;
 
 import java.util.ArrayList;
 import java.util.function.Function;
