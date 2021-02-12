@@ -5,6 +5,8 @@ package model;
  */
 public class Wall extends Space {
 
+  Wall() {}
+
   Wall(String room) {
     this.group = room;
   }

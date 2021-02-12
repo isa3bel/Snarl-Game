@@ -2,6 +2,7 @@ package model;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
 
 /**
@@ -12,9 +13,9 @@ public class RoomBuilder {
   private Location topLeft;
   private int width;
   private int height;
-  private ArrayList<Location> doors = new ArrayList<>();
+  private HashSet<Location> doors;
   private Location exit;
-  private ArrayList<Location> walls = new ArrayList<>();
+  private HashSet<Location> walls;
 
   /**
    * Instantiates a RoomBuilder with the reqiured properties.
@@ -25,6 +26,10 @@ public class RoomBuilder {
    * @throws IllegalArgumentException if x or y are negative or width or height are not positive
    */
   public RoomBuilder(int x, int y, int width, int height) throws IllegalArgumentException {
+    if (x <= 0 || y <= 0) {
+      throw new IllegalArgumentException("top left coordinate must have positive x and y coords, given:  " +
+          x + ", " + y);
+    }
     if (width <= 0 || height <= 0) {
       throw new IllegalArgumentException("width and height must be positive, given: " + width + ", " + height);
     }
@@ -32,6 +37,8 @@ public class RoomBuilder {
     this.topLeft = new Location(x, y);
     this.width = width;
     this.height = height;
+    this.doors = new HashSet<>();
+    this.walls = new HashSet<>();
   }
 
   /**
@@ -42,13 +49,11 @@ public class RoomBuilder {
    * @throws IllegalArgumentException if the door is not on the room's boundary
    */
   public RoomBuilder door(int doorX, int doorY) throws IllegalArgumentException {
-    if (doorX != this.topLeft.x && doorX != this.topLeft.x + this.width) {
-      throw new IllegalArgumentException("door must be on room boundary - x value should be " +
-          this.topLeft.x + " or " + (this.topLeft.x + this.width) + ", given: " + doorX);
-    }
-    if (doorY != this.topLeft.y && doorY != this.topLeft.y + this.height) {
-      throw new IllegalArgumentException("door must be on room boundary - y value should be " +
-          this.topLeft.y + " or " + (this.topLeft.y + this.height) + ", given: " + doorY);
+    if ((doorX != this.topLeft.x - 1 && doorX != this.topLeft.x + this.width) ||
+        (doorY != this.topLeft.y - 1 && doorY != this.topLeft.y + this.height)) {
+      throw new IllegalArgumentException("door must be on room boundary - x value on " +
+          (this.topLeft.x - 1) + " or " + (this.topLeft.x + this.width) + " or y value on " +
+          (this.topLeft.y - 1) + " or " + (this.topLeft.y + this.height) + ", given: " + doorX);
     }
 
     this.doors.add(new Location(doorX, doorY));
@@ -63,11 +68,11 @@ public class RoomBuilder {
    * @throws IllegalArgumentException if the exit is not on the room's boundary
    */
   public RoomBuilder exit(int exitX, int exitY) throws IllegalArgumentException {
-    if (exitX != this.topLeft.x && exitX != this.topLeft.x + this.width) {
+    if (exitX != this.topLeft.x - 1 && exitX != this.topLeft.x + this.width) {
       throw new IllegalArgumentException("exit must be on room boundary - x value should be " +
           this.topLeft.x + " or " + (this.topLeft.x + this.width) + ", given: " + exitX);
     }
-    if (exitY != this.topLeft.y && exitY != this.topLeft.y + this.height) {
+    if (exitY != this.topLeft.y - 1 && exitY != this.topLeft.y + this.height) {
       throw new IllegalArgumentException("exit must be on room boundary - y value should be " +
           this.topLeft.y + " or " + (this.topLeft.y + this.height) + ", given: " + exitY);
     }
@@ -104,13 +109,19 @@ public class RoomBuilder {
     if (this.doors.stream().anyMatch(door -> this.walls.contains(door))) {
       throw new IllegalStateException("no door can also be a wall");
     }
+    if (this.walls.contains(this.exit)) {
+      throw new IllegalStateException("level exit cannot also be a wall");
+    }
+    if (this.doors.contains(this.exit)) {
+      throw new IllegalStateException("level exit cannot also be a door");
+    }
 
     this.initSize(spaces);
-    for (int currY = this.topLeft.y; currY < this.topLeft.y + this.height; currY++) {
-      for (int currX = this.topLeft.x; currX < this.topLeft.x + this.width; currX++) {
-        spaces.get(currY).set(currX, new Tile(this.toString()));
-      }
-    }
+    this.initRoom(spaces);
+
+    this.doors.stream().forEach(door -> spaces.get(door.y).set(door.x, new Door(this.toString())));
+    if (this.exit != null) spaces.get(this.exit.y).set(this.exit.x, new Exit(this.toString()));
+    this.walls.stream().forEach(wall -> spaces.get(wall.y).set(wall.x, new Wall(this.toString())));
   }
 
   /**
@@ -140,6 +151,21 @@ public class RoomBuilder {
       // guarantee the min number of spaces in that row
       while (row.size() < maxX) {
         row.add(null);
+      }
+    }
+  }
+
+  /**
+   * Fill in the room in spaces with the boundary tiles and the content
+   * @param spaces the spaces to fill in the room
+   */
+  private void initRoom(ArrayList<ArrayList<Space>> spaces) {
+    for (int currY = this.topLeft.y - 1; currY < this.topLeft.y + this.height; currY++) {
+      for (int currX = this.topLeft.x; currX < this.topLeft.x + this.width; currX++) {
+        boolean isBoundary = currY == this.topLeft.y - 1 || currY == this.topLeft.y + this.height ||
+            currX == this.topLeft.x - 1 || currX == this.topLeft.x + this.width;
+        Space space = isBoundary ? new Wall() : new Tile(this.toString());
+        spaces.get(currY).set(currX, space);
       }
     }
   }
