@@ -34,7 +34,7 @@ public class Location {
    * @throws IllegalArgumentException if this Location and that are not on the same axis
    */
   public ArrayList<Location> to(Location that) throws IllegalArgumentException {
-    if (new SameAxis(this).test(that)) {
+    if (!new SameAxis(this).test(that)) {
       throw new IllegalArgumentException("locations must be on one of the same axes");
     }
 
@@ -54,7 +54,7 @@ public class Location {
 
     Location next = this.x > that.x ? new Location(this.x - 1, this.y) : new Location(this.x + 1, this.y);
     locations.add(next);
-    return next.alongY(that, locations);
+    return next.alongX(that, locations);
   }
 
   /**

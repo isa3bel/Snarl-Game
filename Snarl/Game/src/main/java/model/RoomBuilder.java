@@ -49,11 +49,11 @@ public class RoomBuilder {
    * @throws IllegalArgumentException if the door is not on the room's boundary
    */
   public RoomBuilder door(int doorX, int doorY) throws IllegalArgumentException {
-    if ((doorX != this.topLeft.x - 1 && doorX != this.topLeft.x + this.width) ||
-        (doorY != this.topLeft.y - 1 && doorY != this.topLeft.y + this.height)) {
+    if (!(doorX == this.topLeft.x - 1 || doorX != this.topLeft.x + this.width ||
+        doorY == this.topLeft.y - 1 || doorY != this.topLeft.y + this.height)) {
       throw new IllegalArgumentException("door must be on room boundary - x value on " +
           (this.topLeft.x - 1) + " or " + (this.topLeft.x + this.width) + " or y value on " +
-          (this.topLeft.y - 1) + " or " + (this.topLeft.y + this.height) + ", given: " + doorX);
+          (this.topLeft.y - 1) + " or " + (this.topLeft.y + this.height) + ", given: " + doorX + ", " + doorY);
     }
 
     this.doors.add(new Location(doorX, doorY));
@@ -149,7 +149,7 @@ public class RoomBuilder {
     }
 
     // for each row in spaces
-    for (int y = 0; y <= maxY; y++) {
+    for (int y = this.topLeft.y - 1; y <= maxY; y++) {
       ArrayList<Space> row = spaces.get(y);
       // guarantee the min number of spaces in that row
       while (row.size() <= maxX) {
@@ -170,8 +170,13 @@ public class RoomBuilder {
     maybeFirst.orElseThrow(() -> new IllegalStateException("no valid doors to connect these rooms"));
 
     Location first = maybeFirst.get();
-    Location last = doorOnAxis(first);
-    return first.to(last);
+    Location last = room.doorOnAxis(first);
+
+    // make sure that doors are not included in the hallway
+    ArrayList<Location> locations = first.to(last);
+    locations.remove(first);
+    locations.remove(last);
+    return locations;
   }
 
   /**
@@ -184,15 +189,5 @@ public class RoomBuilder {
     Optional<Location> maybeLocation = this.doors.stream().filter(new Location.SameAxis(location)).findFirst();
     maybeLocation.orElseThrow(() -> new IllegalArgumentException("no doors on the same axis as the given location"));
     return maybeLocation.get();
-  }
-
-  boolean overlaps(RoomBuilder room) {
-    // TODO: implement this
-    return false;
-  }
-
-  boolean overlaps(HallwayBuilder hallway) {
-    // TODO: implement this
-    return false;
   }
 }

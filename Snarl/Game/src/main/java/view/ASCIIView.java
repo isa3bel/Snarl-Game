@@ -1,8 +1,6 @@
 package view;
 
 import model.*;
-
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.function.Function;
 
@@ -11,21 +9,19 @@ import java.util.function.Function;
  */
 public class ASCIIView implements View {
 
-  PrintStream output;
-
   @Override
   public void draw(Level level) {
     ArrayList<ArrayList<String>> spaces = level.map(new ASCIISpace());
 
     for (ArrayList<String> row : spaces) {
       for (String space : row) {
-        this.output.print(space);
+        System.out.print(space);
       }
-      this.output.println();
+      System.out.print("\n");
     }
   }
 
-  protected static class ASCIISpace implements SpaceVisitor, Function<Space, String> {
+  protected static class ASCIISpace implements SpaceVisitor<String>, Function<Space, String> {
 
     @Override
     public String visitDoor(Door door) {

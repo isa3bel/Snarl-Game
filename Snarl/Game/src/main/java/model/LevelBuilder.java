@@ -45,7 +45,6 @@ public class LevelBuilder {
     }
 
     ArrayList<ArrayList<Space>> spaces = new ArrayList<>();
-
     this.rooms.stream().forEach(room -> room.build(spaces));
     this.hallways.stream().forEach(hallway -> hallway.build(spaces));
     return new Level(spaces);

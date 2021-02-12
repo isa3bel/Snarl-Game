@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Constructs a hallway on a 2d array of spaces.
@@ -15,6 +16,10 @@ public class HallwayBuilder {
     if (to == null || from == null) {
       throw new IllegalArgumentException();
     }
+
+    this.to = to;
+    this.from = from;
+    this.waypoints = new ArrayList<>();
   }
 
   public HallwayBuilder waypoint(int x, int y) {
@@ -31,7 +36,6 @@ public class HallwayBuilder {
         this.to.betweenDoors(this.from) : this.fromWaypoints();
 
     for (Location location : hallwayTiles) {
-      // TODO: make sure that the doors are not reset here
       spaces.get(location.y).set(location.x, new HallwayTile(this.toString()));
     }
   }
@@ -43,17 +47,16 @@ public class HallwayBuilder {
   private ArrayList<Location> fromWaypoints() {
     ArrayList<Location> locations = new ArrayList<>();
     Location first = this.from.doorOnAxis(this.waypoints.get(0));
+    Location prev = first;
     for (Location next : this.waypoints) {
-      locations.addAll(first.to(next));
-      first = next;
+      locations.addAll(prev.to(next));
+      prev = next;
     }
     Location last = this.to.doorOnAxis(first);
-    locations.addAll(first.to(last));
-    return locations;
-  }
+    locations.addAll(prev.to(last));
 
-  boolean overlaps(HallwayBuilder hallway) {
-    // TODO: implement this
-    return false;
+    locations.remove(first);
+    locations.remove(last);
+    return locations;
   }
 }
