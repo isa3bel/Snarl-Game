@@ -21,10 +21,16 @@ public class SnarlRunner {
    * @return the game
    */
   public static GameManager makeGameManager() {
-    RoomBuilder room1 = new RoomBuilder(1,1,20,30)
-        .exit(0, 24)
+    RoomBuilder room1 = new RoomBuilder(1,1,20,8)
+        .exit(0, 6)
         .wall(1,1)
-        .wall(2,1);
+        .wall(2,1)
+        .wall(5,4)
+        .wall(6,4)
+        .wall(7,4)
+        .wall(5,5)
+        .wall(6,5)
+        .wall(7,5);
     Level level = new LevelBuilder().room(room1).build();
     GameManager gameManager = new GameManager(level);
     return gameManager;

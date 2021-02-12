@@ -68,13 +68,11 @@ public class RoomBuilder {
    * @throws IllegalArgumentException if the exit is not on the room's boundary
    */
   public RoomBuilder exit(int exitX, int exitY) throws IllegalArgumentException {
-    if (exitX != this.topLeft.x - 1 && exitX != this.topLeft.x + this.width) {
-      throw new IllegalArgumentException("exit must be on room boundary - x value should be " +
-          this.topLeft.x + " or " + (this.topLeft.x + this.width) + ", given: " + exitX);
-    }
-    if (exitY != this.topLeft.y - 1 && exitY != this.topLeft.y + this.height) {
-      throw new IllegalArgumentException("exit must be on room boundary - y value should be " +
-          this.topLeft.y + " or " + (this.topLeft.y + this.height) + ", given: " + exitY);
+    if (!(exitX == this.topLeft.x - 1 || exitX == this.topLeft.x + this.width ||
+        exitY == this.topLeft.y - 1 || exitY == this.topLeft.y + this.height)) {
+      throw new IllegalArgumentException("door must be on room boundary - x value on " +
+          (this.topLeft.x - 1) + " or " + (this.topLeft.x + this.width) + " or y value on " +
+          (this.topLeft.y - 1) + " or " + (this.topLeft.y + this.height) + ", given: " + exitX + ", " + exitY);
     }
     if (this.exit != null) {
       throw new IllegalStateException("an exit has already been made in this room");
@@ -117,7 +115,12 @@ public class RoomBuilder {
     }
 
     this.initSize(spaces);
-    this.initRoom(spaces);
+
+    for (int currY = this.topLeft.y; currY < this.topLeft.y + this.height; currY++) {
+      for (int currX = this.topLeft.x; currX < this.topLeft.x + this.width; currX++) {
+        spaces.get(currY).set(currX, new Tile(this.toString()));
+      }
+    }
 
     this.doors.stream().forEach(door -> spaces.get(door.y).set(door.x, new Door(this.toString())));
     if (this.exit != null) spaces.get(this.exit.y).set(this.exit.x, new Exit(this.toString()));
@@ -141,31 +144,16 @@ public class RoomBuilder {
     int maxY = this.topLeft.y + this.height;
 
     // guarantee the min number of rows
-    while (spaces.size() < maxY) {
+    while (spaces.size() <= maxY) {
       spaces.add(new ArrayList<>());
     }
 
     // for each row in spaces
-    for (int y = 0; y < maxY; y++) {
+    for (int y = 0; y <= maxY; y++) {
       ArrayList<Space> row = spaces.get(y);
       // guarantee the min number of spaces in that row
-      while (row.size() < maxX) {
-        row.add(null);
-      }
-    }
-  }
-
-  /**
-   * Fill in the room in spaces with the boundary tiles and the content
-   * @param spaces the spaces to fill in the room
-   */
-  private void initRoom(ArrayList<ArrayList<Space>> spaces) {
-    for (int currY = this.topLeft.y - 1; currY < this.topLeft.y + this.height; currY++) {
-      for (int currX = this.topLeft.x; currX < this.topLeft.x + this.width; currX++) {
-        boolean isBoundary = currY == this.topLeft.y - 1 || currY == this.topLeft.y + this.height ||
-            currX == this.topLeft.x - 1 || currX == this.topLeft.x + this.width;
-        Space space = isBoundary ? new Wall() : new Tile(this.toString());
-        spaces.get(currY).set(currX, space);
+      while (row.size() <= maxX) {
+        row.add(new Wall());
       }
     }
   }
