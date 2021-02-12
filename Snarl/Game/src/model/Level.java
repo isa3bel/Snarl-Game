@@ -6,7 +6,7 @@ import java.util.function.Function;
 public class Level {
   private final ArrayList<ArrayList<Space>> spaces;
 
-  private Level(ArrayList<ArrayList<Space>> spaces) {
+  Level(ArrayList<ArrayList<Space>> spaces) {
     this.spaces = spaces;
   }
 
@@ -21,22 +21,6 @@ public class Level {
     }
 
     return result;
-  }
-
-  public static class LevelBuilder {
-
-    private ArrayList<ArrayList<Space>> spaces;
-
-    public LevelBuilder(ArrayList<ArrayList<Space>> spaces) {
-      this.spaces = spaces;
-    }
-
-    public Level createLevel() {
-      Level level = new Level(this.spaces);
-
-      return level;
-    }
-
   }
 
 }
