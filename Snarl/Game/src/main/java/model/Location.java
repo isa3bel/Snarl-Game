@@ -72,7 +72,7 @@ public class Location {
   }
 
   /**
-   * Calcualtes the euclidian distance to the given Location.
+   * Calculates the euclidian distance to the given Location.
    * @param that the location to compare to
    * @return the euclidian distance to that location
    */
