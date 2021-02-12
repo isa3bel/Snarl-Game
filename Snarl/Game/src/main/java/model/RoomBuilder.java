@@ -56,7 +56,11 @@ public class RoomBuilder extends SpaceBuilder {
           (this.topLeft.x - 1) + " or " + (this.topLeft.x + this.width) + " or y value on " +
           (this.topLeft.y - 1) + " or " + (this.topLeft.y + this.height) + ", given: " + doorX + ", " + doorY);
     }
-
+    // DECISION: not validating if a door is reachable (e.g. no walls in front or
+    // the door is on the corner of the room
+    // e.g. XXXXD  OR XXDX
+    //      XX  X     X XX  (if the room is technically 2 wide but
+    //      XXXXX     XXXX   a wall is placed at the edge of the room)
     this.doors.add(new Location(doorX, doorY));
     return this;
   }
@@ -85,12 +89,16 @@ public class RoomBuilder extends SpaceBuilder {
 
   /**
    * Adds a wall to this room.
-   * @param wallX the wall's x coordinate
-   * @param wallY the wall's y coordinate
+   * @param wallX the wall's x coordinate relative to topLeft
+   * @param wallY the wall's y coordinate relative to topLeft
    * @return this RoomBuilder with the wall
-   * @throws IllegalArgumentException if x or y are negative
+   * @throws IllegalArgumentException if x or y are negative or outside room bounds
    */
   public RoomBuilder wall(int wallX, int wallY) throws IllegalArgumentException {
+    if (wallX >= this.width || wallY >= this.height) {
+      throw new IllegalArgumentException("wall added to this room must be inside room bounds of (" +
+          this.width + ", " + this.height +  "), given: " + wallX + ", " + wallY);
+    }
     this.walls.add(new Location(wallX, wallY));
     return this;
   }

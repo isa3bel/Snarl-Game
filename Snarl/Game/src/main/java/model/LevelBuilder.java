@@ -21,6 +21,7 @@ public class LevelBuilder {
    * @return the LevelBuilder with the added room
    */
   public LevelBuilder room(RoomBuilder room) {
+    // DECISION: no validation to assert that there are no overlaps
     this.rooms.add(room);
     return this;
   }
@@ -31,6 +32,14 @@ public class LevelBuilder {
    * @return the LevelBuilder with the added hallway
    */
   public LevelBuilder hallway(HallwayBuilder hallway) {
+    // DECISION: no validation to assert that there are no overlaps
+    // DECISION: a hallway can be right next to a room, making it look like the room
+    // extends outward
+    // e.g. XXXXXXXXXXXXX instead of forcing XXXXXXXXXXXXX
+    //      XD         DX  and additional    X           X
+    //      X   XXXXXX  X  set of waypoints  XDXXXXXXXXXDX
+    //      XXXXXXXXXXXXX      as seen ->    X   XXXXXX  X
+    //                                       XXXXXXXXXXXXX
     this.hallways.add(hallway);
     return this;
   }
@@ -41,6 +50,7 @@ public class LevelBuilder {
    * @throws IllegalStateException when the level has more than one exit
    */
   public Level build() throws IllegalStateException {
+    // DECISION: there is only one exit for a level per level
     if (this.rooms.stream().filter(roomBuilder -> roomBuilder.hasExit()).count() != 1) {
       throw new IllegalStateException("level must have exactly one level exit");
     }
