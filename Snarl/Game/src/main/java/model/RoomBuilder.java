@@ -2,13 +2,14 @@ package model;
 
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Optional;
 
 /**
  * Helper to create a room in a level.
  */
-public class RoomBuilder {
+public class RoomBuilder extends SpaceBuilder {
 
   private Location topLeft;
   private int width;
@@ -49,8 +50,8 @@ public class RoomBuilder {
    * @throws IllegalArgumentException if the door is not on the room's boundary
    */
   public RoomBuilder door(int doorX, int doorY) throws IllegalArgumentException {
-    if (!(doorX == this.topLeft.x - 1 || doorX != this.topLeft.x + this.width ||
-        doorY == this.topLeft.y - 1 || doorY != this.topLeft.y + this.height)) {
+    if (!(doorX == this.topLeft.x - 1 || doorX == this.topLeft.x + this.width ||
+        doorY == this.topLeft.y - 1 || doorY == this.topLeft.y + this.height)) {
       throw new IllegalArgumentException("door must be on room boundary - x value on " +
           (this.topLeft.x - 1) + " or " + (this.topLeft.x + this.width) + " or y value on " +
           (this.topLeft.y - 1) + " or " + (this.topLeft.y + this.height) + ", given: " + doorX + ", " + doorY);
@@ -81,7 +82,6 @@ public class RoomBuilder {
     this.exit = new Location(exitX, exitY);
     return this;
   }
-
 
   /**
    * Adds a wall to this room.
@@ -114,7 +114,8 @@ public class RoomBuilder {
       throw new IllegalStateException("level exit cannot also be a door");
     }
 
-    this.initSize(spaces);
+    Location bottomRight = new Location(this.topLeft.x + this.width, this.topLeft.y + this.height);
+    this.initSize(bottomRight, spaces);
 
     for (int currY = this.topLeft.y; currY < this.topLeft.y + this.height; currY++) {
       for (int currX = this.topLeft.x; currX < this.topLeft.x + this.width; currX++) {
@@ -136,29 +137,6 @@ public class RoomBuilder {
   }
 
   /**
-   * Initialize the given spaces array to the required size for this room.
-   * @param spaces the spaces array
-   */
-  private void initSize(ArrayList<ArrayList<Space>> spaces) {
-    int maxX = this.topLeft.x + this.width;
-    int maxY = this.topLeft.y + this.height;
-
-    // guarantee the min number of rows
-    while (spaces.size() <= maxY) {
-      spaces.add(new ArrayList<>());
-    }
-
-    // for each row in spaces
-    for (int y = this.topLeft.y - 1; y <= maxY; y++) {
-      ArrayList<Space> row = spaces.get(y);
-      // guarantee the min number of spaces in that row
-      while (row.size() <= maxX) {
-        row.add(new Wall());
-      }
-    }
-  }
-
-  /**
    * Gets all the locations that would make up a hallway directly between these two rooms.
    * @param room the room to go to
    * @return the locations between the door on this room and the door on the given room
@@ -170,7 +148,7 @@ public class RoomBuilder {
     maybeFirst.orElseThrow(() -> new IllegalStateException("no valid doors to connect these rooms"));
 
     Location first = maybeFirst.get();
-    Location last = room.doorOnAxis(first);
+    Location last = room.closestDoorOnAxis(first);
 
     // make sure that doors are not included in the hallway
     ArrayList<Location> locations = first.to(last);
@@ -185,8 +163,9 @@ public class RoomBuilder {
    * @return the location of the door on the same axis as this location
    * @throws IllegalArgumentException if the given location is not on the same axis as any of the doors in this room
    */
-  Location doorOnAxis(Location location) throws IllegalArgumentException {
-    Optional<Location> maybeLocation = this.doors.stream().filter(new Location.SameAxis(location)).findFirst();
+  Location closestDoorOnAxis(Location location) throws IllegalArgumentException {
+    Optional<Location> maybeLocation = this.doors.stream().filter(new Location.SameAxis(location))
+        .min(Comparator.comparingInt(door -> door.euclidianDistance(location)));
     maybeLocation.orElseThrow(() -> new IllegalArgumentException("no doors on the same axis as the given location"));
     return maybeLocation.get();
   }

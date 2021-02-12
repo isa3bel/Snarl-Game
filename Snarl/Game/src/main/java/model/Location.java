@@ -71,6 +71,15 @@ public class Location {
     return next.alongY(that, locations);
   }
 
+  /**
+   * Calcualtes the euclidian distance to the given Location.
+   * @param that the location to compare to
+   * @return the euclidian distance to that location
+   */
+  int euclidianDistance(Location that) {
+    return Math.abs(this.x - that.x) + Math.abs(this.y - that.y);
+  }
+
   @Override
   public String toString() {
     return "(" +  x +", " + y + ")";

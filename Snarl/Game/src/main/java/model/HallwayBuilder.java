@@ -1,12 +1,11 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 /**
  * Constructs a hallway on a 2d array of spaces.
  */
-public class HallwayBuilder {
+public class HallwayBuilder extends SpaceBuilder {
 
   RoomBuilder to;
   RoomBuilder from;
@@ -22,6 +21,12 @@ public class HallwayBuilder {
     this.waypoints = new ArrayList<>();
   }
 
+  /**
+   * Add a waypoint at the given coordinates to this hallway.
+   * @param x the x coord of the waypoint
+   * @param y the y coord of the waypoint
+   * @return this builder with the waypoint
+   */
   public HallwayBuilder waypoint(int x, int y) {
     this.waypoints.add(new Location(x, y));
     return this;
@@ -36,6 +41,8 @@ public class HallwayBuilder {
         this.to.betweenDoors(this.from) : this.fromWaypoints();
 
     for (Location location : hallwayTiles) {
+      Location outer = new Location(location.x + 1, location.y + 1);
+      this.initSize(outer, spaces);
       spaces.get(location.y).set(location.x, new HallwayTile(this.toString()));
     }
   }
@@ -46,13 +53,13 @@ public class HallwayBuilder {
    */
   private ArrayList<Location> fromWaypoints() {
     ArrayList<Location> locations = new ArrayList<>();
-    Location first = this.from.doorOnAxis(this.waypoints.get(0));
+    Location first = this.from.closestDoorOnAxis(this.waypoints.get(0));
     Location prev = first;
     for (Location next : this.waypoints) {
       locations.addAll(prev.to(next));
       prev = next;
     }
-    Location last = this.to.doorOnAxis(first);
+    Location last = this.to.closestDoorOnAxis(prev);
     locations.addAll(prev.to(last));
 
     locations.remove(first);
