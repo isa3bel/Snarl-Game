@@ -27,6 +27,28 @@ public class LocationTest {
   }
 
   @Test
+  public void testNegativeX() {
+    try {
+      new Location(-1, 0);
+      fail();
+    }
+    catch (IllegalArgumentException e) {
+      assertEquals("location coordinates must be non-negative, given: -1, 0", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testNegativeY() {
+    try {
+      new Location(0, -1);
+      fail();
+    }
+    catch (IllegalArgumentException e) {
+      assertEquals("location coordinates must be non-negative, given: 0, -1", e.getMessage());
+    }
+  }
+
+  @Test
   public void testTo() {
     ArrayList<Location> justX0Y0 = new ArrayList<>();
     justX0Y0.add(this.x0y0);
