@@ -27,7 +27,7 @@ public class LevelBuilder {
 
   /**
    * Adds a hallway to the level.
-   * @param hallway the hallwaya to add
+   * @param hallway the hallway to add
    * @return the LevelBuilder with the added hallway
    */
   public LevelBuilder hallway(HallwayBuilder hallway) {

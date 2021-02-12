@@ -5,8 +5,11 @@ package model;
  */
 public class Exit extends Space {
 
-  @Override
-  <T> T acceptVisitor(SpaceVisitor<T> visitor) {
+  Exit(String room) {
+    this.group = room;
+  }
+
+  public String acceptVisitor(SpaceVisitor visitor) {
     return visitor.visitExit(this);
   }
 }

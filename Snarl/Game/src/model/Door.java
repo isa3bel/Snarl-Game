@@ -5,8 +5,12 @@ package model;
  */
 public class Door extends Space {
 
+  Door(String room) {
+    this.group = room;
+  }
+
   @Override
-  <T> T acceptVisitor(SpaceVisitor<T> visitor) {
+  public String acceptVisitor(SpaceVisitor visitor) {
     return visitor.visitDoor(this);
   }
 }

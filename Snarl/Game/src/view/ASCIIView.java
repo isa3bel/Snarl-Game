@@ -45,7 +45,7 @@ public class ASCIIView implements View {
 
     @Override
     public String apply(Space space) {
-      return null;
+      return space.acceptVisitor(this);
     }
   }
 }

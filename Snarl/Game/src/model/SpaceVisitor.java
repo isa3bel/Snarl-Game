@@ -5,8 +5,8 @@ package model;
  * @param <T>
  */
 public interface SpaceVisitor<T> {
-  T visitDoor(Door door);
-  T visitExit(Exit exit);
-  T visitWall(Wall wall);
-  T visitTile(Tile tile);
+  String visitDoor(Door door);
+  String visitExit(Exit exit);
+  String visitWall(Wall wall);
+  String visitTile(Tile tile);
 }

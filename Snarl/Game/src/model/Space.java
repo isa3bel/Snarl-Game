@@ -8,5 +8,5 @@ public abstract class Space {
   // the room or hallway identifier of this space
   String group;
 
-  abstract <T> T acceptVisitor(SpaceVisitor<T> visitor);
+  public abstract String acceptVisitor(SpaceVisitor visitor);
 }

@@ -10,7 +10,7 @@ public class Tile extends Space {
   }
 
   @Override
-  <T> T acceptVisitor(SpaceVisitor<T> visitor) {
+  public String acceptVisitor(SpaceVisitor visitor) {
     return visitor.visitTile(this);
   }
 }
