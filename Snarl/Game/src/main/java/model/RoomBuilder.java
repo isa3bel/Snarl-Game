@@ -11,15 +11,15 @@ import java.util.Optional;
  */
 public class RoomBuilder extends SpaceBuilder {
 
-  private Location topLeft;
-  private int width;
-  private int height;
-  private HashSet<Location> doors;
+  private final Location topLeft;
+  private final int width;
+  private final int height;
+  private final HashSet<Location> doors;
   private Location exit;
-  private HashSet<Location> walls;
+  private final HashSet<Location> walls;
 
   /**
-   * Instantiates a RoomBuilder with the reqiured properties.
+   * Instantiates a RoomBuilder with the required properties.
    * @param x x coordinate of the top left corner of this room
    * @param y y coordinate of the top left corner of this room
    * @param width width of the room
@@ -28,7 +28,7 @@ public class RoomBuilder extends SpaceBuilder {
    */
   public RoomBuilder(int x, int y, int width, int height) throws IllegalArgumentException {
     if (x <= 0 || y <= 0) {
-      throw new IllegalArgumentException("top left coordinate must have positive x and y coords, given:  " +
+      throw new IllegalArgumentException("top left coordinate must have positive x and y coordinates, given:  " +
           x + ", " + y);
     }
     if (width <= 0 || height <= 0) {
@@ -104,7 +104,7 @@ public class RoomBuilder extends SpaceBuilder {
     if (this.doors.size() < 1 && this.exit == null) {
       throw new IllegalStateException("room must have at least 1 door");
     }
-    if (this.doors.stream().anyMatch(door -> this.walls.contains(door))) {
+    if (this.doors.stream().anyMatch(this.walls::contains)) {
       throw new IllegalStateException("no door can also be a wall");
     }
     if (this.walls.contains(this.exit)) {
@@ -123,9 +123,9 @@ public class RoomBuilder extends SpaceBuilder {
       }
     }
 
-    this.doors.stream().forEach(door -> spaces.get(door.y).set(door.x, new Door(this.toString())));
+    this.doors.forEach(door -> spaces.get(door.y).set(door.x, new Door(this.toString())));
     if (this.exit != null) spaces.get(this.exit.y).set(this.exit.x, new Exit(this.toString()));
-    this.walls.stream().forEach(wall -> spaces.get(wall.y).set(wall.x, new Wall(this.toString())));
+    this.walls.forEach(wall -> spaces.get(wall.y).set(wall.x, new Wall(this.toString())));
   }
 
   /**
