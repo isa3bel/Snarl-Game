@@ -2,6 +2,7 @@ package view;
 
 import model.*;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.function.Function;
 
@@ -10,14 +11,17 @@ import java.util.function.Function;
  */
 public class ASCIIView implements View {
 
+  PrintStream output;
+
   @Override
   public void draw(Level level) {
-    ArrayList<ArrayList<String>> list = level.map(new ASCIISpace());
-    for (ArrayList<String> arr : list) {
-      for (String s : arr) {
-        System.out.print(s);
+    ArrayList<ArrayList<String>> spaces = level.map(new ASCIISpace());
+
+    for (ArrayList<String> row : spaces) {
+      for (String space : row) {
+        this.output.print(space);
       }
-      System.out.println();
+      this.output.println();
     }
   }
 
