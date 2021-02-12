@@ -28,7 +28,7 @@ public class RoomBuilder extends SpaceBuilder {
    */
   public RoomBuilder(int x, int y, int width, int height) throws IllegalArgumentException {
     if (x <= 0 || y <= 0) {
-      throw new IllegalArgumentException("top left coordinate must have positive x and y coordinates, given:  " +
+      throw new IllegalArgumentException("top left coordinate must have positive x and y coordinates, given: " +
           x + ", " + y);
     }
     if (width <= 0 || height <= 0) {
