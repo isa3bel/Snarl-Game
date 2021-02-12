@@ -39,7 +39,7 @@ public class LevelBuilder {
 
   /**
    * Creates the level that this RoomBuilder would create
-   * @return
+   * @return the Level built by this LevelBuilder
    */
   public Level build() {
     if (this.rooms.stream().filter(roomBuilder -> roomBuilder.hasExit()).count() != 1) {

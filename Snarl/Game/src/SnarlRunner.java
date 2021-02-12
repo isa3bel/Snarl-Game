@@ -5,15 +5,22 @@ import model.RoomBuilder;
 import view.ASCIIView;
 import view.View;
 
+/**
+ * Runs the Snarl game.
+ */
 public class SnarlRunner {
 
   public static void main(String[] args) {
-    GameManager gameManager = this.makeGameManager();
+    GameManager gameManager = makeGameManager();
     View view = new ASCIIView();
     gameManager.draw(view);
   }
 
-  public static Level makeGameManager() {
+  /**
+   * Makes the game to run.
+   * @return the game
+   */
+  public static GameManager makeGameManager() {
     RoomBuilder room1 = new RoomBuilder(0,0,20,30).exit(0, 21);
     Level level = new LevelBuilder().room(room1).build();
     GameManager gameManager = new GameManager(level);
