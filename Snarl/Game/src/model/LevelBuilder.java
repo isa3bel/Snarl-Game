@@ -21,7 +21,6 @@ public class LevelBuilder {
    * @return the LevelBuilder with the added room
    */
   public LevelBuilder room(RoomBuilder room) {
-    // TODO: validate the room overlap?
     this.rooms.add(room);
     return this;
   }
@@ -32,7 +31,6 @@ public class LevelBuilder {
    * @return the LevelBuilder with the added hallway
    */
   public LevelBuilder hallway(HallwayBuilder hallway) {
-    // TODO: validate the hallway overlap?
     this.hallways.add(hallway);
     return this;
   }

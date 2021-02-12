@@ -12,9 +12,9 @@ public class RoomBuilder {
   private Location topLeft;
   private int width;
   private int height;
-  private ArrayList<Location> doors;
+  private ArrayList<Location> doors = new ArrayList<>();
   private Location exit;
-  private ArrayList<Location> walls;
+  private ArrayList<Location> walls = new ArrayList<>();
 
   /**
    * Instantiates a RoomBuilder with the reqiured properties.
@@ -106,8 +106,8 @@ public class RoomBuilder {
     }
 
     this.initSize(spaces);
-    for (int currY = this.topLeft.y; currY <= this.topLeft.y + this.height; currY++) {
-      for (int currX = this.topLeft.x; currX <= this.topLeft.x + this.width; currX++) {
+    for (int currY = this.topLeft.y; currY < this.topLeft.y + this.height; currY++) {
+      for (int currX = this.topLeft.x; currX < this.topLeft.x + this.width; currX++) {
         spaces.get(currY).set(currX, new Tile(this.toString()));
       }
     }
