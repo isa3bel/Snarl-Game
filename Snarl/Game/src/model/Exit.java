@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * An exit from the level.
+ */
 public class Exit extends Space {
 
   @Override

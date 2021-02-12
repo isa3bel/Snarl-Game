@@ -2,6 +2,9 @@ package model;
 
 import java.util.ArrayList;
 
+/**
+ * A way to build to a Level.
+ */
 public class LevelBuilder {
 
   private ArrayList<RoomBuilder> rooms;
@@ -9,30 +12,25 @@ public class LevelBuilder {
 
   public LevelBuilder() {
     this.rooms = new ArrayList<>();
+    this.hallways = new ArrayList<>();
   }
 
-  public LevelBuilder addRoom(RoomBuilder room) throws IllegalArgumentException {
-    // TODO: does overlap need to be verified or can we assume valid input?
-    if (this.rooms.stream().anyMatch(existingRoom -> room.overlaps(existingRoom))) {
-      throw new IllegalArgumentException("cannot add a room that overlaps with another room");
-    }
-    if (this.hallways.stream().anyMatch(existingHallway -> room.overlaps(existingHallway))) {
-      throw new IllegalArgumentException("cannot add a room that overlaps with another room");
-    }
-
+  /**
+   * Adds a room to the level.
+   * @param room the room to add
+   * @return the LevelBuilder with the added room
+   */
+  public LevelBuilder addRoom(RoomBuilder room) {
     this.rooms.add(room);
     return this;
   }
 
+  /**
+   * Adds a hallway to the level.
+   * @param hallway the hallwaya to add
+   * @return the LevelBuilder with the added hallway
+   */
   public LevelBuilder addHallway(HallwayBuilder hallway) {
-    // TODO: does overlap need to be verified or can we assume valid input?
-    if (this.rooms.stream().anyMatch(existingRoom -> existingRoom.overlaps(hallway))) {
-      throw new IllegalArgumentException("cannot add a room that overlaps with another room");
-    }
-    if (this.hallways.stream().anyMatch(existingHallway -> existingHallway.overlaps(hallway))) {
-      throw new IllegalArgumentException("cannot add a room that overlaps with another room");
-    }
-
     this.hallways.add(hallway);
     return this;
   }

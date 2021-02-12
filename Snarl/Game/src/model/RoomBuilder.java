@@ -3,7 +3,6 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 /**
  * Helper to create a room in a level.

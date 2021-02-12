@@ -5,6 +5,9 @@ import model.*;
 import java.util.ArrayList;
 import java.util.function.Function;
 
+/**
+ * Creates the view for a Snarl game in with ASCII characters.
+ */
 public class ASCIIView implements View {
 
   @Override

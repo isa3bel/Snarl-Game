@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * An exit from a room to another room.
+ */
 public class Door extends Space {
 
   @Override

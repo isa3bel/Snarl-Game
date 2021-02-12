@@ -3,13 +3,23 @@ package model;
 import java.util.ArrayList;
 import java.util.function.Function;
 
+/**
+ * A level in the Snarl dungeon crawler.
+ */
 public class Level {
+
   private final ArrayList<ArrayList<Space>> spaces;
 
   Level(ArrayList<ArrayList<Space>> spaces) {
     this.spaces = spaces;
   }
 
+  /**
+   * Maps the given function across all of the spaces in this level.
+   * @param function the function to apply to the spaces
+   * @param <T> the result type of the function
+   * @return the result of the mapped functions
+   */
   public <T> ArrayList<ArrayList<T>> map(Function<Space, T> function) {
     ArrayList<ArrayList<T>> result = new ArrayList<>();
     for(ArrayList<Space> row : spaces) {
@@ -19,7 +29,6 @@ public class Level {
       }
       result.add(resultRow);
     }
-
     return result;
   }
 
