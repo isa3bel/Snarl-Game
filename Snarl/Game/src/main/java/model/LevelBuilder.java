@@ -36,10 +36,11 @@ public class LevelBuilder {
   }
 
   /**
-   * Creates the level that this RoomBuilder would create
+   * Creates the level that this RoomBuilder would create.
    * @return the Level built by this LevelBuilder
+   * @throws IllegalStateException when the level has more than one exit
    */
-  public Level build() {
+  public Level build() throws IllegalStateException {
     if (this.rooms.stream().filter(roomBuilder -> roomBuilder.hasExit()).count() != 1) {
       throw new IllegalStateException("level must have exactly one level exit");
     }
