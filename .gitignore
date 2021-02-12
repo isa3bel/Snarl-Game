@@ -2,3 +2,4 @@ META-INF/
 out/
 .idea
 *.iml
+/Snarl/Game/target/
