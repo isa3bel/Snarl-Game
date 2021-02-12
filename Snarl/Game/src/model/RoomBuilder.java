@@ -13,6 +13,7 @@ public class RoomBuilder {
   private int width;
   private int height;
   private ArrayList<Location> doors;
+  private Location exit;
   private ArrayList<Location> walls;
 
   /**
@@ -55,6 +56,31 @@ public class RoomBuilder {
   }
 
   /**
+   * Adds a level exit to this room.
+   * @param exitX the exit's x coordinate
+   * @param exitY the exit's y coordinate
+   * @return this RoomBuilder with the door
+   * @throws IllegalArgumentException if the exit is not on the room's boundary
+   */
+  public RoomBuilder exit(int exitX, int exitY) throws IllegalArgumentException {
+    if (exitX != this.topLeft.x && exitX != this.topLeft.x + this.width) {
+      throw new IllegalArgumentException("exit must be on room boundary - x value should be " +
+          this.topLeft.x + " or " + (this.topLeft.x + this.width) + ", given: " + exitX);
+    }
+    if (exitY != this.topLeft.y && exitY != this.topLeft.y + this.height) {
+      throw new IllegalArgumentException("exit must be on room boundary - y value should be " +
+          this.topLeft.y + " or " + (this.topLeft.y + this.height) + ", given: " + exitY);
+    }
+    if (this.exit != null) {
+      throw new IllegalStateException("an exit has already been made in this room");
+    }
+
+    this.exit = new Location(exitX, exitY);
+    return this;
+  }
+
+
+  /**
    * Adds a wall to this room.
    * @param wallX the wall's x coordinate
    * @param wallY the wall's y coordinate
@@ -72,7 +98,7 @@ public class RoomBuilder {
    * @throws IllegalStateException if the room has no doors or has a door that is also a wall
    */
   void build(ArrayList<ArrayList<Space>> spaces) throws IllegalStateException {
-    if (this.doors.size() < 1) {
+    if (this.doors.size() < 1 && this.exit == null) {
       throw new IllegalStateException("room must have at least 1 door");
     }
     if (this.doors.stream().anyMatch(door -> this.walls.contains(door))) {
@@ -85,6 +111,14 @@ public class RoomBuilder {
         spaces.get(currY).set(currX, new Tile(this.toString()));
       }
     }
+  }
+
+  /**
+   * Does this room have an exit?
+   * @return whether this room would be built with an exit
+   */
+  boolean hasExit() {
+    return this.exit != null;
   }
 
   /**
