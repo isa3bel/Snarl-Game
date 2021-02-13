@@ -37,6 +37,8 @@ public class HallwayBuilder extends SpaceBuilder {
    * @param spaces the 2d array to mutate with this hallway
    */
   void build(ArrayList<ArrayList<Space>> spaces) {
+    // TODO: does not currently check that both rooms in a hallway builder are in the level
+
     ArrayList<Location> hallwayTiles = this.waypoints.size() == 0 ?
         this.to.betweenDoors(this.from) : this.fromWaypoints();
 
