@@ -7,9 +7,9 @@ import java.util.ArrayList;
  */
 public class HallwayBuilder extends SpaceBuilder {
 
-  private RoomBuilder to;
-  private RoomBuilder from;
-  private ArrayList<Location> waypoints;
+  private final RoomBuilder to;
+  private final RoomBuilder from;
+  private final ArrayList<Location> waypoints;
 
   public HallwayBuilder(RoomBuilder to, RoomBuilder from) throws IllegalArgumentException {
     if (to == null || from == null) {
