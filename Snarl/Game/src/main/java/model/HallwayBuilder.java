@@ -7,13 +7,13 @@ import java.util.ArrayList;
  */
 public class HallwayBuilder extends SpaceBuilder {
 
-  RoomBuilder to;
-  RoomBuilder from;
-  ArrayList<Location> waypoints;
+  private RoomBuilder to;
+  private RoomBuilder from;
+  private ArrayList<Location> waypoints;
 
   public HallwayBuilder(RoomBuilder to, RoomBuilder from) throws IllegalArgumentException {
     if (to == null || from == null) {
-      throw new IllegalArgumentException();
+      throw new IllegalArgumentException("to and from rooms must not be null");
     }
 
     this.to = to;
@@ -37,8 +37,8 @@ public class HallwayBuilder extends SpaceBuilder {
    * @param spaces the 2d array to mutate with this hallway
    */
   void build(ArrayList<ArrayList<Space>> spaces) {
-    // TODO: does not currently check that both rooms in a hallway builder are in the level
-
+    // DECISION: does not verify that both rooms are actually in a level
+    // DECISION: does not verify that a hallway does not overlap with itself
     ArrayList<Location> hallwayTiles = this.waypoints.size() == 0 ?
         this.to.betweenDoors(this.from) : this.fromWaypoints();
 

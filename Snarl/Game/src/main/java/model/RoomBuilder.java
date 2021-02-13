@@ -153,7 +153,6 @@ public class RoomBuilder extends SpaceBuilder {
     Location first = this.doorToRoom(room);
     Location last = room.closestDoorOnAxis(first);
 
-    // make sure that doors are not included in the hallway
     ArrayList<Location> locations = first.to(last);
     locations.remove(first);
     locations.remove(last);
