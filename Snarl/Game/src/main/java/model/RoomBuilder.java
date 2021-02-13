@@ -150,12 +150,7 @@ public class RoomBuilder extends SpaceBuilder {
    * @return the locations between the door on this room and the door on the given room
    */
   ArrayList<Location> betweenDoors(RoomBuilder room) {
-    Optional<Location> maybeFirst = this.doors.stream().filter(
-        thisDoor ->  room.doors.stream().anyMatch(new Location.SameAxis(thisDoor))
-    ).findFirst();
-    maybeFirst.orElseThrow(() -> new IllegalStateException("no valid doors to connect these rooms"));
-
-    Location first = maybeFirst.get();
+    Location first = this.doorToRoom(room);
     Location last = room.closestDoorOnAxis(first);
 
     // make sure that doors are not included in the hallway
@@ -163,6 +158,22 @@ public class RoomBuilder extends SpaceBuilder {
     locations.remove(first);
     locations.remove(last);
     return locations;
+  }
+
+  /**
+   * Gets the door on this room that is closest to any door on that room.
+   * @param that the room this is connecting to
+   * @return the door leading to that room
+   */
+  private Location doorToRoom(RoomBuilder that) {
+    Optional<Location> maybeDoor = this.doors.stream().min(Comparator.comparingInt(
+        thisDoor -> that.doors.stream()
+            .filter(new Location.SameAxis(thisDoor))
+            .map(thisDoor::euclidianDistance)
+            .min(Comparator.comparingInt(a -> a))
+            .orElse(Integer.MAX_VALUE)));
+
+    return maybeDoor.orElseThrow(() -> new IllegalStateException("no valid doors to connect these rooms"));
   }
 
   /**
