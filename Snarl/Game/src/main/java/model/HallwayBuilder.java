@@ -13,7 +13,7 @@ public class HallwayBuilder extends SpaceBuilder {
 
   public HallwayBuilder(RoomBuilder to, RoomBuilder from) throws IllegalArgumentException {
     if (to == null || from == null) {
-      throw new IllegalArgumentException();
+      throw new IllegalArgumentException("You must provide two rooms");
     }
 
     this.to = to;
