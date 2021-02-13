@@ -10,7 +10,7 @@ public class Door extends Space {
   }
 
   @Override
-  public String acceptVisitor(SpaceVisitor visitor) {
+  public <T> T acceptVisitor(SpaceVisitor<T> visitor) {
     return visitor.visitDoor(this);
   }
 }

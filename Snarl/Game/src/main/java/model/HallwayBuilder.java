@@ -23,8 +23,8 @@ public class HallwayBuilder extends SpaceBuilder {
 
   /**
    * Add a waypoint at the given coordinates to this hallway.
-   * @param x the x coord of the waypoint
-   * @param y the y coord of the waypoint
+   * @param x the x coordinates of the waypoint
+   * @param y the y coordinates of the waypoint
    * @return this builder with the waypoint
    */
   public HallwayBuilder waypoint(int x, int y) {

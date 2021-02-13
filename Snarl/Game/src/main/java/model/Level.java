@@ -23,7 +23,7 @@ public class Level {
   public <T> ArrayList<ArrayList<T>> map(Function<Space, T> function) {
     ArrayList<ArrayList<T>> result = new ArrayList<>();
     for(ArrayList<Space> row : spaces) {
-      ArrayList<T> resultRow = new ArrayList();
+      ArrayList<T> resultRow = new ArrayList<>();
       for(Space s : row) {
         resultRow.add(function.apply(s));
       }

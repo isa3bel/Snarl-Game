@@ -7,7 +7,7 @@ import view.View;
  */
 public class GameManager {
 
-  private Level level;
+  private final Level level;
 
   public GameManager(Level level) {
     this.level = level;

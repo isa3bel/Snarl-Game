@@ -8,4 +8,5 @@ public class HallwayTile extends Tile {
   HallwayTile(String hallway) {
     super(hallway);
   }
+
 }

@@ -9,7 +9,7 @@ public class Exit extends Space {
     this.group = room;
   }
 
-  public String acceptVisitor(SpaceVisitor visitor) {
+  public <T> T acceptVisitor(SpaceVisitor<T> visitor) {
     return visitor.visitExit(this);
   }
 }
