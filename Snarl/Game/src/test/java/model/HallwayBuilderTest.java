@@ -27,7 +27,7 @@ public class HallwayBuilderTest {
       fail();
     }
     catch (IllegalArgumentException e) {
-      assertEquals("to and from rooms must not be null", e.getMessage());
+      assertEquals("You must provide two rooms", e.getMessage());
     }
   }
 
@@ -38,7 +38,7 @@ public class HallwayBuilderTest {
       fail();
     }
     catch (IllegalArgumentException e) {
-      assertEquals("to and from rooms must not be null", e.getMessage());
+      assertEquals("You must provide two rooms", e.getMessage());
     }
   }
 

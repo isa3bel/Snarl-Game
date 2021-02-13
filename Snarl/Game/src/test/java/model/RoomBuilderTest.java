@@ -51,4 +51,20 @@ public class RoomBuilderTest {
       assertEquals("width and height must be positive, given: 1, 0", e.getMessage());
     }
   }
+
+  @Test
+  public void testExitTrue() {
+    RoomBuilder room1 = new RoomBuilder(1,1,20,8)
+        .exit(0, 6);
+
+    assertTrue(room1.hasExit());
+  }
+
+  @Test
+  public void testExitFalse() {
+    RoomBuilder room2 = new RoomBuilder(25, 3, 10, 3)
+        .door(24, 4);
+
+    assertFalse(room2.hasExit());
+  }
 }
