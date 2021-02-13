@@ -7,8 +7,8 @@ import java.util.ArrayList;
  */
 public class LevelBuilder {
 
-  private ArrayList<RoomBuilder> rooms;
-  private ArrayList<HallwayBuilder> hallways;
+  private final ArrayList<RoomBuilder> rooms;
+  private final ArrayList<HallwayBuilder> hallways;
 
   public LevelBuilder() {
     this.rooms = new ArrayList<>();
@@ -51,13 +51,13 @@ public class LevelBuilder {
    */
   public Level build() throws IllegalStateException {
     // DECISION: there is only one exit for a level per level
-    if (this.rooms.stream().filter(roomBuilder -> roomBuilder.hasExit()).count() != 1) {
+    if (this.rooms.stream().filter(RoomBuilder::hasExit).count() != 1) {
       throw new IllegalStateException("level must have exactly one level exit");
     }
 
     ArrayList<ArrayList<Space>> spaces = new ArrayList<>();
-    this.rooms.stream().forEach(room -> room.build(spaces));
-    this.hallways.stream().forEach(hallway -> hallway.build(spaces));
+    this.rooms.forEach(room -> room.build(spaces));
+    this.hallways.forEach(hallway -> hallway.build(spaces));
     return new Level(spaces);
   }
 }
