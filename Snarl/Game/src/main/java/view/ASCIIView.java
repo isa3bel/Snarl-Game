@@ -1,5 +1,6 @@
 package view;
 
+import java.util.stream.Collectors;
 import model.*;
 import java.util.ArrayList;
 import java.util.function.Function;
@@ -13,12 +14,10 @@ public class ASCIIView implements View {
   public void draw(Level level) {
     ArrayList<ArrayList<String>> spaces = level.map(new ASCIISpace());
 
-    for (ArrayList<String> row : spaces) {
-      for (String space : row) {
-        System.out.print(space);
-      }
-      System.out.print("\n");
-    }
+    final String outputString = spaces.stream()
+        .map(row -> String.join("", row))
+        .collect(Collectors.joining("\n"));
+    System.out.println(outputString);
   }
 
   protected static class ASCIISpace implements SpaceVisitor<String>, Function<Space, String> {
