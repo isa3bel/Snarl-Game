@@ -1,6 +1,5 @@
 package model;
 
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -82,7 +81,6 @@ public class RoomBuilder extends SpaceBuilder {
    * Determines whether the given door coordinates are on a room boundary
    * @param doorX the door's x coordinate
    * @param doorY the door's y coordinate
-   * @return
    */
   private void checkDoorPlacement(int doorX, int doorY) throws IllegalArgumentException {
     if (!(doorX == this.topLeft.xCoordinate - 1
