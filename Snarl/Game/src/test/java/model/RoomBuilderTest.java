@@ -1,6 +1,5 @@
 package model;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import org.junit.Test;
 
@@ -15,8 +14,8 @@ public class RoomBuilderTest {
       fail();
     }
     catch (IllegalArgumentException e) {
-      assertEquals("top left coordinate must have positive x" +
-          " and y coordinates, given: 0, 1", e.getMessage());
+      assertEquals("top left coordinate must have positive xCoordinate" +
+          " and yCoordinate coordinates, given: 0, 1", e.getMessage());
     }
   }
 
@@ -27,8 +26,8 @@ public class RoomBuilderTest {
       fail();
     }
     catch (IllegalArgumentException e) {
-      assertEquals("top left coordinate must have positive x" +
-          " and y coordinates, given: 1, -2", e.getMessage());
+      assertEquals("top left coordinate must have positive xCoordinate" +
+          " and yCoordinate coordinates, given: 1, -2", e.getMessage());
     }
   }
 
@@ -57,7 +56,7 @@ public class RoomBuilderTest {
   @Test
   public void testExitTrue() {
     RoomBuilder room1 = new RoomBuilder(1,1,20,8)
-        .exit(0, 6);
+        .addExit(0, 6);
 
     assertTrue(room1.hasExit());
   }
@@ -84,7 +83,7 @@ public class RoomBuilderTest {
   @Test
   public void testBuildExitIsWall() {
     RoomBuilder room1 = new RoomBuilder(1,1,20,8)
-        .exit(0,2).wall(0,2);
+        .addExit(0,2).addWall(0,2);
 
     try {
       room1.build(new ArrayList<>());
@@ -96,7 +95,7 @@ public class RoomBuilderTest {
   @Test
   public void testBuildDoorIsWall() {
     RoomBuilder room1 = new RoomBuilder(1,1,20,8)
-        .door(0,2).wall(0,2);
+        .door(0,2).addWall(0,2);
 
     try {
       room1.build(new ArrayList<>());
@@ -108,7 +107,7 @@ public class RoomBuilderTest {
   @Test
   public void testBuildDoorIsExit() {
     RoomBuilder room1 = new RoomBuilder(1,1,20,8)
-        .door(0,2).exit(0,2);
+        .door(0,2).addExit(0,2);
 
     try {
       room1.build(new ArrayList<>());
@@ -118,9 +117,29 @@ public class RoomBuilderTest {
   }
 
   @Test
+  public void testBadExitPlacement() {
+    RoomBuilder room1 = new RoomBuilder(1,1,20,8);
+    try {
+      room1.addExit(2,-9);
+    } catch(IllegalArgumentException e) {
+      assertEquals("door must be on room boundary - x value on 0 or 21 or y value on 0 or 9, given: 2, -9", e.getMessage());
+    }
+  }
+
+  @Test
+  public void testBadDoorPlacement() {
+    RoomBuilder room1 = new RoomBuilder(1,1,20,8);
+    try {
+      room1.door(2,-9);
+    } catch(IllegalArgumentException e) {
+      assertEquals("door must be on room boundary - x value on 0 or 21 or y value on 0 or 9, given: 2, -9", e.getMessage());
+    }
+  }
+
+  @Test
   public void testSuccessfulBuild() {
     RoomBuilder room1 = new RoomBuilder(1,1,20,8)
-        .door(0,2).exit(0,5).wall(2,6);
+        .door(0,2).addExit(0,5).addWall(2,6);
 
     ArrayList<ArrayList<Space>> spaces = new ArrayList<>();
     room1.build(spaces);

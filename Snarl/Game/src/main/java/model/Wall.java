@@ -7,6 +7,10 @@ public class Wall extends Space {
 
   Wall() {}
 
+  /**
+   * Constructor for this Wall
+   * @param room the room that this wall will be in
+   */
   Wall(String room) {
     this.group = room;
   }

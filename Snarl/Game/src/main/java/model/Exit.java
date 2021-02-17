@@ -5,6 +5,10 @@ package model;
  */
 public class Exit extends Space {
 
+  /**
+   * Constructor for this Exit
+   * @param room the room that this exit will be in
+   */
   Exit(String room) {
     this.group = room;
   }

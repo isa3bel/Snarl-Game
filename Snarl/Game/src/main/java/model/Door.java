@@ -5,6 +5,10 @@ package model;
  */
 public class Door extends Space {
 
+  /**
+   * Constructor for this Door
+   * @param room the room that this door will be in
+   */
   Door(String room) {
     this.group = room;
   }

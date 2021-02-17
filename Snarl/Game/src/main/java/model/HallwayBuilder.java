@@ -7,22 +7,28 @@ import java.util.ArrayList;
  */
 public class HallwayBuilder extends SpaceBuilder {
 
-  private final RoomBuilder to;
-  private final RoomBuilder from;
+  private final RoomBuilder toRoom;
+  private final RoomBuilder fromRoom;
   private final ArrayList<Location> waypoints;
 
-  public HallwayBuilder(RoomBuilder to, RoomBuilder from) throws IllegalArgumentException {
-    if (to == null || from == null) {
+  /**
+   * Constructor for this HallwayBuilder
+   * @param toRoom the room that this HallwayBuilder leads to
+   * @param fromRoom the room that this HallwayBuilder goes to
+   * @throws if either the 'toRoom' or 'fromRoom' room is null
+   */
+  public HallwayBuilder(RoomBuilder toRoom, RoomBuilder fromRoom) throws IllegalArgumentException {
+    if (toRoom == null || fromRoom == null) {
       throw new IllegalArgumentException("You must provide two rooms");
     }
 
-    this.to = to;
-    this.from = from;
+    this.toRoom = toRoom;
+    this.fromRoom = fromRoom;
     this.waypoints = new ArrayList<>();
   }
 
   /**
-   * Add a waypoint at the given coordinates to this hallway.
+   * Add a waypoint at the given coordinates toRoom this hallway.
    * @param x the x coordinates of the waypoint
    * @param y the y coordinates of the waypoint
    * @return this builder with the waypoint
@@ -34,18 +40,19 @@ public class HallwayBuilder extends SpaceBuilder {
 
   /**
    * Builds this hallway on the array of spaces
-   * @param spaces the 2d array to mutate with this hallway
+   * @param spaces the 2d array toRoom mutate with this hallway
    */
   void build(ArrayList<ArrayList<Space>> spaces) {
     // DECISION: does not verify that both rooms are actually in a level
     // DECISION: does not verify that a hallway does not overlap with itself
-    ArrayList<Location> hallwayTiles = this.waypoints.size() == 0 ?
-        this.to.betweenDoors(this.from) : this.fromWaypoints();
+    ArrayList<Location> hallwayTiles = this.waypoints.size() == 0
+        ? this.toRoom.calculateLocationsFromRoomDoors(this.fromRoom)
+        : this.calculateLocationsFromWaypoints();
 
     for (Location location : hallwayTiles) {
-      Location outer = new Location(location.x + 1, location.y + 1);
+      Location outer = new Location(location.xCoordinate + 1, location.yCoordinate + 1);
       this.initSize(outer, spaces);
-      spaces.get(location.y).set(location.x, new HallwayTile(this.toString()));
+      spaces.get(location.yCoordinate).set(location.xCoordinate, new HallwayTile(this.toString()));
     }
   }
 
@@ -53,19 +60,22 @@ public class HallwayBuilder extends SpaceBuilder {
    * Connects between the rooms through the waypoints.
    * @return the locations connecting all these waypoints
    */
-  private ArrayList<Location> fromWaypoints() {
+  private ArrayList<Location> calculateLocationsFromWaypoints() {
     ArrayList<Location> locations = new ArrayList<>();
-    Location first = this.from.closestDoorOnAxis(this.waypoints.get(0));
-    Location prev = first;
-    for (Location next : this.waypoints) {
-      locations.addAll(prev.to(next));
-      prev = next;
-    }
-    Location last = this.to.closestDoorOnAxis(prev);
-    locations.addAll(prev.to(last));
+    Location firstWaypoint = this.waypoints.get(0);
+    Location startingPoint = this.fromRoom.getClosestDoorOnAxis(firstWaypoint);
+    Location previousPoint = startingPoint;
 
-    locations.remove(first);
-    locations.remove(last);
+    for (Location nextWaypoint : this.waypoints) {
+      locations.addAll(previousPoint.to(nextWaypoint));
+      previousPoint = nextWaypoint;
+    }
+
+    Location endingPoint = this.toRoom.getClosestDoorOnAxis(previousPoint);
+    locations.addAll(previousPoint.to(endingPoint));
+
+    locations.remove(startingPoint);
+    locations.remove(endingPoint);
     return locations;
   }
 }

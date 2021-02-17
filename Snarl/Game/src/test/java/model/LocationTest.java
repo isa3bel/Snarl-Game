@@ -61,7 +61,7 @@ public class LocationTest {
     }
     assertEquals(alongX, this.x4y4.to(this.x1y4));
 
-    alongX.sort(Comparator.comparingInt(location -> location.x));
+    alongX.sort(Comparator.comparingInt(location -> location.xCoordinate));
     assertEquals(alongX, this.x1y4.to(this.x4y4));
 
     ArrayList<Location> alongY = new ArrayList<>();

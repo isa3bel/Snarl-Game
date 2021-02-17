@@ -9,94 +9,118 @@ import java.util.function.Predicate;
  */
 public class Location {
 
-  int x;
-  int y;
+  int xCoordinate;
+  int yCoordinate;
 
   /**
    * Creates a location with the given coordinates.
-   * @param x
-   * @param y
+   * @param xCoordinate x coordinate of this location
+   * @param yCoordinate y coordinate of this location
    * @throws IllegalArgumentException if x or y are negative
    */
-  public Location(int x, int y) throws IllegalArgumentException {
-    if (x < 0 || y < 0) {
-      throw new IllegalArgumentException("location coordinates must be non-negative, given: " + x + ", " + y);
+  public Location(int xCoordinate, int yCoordinate) throws IllegalArgumentException {
+    if (xCoordinate < 0 || yCoordinate < 0) {
+      throw new IllegalArgumentException("location coordinates must be non-negative, given: "
+          + xCoordinate + ", " + yCoordinate);
     }
 
-    this.x = x;
-    this.y = y;
+    this.xCoordinate = xCoordinate;
+    this.yCoordinate = yCoordinate;
   }
 
   /**
    * Calculates all the locations between this Location and that Location.
-   * @param that the location to go ot
+   * @param end the location to go to
    * @return the locations between this and that
    * @throws IllegalArgumentException if this Location and that are not on the same axis
    */
-  public ArrayList<Location> to(Location that) throws IllegalArgumentException {
-    if (!new SameAxis(this).test(that)) {
+  public ArrayList<Location> to(Location end) throws IllegalArgumentException {
+    if (!new SameAxis(this).test(end)) {
       throw new IllegalArgumentException("locations must be on one of the same axes");
     }
 
     ArrayList<Location> locations = new ArrayList<>();
     locations.add(this);
-    return this.x == that.x ? this.alongY(that, locations) : this.alongX(that, locations);
+
+    return this.xCoordinate == end.xCoordinate
+        ? this.calculateYAxisPoints(end, locations)
+        : this.calculateXAxisPoints(end, locations);
   }
 
   /**
    * Calculates all the points on the x axis from this to that.
-   * @param that where to end
+   * @param end end location
    * @param locations the locations so far
    * @return all the locations from the first Location to that
    */
-  private ArrayList<Location> alongX(Location that, ArrayList<Location> locations) {
-    if (this.equals(that)) return locations;
+  private ArrayList<Location> calculateXAxisPoints(Location end, ArrayList<Location> locations) {
+    int xPosnBefore = this.xCoordinate - 1;
+    int xPosnNext = this.xCoordinate + 1;
 
-    Location next = this.x > that.x ? new Location(this.x - 1, this.y) : new Location(this.x + 1, this.y);
+    if (this.equals(end)) {
+      return locations;
+    }
+
+    Location next = this.xCoordinate > end.xCoordinate
+        ? new Location(xPosnBefore, this.yCoordinate)
+        : new Location(xPosnNext, this.yCoordinate);
+
     locations.add(next);
-    return next.alongX(that, locations);
+    return next.calculateXAxisPoints(end, locations);
   }
 
   /**
-   * Calculates all the points on the y axis from this to that.
-   * @param that where to end
+   * Calculates all the points on the yCoordinate axis from this to that.
+   * @param end end location
    * @param locations the locations so far
    * @return all the locations from the first Location to that
    */
-  private ArrayList<Location> alongY(Location that, ArrayList<Location> locations) {
-    if (this.equals(that)) return locations;
+  private ArrayList<Location> calculateYAxisPoints(Location end, ArrayList<Location> locations) {
+    if (this.equals(end)) {
+      return locations;
+    }
 
-    Location next = this.y > that.y ? new Location(this.x, this.y - 1) : new Location(this.x, this.y + 1);
+    int yPosnBelow = this.yCoordinate - 1;
+    int yPosnAbove = this.yCoordinate + 1;
+
+    Location next = this.yCoordinate > end.yCoordinate
+        ? new Location(this.xCoordinate, yPosnBelow)
+        : new Location(this.xCoordinate, yPosnAbove);
+
     locations.add(next);
-    return next.alongY(that, locations);
+    return next.calculateYAxisPoints(end, locations);
   }
 
   /**
    * Calculates the euclidian distance to the given Location.
-   * @param that the location to compare to
+   * @param other the location to compare to
    * @return the euclidian distance to that location
    */
-  int euclidianDistance(Location that) {
-    return Math.abs(this.x - that.x) + Math.abs(this.y - that.y);
+  int euclidianDistance(Location other) {
+    return Math.abs(this.xCoordinate - other.xCoordinate)
+        + Math.abs(this.yCoordinate - other.yCoordinate);
   }
 
   @Override
   public String toString() {
-    return "(" +  x +", " + y + ")";
+    return "(" + xCoordinate +", " + yCoordinate + ")";
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Location that = (Location) o;
-    return this.x == that.x &&
-        this.y == that.y;
+  public boolean equals(Object other) {
+    if (this == other) {
+      return true;
+    }
+    if (other == null || getClass() != other.getClass()) {
+      return false;
+    }
+    Location that = (Location) other;
+    return this.xCoordinate == that.xCoordinate && this.yCoordinate == that.yCoordinate;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(this.x, this.y);
+    return Objects.hash(this.xCoordinate, this.yCoordinate);
   }
 
   /**
@@ -111,8 +135,9 @@ public class Location {
     }
 
     @Override
-    public boolean test(Location location) {
-      return this.location.x == location.x || this.location.y == location.y;
+    public boolean test(Location other) {
+      return this.location.xCoordinate == other.xCoordinate
+          || this.location.yCoordinate == other.yCoordinate;
     }
   }
 }

@@ -10,6 +10,10 @@ public class Level {
 
   private final ArrayList<ArrayList<Space>> spaces;
 
+  /**
+   * Constructor for this Level
+   * @param spaces that make up this level
+   */
   Level(ArrayList<ArrayList<Space>> spaces) {
     this.spaces = spaces;
   }

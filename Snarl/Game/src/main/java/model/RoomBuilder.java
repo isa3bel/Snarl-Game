@@ -24,7 +24,7 @@ public class RoomBuilder extends SpaceBuilder {
    * @param y y coordinate of the top left corner of this room
    * @param width width of the room
    * @param height height of the room
-   * @throws IllegalArgumentException if x or y are negative or width or height are not positive
+   * @throws IllegalArgumentException if x coordinate or y coordinate are negative or width or height are not positive
    */
   public RoomBuilder(int x, int y, int width, int height) throws IllegalArgumentException {
     if (x <= 0 || y <= 0) {
@@ -50,17 +50,13 @@ public class RoomBuilder extends SpaceBuilder {
    * @throws IllegalArgumentException if the door is not on the room's boundary
    */
   public RoomBuilder door(int doorX, int doorY) throws IllegalArgumentException {
-    if (!(doorX == this.topLeft.x - 1 || doorX == this.topLeft.x + this.width ||
-        doorY == this.topLeft.y - 1 || doorY == this.topLeft.y + this.height)) {
-      throw new IllegalArgumentException("door must be on room boundary - x value on " +
-          (this.topLeft.x - 1) + " or " + (this.topLeft.x + this.width) + " or y value on " +
-          (this.topLeft.y - 1) + " or " + (this.topLeft.y + this.height) + ", given: " + doorX + ", " + doorY);
-    }
     // DECISION: not validating if a door is reachable (e.g. no walls in front or
     // the door is on the corner of the room
     // e.g. XXXXD  OR XXDX
     //      XX  X     X XX  (if the room is technically 2 wide but
     //      XXXXX     XXXX   a wall is placed at the edge of the room)
+    checkDoorPlacement(doorX, doorY);
+
     this.doors.add(new Location(doorX, doorY));
     return this;
   }
@@ -72,13 +68,8 @@ public class RoomBuilder extends SpaceBuilder {
    * @return this RoomBuilder with the door
    * @throws IllegalArgumentException if the exit is not on the room's boundary
    */
-  public RoomBuilder exit(int exitX, int exitY) throws IllegalArgumentException {
-    if (!(exitX == this.topLeft.x - 1 || exitX == this.topLeft.x + this.width ||
-        exitY == this.topLeft.y - 1 || exitY == this.topLeft.y + this.height)) {
-      throw new IllegalArgumentException("door must be on room boundary - x value on " +
-          (this.topLeft.x - 1) + " or " + (this.topLeft.x + this.width) + " or y value on " +
-          (this.topLeft.y - 1) + " or " + (this.topLeft.y + this.height) + ", given: " + exitX + ", " + exitY);
-    }
+  public RoomBuilder addExit(int exitX, int exitY) throws IllegalArgumentException {
+    checkDoorPlacement(exitX, exitY);
     if (this.exit != null) {
       throw new IllegalStateException("an exit has already been made in this room");
     }
@@ -88,17 +79,35 @@ public class RoomBuilder extends SpaceBuilder {
   }
 
   /**
+   * Determines whether the given door coordinates are on a room boundary
+   * @param doorX the door's x coordinate
+   * @param doorY the door's y coordinate
+   * @return
+   */
+  private void checkDoorPlacement(int doorX, int doorY) throws IllegalArgumentException {
+    if (!(doorX == this.topLeft.xCoordinate - 1
+        || doorX == this.topLeft.xCoordinate + this.width
+        || doorY == this.topLeft.yCoordinate - 1
+        || doorY == this.topLeft.yCoordinate + this.height)) {
+      throw new IllegalArgumentException("door must be on room boundary - x value on " +
+          (this.topLeft.xCoordinate - 1) + " or " + (this.topLeft.xCoordinate + this.width) + " or y value on " +
+          (this.topLeft.yCoordinate - 1) + " or " + (this.topLeft.yCoordinate + this.height) + ", given: " + doorX + ", " + doorY);
+    }
+  }
+
+  /**
    * Adds a wall to this room.
    * @param wallX the wall's x coordinate relative to topLeft
    * @param wallY the wall's y coordinate relative to topLeft
    * @return this RoomBuilder with the wall
-   * @throws IllegalArgumentException if x or y are negative or outside room bounds
+   * @throws IllegalArgumentException if x coordinate or y coordinate are negative or outside room bounds
    */
-  public RoomBuilder wall(int wallX, int wallY) throws IllegalArgumentException {
+  public RoomBuilder addWall(int wallX, int wallY) throws IllegalArgumentException {
     if (wallX >= this.width || wallY >= this.height) {
       throw new IllegalArgumentException("wall added to this room must be inside room bounds of (" +
           this.width + ", " + this.height +  "), given: " + wallX + ", " + wallY);
     }
+
     this.walls.add(new Location(wallX, wallY));
     return this;
   }
@@ -122,18 +131,19 @@ public class RoomBuilder extends SpaceBuilder {
       throw new IllegalStateException("level exit cannot also be a door");
     }
 
-    Location bottomRight = new Location(this.topLeft.x + this.width, this.topLeft.y + this.height);
+    Location bottomRight = new Location(this.topLeft.xCoordinate + this.width, this.topLeft.yCoordinate
+        + this.height);
     this.initSize(bottomRight, spaces);
 
-    for (int currY = this.topLeft.y; currY < this.topLeft.y + this.height; currY++) {
-      for (int currX = this.topLeft.x; currX < this.topLeft.x + this.width; currX++) {
+    for (int currY = this.topLeft.yCoordinate; currY < this.topLeft.yCoordinate + this.height; currY++) {
+      for (int currX = this.topLeft.xCoordinate; currX < this.topLeft.xCoordinate + this.width; currX++) {
         spaces.get(currY).set(currX, new Tile(this.toString()));
       }
     }
 
-    this.doors.forEach(door -> spaces.get(door.y).set(door.x, new Door(this.toString())));
-    if (this.exit != null) spaces.get(this.exit.y).set(this.exit.x, new Exit(this.toString()));
-    this.walls.forEach(wall -> spaces.get(wall.y).set(wall.x, new Wall(this.toString())));
+    this.doors.forEach(door -> spaces.get(door.yCoordinate).set(door.xCoordinate, new Door(this.toString())));
+    if (this.exit != null) spaces.get(this.exit.yCoordinate).set(this.exit.xCoordinate, new Exit(this.toString()));
+    this.walls.forEach(wall -> spaces.get(wall.yCoordinate).set(wall.xCoordinate, new Wall(this.toString())));
   }
 
   /**
@@ -146,27 +156,27 @@ public class RoomBuilder extends SpaceBuilder {
 
   /**
    * Gets all the locations that would make up a hallway directly between these two rooms.
-   * @param room the room to go to
+   * @param otherRoom the room to go to
    * @return the locations between the door on this room and the door on the given room
    */
-  ArrayList<Location> betweenDoors(RoomBuilder room) {
-    Location first = this.doorToRoom(room);
-    Location last = room.closestDoorOnAxis(first);
+  ArrayList<Location> calculateLocationsFromRoomDoors(RoomBuilder otherRoom) {
+    Location startingDoor = this.getClosestConnectingDoor(otherRoom);
+    Location endingDoor = otherRoom.getClosestDoorOnAxis(startingDoor);
 
-    ArrayList<Location> locations = first.to(last);
-    locations.remove(first);
-    locations.remove(last);
+    ArrayList<Location> locations = startingDoor.to(endingDoor);
+    locations.remove(startingDoor);
+    locations.remove(endingDoor);
     return locations;
   }
 
   /**
-   * Gets the door on this room that is closest to any door on that room.
-   * @param that the room this is connecting to
-   * @return the door leading to that room
+   * Gets the door in this room that is closest to any door in that room.
+   * @param otherRoom the room this room is connecting to
+   * @return the location of the door leading to the other room
    */
-  private Location doorToRoom(RoomBuilder that) {
+  private Location getClosestConnectingDoor(RoomBuilder otherRoom) {
     Optional<Location> maybeDoor = this.doors.stream().min(Comparator.comparingInt(
-        thisDoor -> that.doors.stream()
+        thisDoor -> otherRoom.doors.stream()
             .filter(new Location.SameAxis(thisDoor))
             .map(thisDoor::euclidianDistance)
             .min(Comparator.comparingInt(a -> a))
@@ -177,14 +187,15 @@ public class RoomBuilder extends SpaceBuilder {
 
   /**
    * Find the door on the same axis of the given Location.
-   * @param location the location to find on the axis
+   * @param locationToFind the location to find on the axis
    * @return the location of the door on the same axis as this location
    * @throws IllegalArgumentException if the given location is not on the same axis as any of the doors in this room
    */
-  Location closestDoorOnAxis(Location location) throws IllegalArgumentException {
-    Optional<Location> maybeLocation = this.doors.stream().filter(new Location.SameAxis(location))
-        .min(Comparator.comparingInt(door -> door.euclidianDistance(location)));
-    maybeLocation.orElseThrow(() -> new IllegalArgumentException("no doors on the same axis as the given location"));
-    return maybeLocation.get();
+  Location getClosestDoorOnAxis(Location locationToFind) throws IllegalArgumentException {
+    Optional<Location> doorLocation = this.doors.stream().filter(new Location.SameAxis(locationToFind))
+        .min(Comparator.comparingInt(door -> door.euclidianDistance(locationToFind)));
+    doorLocation.orElseThrow(() -> new IllegalArgumentException("no doors on the same axis as the given location"));
+
+    return doorLocation.get();
   }
 }

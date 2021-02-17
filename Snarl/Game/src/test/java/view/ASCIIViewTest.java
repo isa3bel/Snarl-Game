@@ -27,22 +27,22 @@ public class ASCIIViewTest {
 
   private void setupSingleRoom() {
     RoomBuilder singleRoomBuilder = new RoomBuilder(1,1,20,8)
-        .exit(0, 6)
-        .wall(1,1)
-        .wall(2,1)
-        .wall(5,4)
-        .wall(6,4)
-        .wall(7,4)
-        .wall(5,5)
-        .wall(6,5)
-        .wall(7,5);
+        .addExit(0, 6)
+        .addWall(1,1)
+        .addWall(2,1)
+        .addWall(5,4)
+        .addWall(6,4)
+        .addWall(7,4)
+        .addWall(5,5)
+        .addWall(6,5)
+        .addWall(7,5);
     Level singleRoomLevel = new LevelBuilder().room(singleRoomBuilder).build();
     this.singleRoom = new GameManager(singleRoomLevel);
   }
 
   private void setupTwoRooms() {
     RoomBuilder room1 = new RoomBuilder(1,1,20,8)
-        .exit(0, 6)
+        .addExit(0, 6)
         .door(21, 4);
     RoomBuilder room2 = new RoomBuilder(25, 3, 10, 3)
         .door(24, 4);
@@ -56,17 +56,17 @@ public class ASCIIViewTest {
 
   private void setupComplicatedLevel() {
     RoomBuilder room1 = new RoomBuilder(1,1,20,8)
-        .exit(0, 6)
+        .addExit(0, 6)
         .door(21, 4)
         .door(16, 9)
-        .wall(1, 1)
-        .wall(2, 1)
-        .wall(5, 4)
-        .wall(6, 4)
-        .wall(7, 4)
-        .wall(5, 5)
-        .wall(6, 5)
-        .wall(7, 5);
+        .addWall(1, 1)
+        .addWall(2, 1)
+        .addWall(5, 4)
+        .addWall(6, 4)
+        .addWall(7, 4)
+        .addWall(5, 5)
+        .addWall(6, 5)
+        .addWall(7, 5);
     RoomBuilder room2 = new RoomBuilder(25, 3, 10, 3)
         .door(24, 4);
     RoomBuilder room3 = new RoomBuilder(28, 12, 4, 2)
@@ -85,17 +85,17 @@ public class ASCIIViewTest {
 
   private void setupAnotherComplicatedLevel() {
     RoomBuilder room1 = new RoomBuilder(1,1,20,8)
-        .exit(0, 6)
+        .addExit(0, 6)
         .door(21, 4)
         .door(16, 9)
-        .wall(1, 1)
-        .wall(2, 1)
-        .wall(5, 4)
-        .wall(6, 4)
-        .wall(7, 4)
-        .wall(5, 5)
-        .wall(6, 5)
-        .wall(7, 5);
+        .addWall(1, 1)
+        .addWall(2, 1)
+        .addWall(5, 4)
+        .addWall(6, 4)
+        .addWall(7, 4)
+        .addWall(5, 5)
+        .addWall(6, 5)
+        .addWall(7, 5);
     RoomBuilder room2 = new RoomBuilder(25, 3, 10, 3)
         .door(24, 4)
         .door(34, 2);

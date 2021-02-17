@@ -3,6 +3,9 @@ package model;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * Represents a class that builds spaces
+ */
 public abstract class SpaceBuilder {
 
   /**
@@ -10,9 +13,9 @@ public abstract class SpaceBuilder {
    * @param spaces the spaces array
    */
   protected void initSize(Location location, ArrayList<ArrayList<Space>> spaces) {
-    int maxX = Math.max(location.x, spaces.stream().map(row -> row.size() - 1)
+    int maxX = Math.max(location.xCoordinate, spaces.stream().map(row -> row.size() - 1)
         .max(Comparator.comparingInt(a -> a)).orElse(0));
-    int maxY = Math.max(location.y, spaces.size() - 1);
+    int maxY = Math.max(location.yCoordinate, spaces.size() - 1);
 
     // guarantee the min number of rows
     while (spaces.size() <= maxY) {
