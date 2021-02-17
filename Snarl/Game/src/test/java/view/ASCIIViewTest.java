@@ -36,20 +36,20 @@ public class ASCIIViewTest {
         .addWall(5,5)
         .addWall(6,5)
         .addWall(7,5);
-    Level singleRoomLevel = new LevelBuilder().room(singleRoomBuilder).build();
+    Level singleRoomLevel = new LevelBuilder().addRoom(singleRoomBuilder).build();
     this.singleRoom = new GameManager(singleRoomLevel);
   }
 
   private void setupTwoRooms() {
     RoomBuilder room1 = new RoomBuilder(1,1,20,8)
         .addExit(0, 6)
-        .door(21, 4);
+        .addDoor(21, 4);
     RoomBuilder room2 = new RoomBuilder(25, 3, 10, 3)
-        .door(24, 4);
+        .addDoor(24, 4);
     Level twoRoomsLevel = new LevelBuilder()
-        .room(room1)
-        .room(room2)
-        .hallway(new HallwayBuilder(room1, room2))
+        .addRoom(room1)
+        .addRoom(room2)
+        .addHallway(new HallwayBuilder(room1, room2))
         .build();
     this.twoRooms = new GameManager(twoRoomsLevel);
   }
@@ -57,8 +57,8 @@ public class ASCIIViewTest {
   private void setupComplicatedLevel() {
     RoomBuilder room1 = new RoomBuilder(1,1,20,8)
         .addExit(0, 6)
-        .door(21, 4)
-        .door(16, 9)
+        .addDoor(21, 4)
+        .addDoor(16, 9)
         .addWall(1, 1)
         .addWall(2, 1)
         .addWall(5, 4)
@@ -68,17 +68,17 @@ public class ASCIIViewTest {
         .addWall(6, 5)
         .addWall(7, 5);
     RoomBuilder room2 = new RoomBuilder(25, 3, 10, 3)
-        .door(24, 4);
+        .addDoor(24, 4);
     RoomBuilder room3 = new RoomBuilder(28, 12, 4, 2)
-        .door(27, 13);
+        .addDoor(27, 13);
     HallwayBuilder hallway1 = new HallwayBuilder(room1, room2);
-    HallwayBuilder hallway2 = new HallwayBuilder(room1, room3).waypoint(16, 13);
+    HallwayBuilder hallway2 = new HallwayBuilder(room1, room3).addWaypoint(16, 13);
     Level twoRoomsLevel = new LevelBuilder()
-        .room(room1)
-        .room(room2)
-        .room(room3)
-        .hallway(hallway1)
-        .hallway(hallway2)
+        .addRoom(room1)
+        .addRoom(room2)
+        .addRoom(room3)
+        .addHallway(hallway1)
+        .addHallway(hallway2)
         .build();
     this.complicatedLevel = new GameManager(twoRoomsLevel);
   }
@@ -86,8 +86,8 @@ public class ASCIIViewTest {
   private void setupAnotherComplicatedLevel() {
     RoomBuilder room1 = new RoomBuilder(1,1,20,8)
         .addExit(0, 6)
-        .door(21, 4)
-        .door(16, 9)
+        .addDoor(21, 4)
+        .addDoor(16, 9)
         .addWall(1, 1)
         .addWall(2, 1)
         .addWall(5, 4)
@@ -97,34 +97,34 @@ public class ASCIIViewTest {
         .addWall(6, 5)
         .addWall(7, 5);
     RoomBuilder room2 = new RoomBuilder(25, 3, 10, 3)
-        .door(24, 4)
-        .door(34, 2);
+        .addDoor(24, 4)
+        .addDoor(34, 2);
     RoomBuilder room3 = new RoomBuilder(28, 12, 4, 2)
-        .door(27, 13);
+        .addDoor(27, 13);
     RoomBuilder room4 = new RoomBuilder(35, 7, 4, 1)
-        .door(36, 6)
-        .door(36,8);
+        .addDoor(36, 6)
+        .addDoor(36,8);
     RoomBuilder room5 = new RoomBuilder(22, 8, 6, 3)
-        .door(28, 9);
+        .addDoor(28, 9);
     HallwayBuilder hallway1to2 = new HallwayBuilder(room1, room2);
-    HallwayBuilder hallway1to3 = new HallwayBuilder(room1, room3).waypoint(16, 13);
+    HallwayBuilder hallway1to3 = new HallwayBuilder(room1, room3).addWaypoint(16, 13);
     HallwayBuilder hallway2to4 = new HallwayBuilder(room2, room4)
-        .waypoint(36, 5)
-        .waypoint(45, 5)
-        .waypoint(45, 2)
-        .waypoint(45, 2);
+        .addWaypoint(36, 5)
+        .addWaypoint(45, 5)
+        .addWaypoint(45, 2)
+        .addWaypoint(45, 2);
     HallwayBuilder hallway5to4 = new HallwayBuilder(room5, room4)
-        .waypoint(36, 9);
+        .addWaypoint(36, 9);
     Level twoRoomsLevel = new LevelBuilder()
-        .room(room1)
-        .room(room2)
-        .room(room3)
-        .room(room4)
-        .room(room5)
-        .hallway(hallway1to2)
-        .hallway(hallway1to3)
-        .hallway(hallway2to4)
-        .hallway(hallway5to4)
+        .addRoom(room1)
+        .addRoom(room2)
+        .addRoom(room3)
+        .addRoom(room4)
+        .addRoom(room5)
+        .addHallway(hallway1to2)
+        .addHallway(hallway1to3)
+        .addHallway(hallway2to4)
+        .addHallway(hallway5to4)
         .build();
     this.anotherComplicatedLevel = new GameManager(twoRoomsLevel);
   }

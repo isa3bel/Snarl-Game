@@ -64,7 +64,7 @@ public class RoomBuilderTest {
   @Test
   public void testExitFalse() {
     RoomBuilder room2 = new RoomBuilder(25, 3, 10, 3)
-        .door(24, 4);
+        .addDoor(24, 4);
 
     assertFalse(room2.hasExit());
   }
@@ -95,7 +95,7 @@ public class RoomBuilderTest {
   @Test
   public void testBuildDoorIsWall() {
     RoomBuilder room1 = new RoomBuilder(1,1,20,8)
-        .door(0,2).addWall(0,2);
+        .addDoor(0,2).addWall(0,2);
 
     try {
       room1.build(new ArrayList<>());
@@ -107,7 +107,7 @@ public class RoomBuilderTest {
   @Test
   public void testBuildDoorIsExit() {
     RoomBuilder room1 = new RoomBuilder(1,1,20,8)
-        .door(0,2).addExit(0,2);
+        .addDoor(0,2).addExit(0,2);
 
     try {
       room1.build(new ArrayList<>());
@@ -130,7 +130,7 @@ public class RoomBuilderTest {
   public void testBadDoorPlacement() {
     RoomBuilder room1 = new RoomBuilder(1,1,20,8);
     try {
-      room1.door(2,-9);
+      room1.addDoor(2,-9);
     } catch(IllegalArgumentException e) {
       assertEquals("door must be on room boundary - x value on 0 or 21 or y value on 0 or 9, given: 2, -9", e.getMessage());
     }
@@ -139,7 +139,7 @@ public class RoomBuilderTest {
   @Test
   public void testSuccessfulBuild() {
     RoomBuilder room1 = new RoomBuilder(1,1,20,8)
-        .door(0,2).addExit(0,5).addWall(2,6);
+        .addDoor(0,2).addExit(0,5).addWall(2,6);
 
     ArrayList<ArrayList<Space>> spaces = new ArrayList<>();
     room1.build(spaces);

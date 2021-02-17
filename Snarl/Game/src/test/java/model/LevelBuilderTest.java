@@ -10,12 +10,12 @@ public class LevelBuilderTest {
 
   @Before
   public void setUp() {
-    this.roomX1Y1 = new RoomBuilder(1, 1, 1, 1).door(2, 1);
+    this.roomX1Y1 = new RoomBuilder(1, 1, 1, 1).addDoor(2, 1);
 
   }
   @Test
   public void testBuildingLevelWithoutExit() {
-    LevelBuilder twoRoomsLevel = new LevelBuilder().room(this.roomX1Y1);
+    LevelBuilder twoRoomsLevel = new LevelBuilder().addRoom(this.roomX1Y1);
     try {
       twoRoomsLevel.build();
     } catch (IllegalStateException e) {

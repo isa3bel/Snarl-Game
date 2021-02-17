@@ -33,7 +33,7 @@ public class SnarlRunner {
         .addWall(5,5)
         .addWall(6,5)
         .addWall(7,5);
-    Level level = new LevelBuilder().room(room1).build();
+    Level level = new LevelBuilder().addRoom(room1).build();
     GameManager gameManager = new GameManager(level);
     return gameManager;
   }
@@ -41,8 +41,8 @@ public class SnarlRunner {
   private static GameManager setupComplicatedLevel() {
     RoomBuilder room1 = new RoomBuilder(1,1,20,8)
         .addExit(0, 6)
-        .door(21, 4)
-        .door(16, 9)
+        .addDoor(21, 4)
+        .addDoor(16, 9)
         .addWall(1, 1)
         .addWall(2, 1)
         .addWall(5, 4)
@@ -52,17 +52,17 @@ public class SnarlRunner {
         .addWall(6, 5)
         .addWall(7, 5);
     RoomBuilder room2 = new RoomBuilder(25, 3, 10, 3)
-        .door(24, 4);
+        .addDoor(24, 4);
     RoomBuilder room3 = new RoomBuilder(28, 12, 4, 2)
-        .door(27, 13);
+        .addDoor(27, 13);
     HallwayBuilder hallway1 = new HallwayBuilder(room1, room2);
-    HallwayBuilder hallway2 = new HallwayBuilder(room1, room3).waypoint(16, 13);
+    HallwayBuilder hallway2 = new HallwayBuilder(room1, room3).addWaypoint(16, 13);
     Level twoRoomsLevel = new LevelBuilder()
-        .room(room1)
-        .room(room2)
-        .room(room3)
-        .hallway(hallway1)
-        .hallway(hallway2)
+        .addRoom(room1)
+        .addRoom(room2)
+        .addRoom(room3)
+        .addHallway(hallway1)
+        .addHallway(hallway2)
         .build();
     return new GameManager(twoRoomsLevel);
   }

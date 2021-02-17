@@ -29,8 +29,8 @@ public class HallwayBuilderTest {
   @Before
   public void setup() {
     this.spaces = new ArrayList<>();
-    this.roomX1Y1 = new RoomBuilder(1, 1, 1, 1).door(2, 1);
-    this.roomX5Y5 = new RoomBuilder(5, 5, 1, 1).door(5, 4);
+    this.roomX1Y1 = new RoomBuilder(1, 1, 1, 1).addDoor(2, 1);
+    this.roomX5Y5 = new RoomBuilder(5, 5, 1, 1).addDoor(5, 4);
     this.hallwayMocked = new HallwayBuilder(this.roomX1Y1, this.roomX5Y5);
   }
 
@@ -59,7 +59,7 @@ public class HallwayBuilderTest {
   @Test
   public void testWaypointIsOnSameAxisAsDoor() {
     HallwayBuilder hallway = new HallwayBuilder(this.roomX5Y5, this.roomX1Y1);
-    hallway.waypoint(2, 3);
+    hallway.addWaypoint(2, 3);
 
     try {
       hallway.build(spaces);
@@ -73,8 +73,8 @@ public class HallwayBuilderTest {
   @Test
   public void testWaypointIsOnSameAxisAsOtherWaypoint() {
     HallwayBuilder hallway = new HallwayBuilder(this.roomX5Y5, this.roomX1Y1);
-    hallway.waypoint(2, 3);
-    hallway.waypoint(3, 4);
+    hallway.addWaypoint(2, 3);
+    hallway.addWaypoint(3, 4);
 
     try {
       hallway.build(spaces);
@@ -88,7 +88,7 @@ public class HallwayBuilderTest {
   @Test
   public void testWaypoints() {
     // currently failing because the injection isn't working - need to figure out these mocks
-    hallwayMocked.waypoint(5, 1);
+    hallwayMocked.addWaypoint(5, 1);
     Mockito.verify(waypoints).add(new Location(3, 1));
   }
 }

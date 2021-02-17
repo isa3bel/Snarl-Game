@@ -20,7 +20,7 @@ public class LevelBuilder {
    * @param room the room to add
    * @return the LevelBuilder with the added room
    */
-  public LevelBuilder room(RoomBuilder room) {
+  public LevelBuilder addRoom(RoomBuilder room) {
     // DECISION: no validation to assert that there are no overlaps
     this.rooms.add(room);
     return this;
@@ -31,7 +31,7 @@ public class LevelBuilder {
    * @param hallway the hallway to add
    * @return the LevelBuilder with the added hallway
    */
-  public LevelBuilder hallway(HallwayBuilder hallway) {
+  public LevelBuilder addHallway(HallwayBuilder hallway) {
     // DECISION: no validation to assert that there are no overlaps
     // DECISION: a hallway can be right next to a room, making it look like the room
     // extends outward

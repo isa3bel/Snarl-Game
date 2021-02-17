@@ -33,7 +33,7 @@ public class HallwayBuilder extends SpaceBuilder {
    * @param y the y coordinates of the waypoint
    * @return this builder with the waypoint
    */
-  public HallwayBuilder waypoint(int x, int y) {
+  public HallwayBuilder addWaypoint(int x, int y) {
     this.waypoints.add(new Location(x, y));
     return this;
   }

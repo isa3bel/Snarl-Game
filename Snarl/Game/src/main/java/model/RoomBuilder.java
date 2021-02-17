@@ -49,7 +49,7 @@ public class RoomBuilder extends SpaceBuilder {
    * @return this RoomBuilder with the door
    * @throws IllegalArgumentException if the door is not on the room's boundary
    */
-  public RoomBuilder door(int doorX, int doorY) throws IllegalArgumentException {
+  public RoomBuilder addDoor(int doorX, int doorY) throws IllegalArgumentException {
     // DECISION: not validating if a door is reachable (e.g. no walls in front or
     // the door is on the corner of the room
     // e.g. XXXXD  OR XXDX
