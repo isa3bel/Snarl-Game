@@ -14,8 +14,8 @@ public class RoomBuilderTest {
       fail();
     }
     catch (IllegalArgumentException e) {
-      assertEquals("top left coordinate must have positive xCoordinate" +
-          " and yCoordinate coordinates, given: 0, 1", e.getMessage());
+      assertEquals("top left coordinate must have positive x" +
+          " and y coordinates, given: 0, 1", e.getMessage());
     }
   }
 
@@ -26,8 +26,8 @@ public class RoomBuilderTest {
       fail();
     }
     catch (IllegalArgumentException e) {
-      assertEquals("top left coordinate must have positive xCoordinate" +
-          " and yCoordinate coordinates, given: 1, -2", e.getMessage());
+      assertEquals("top left coordinate must have positive x" +
+          " and y coordinates, given: 1, -2", e.getMessage());
     }
   }
 
