@@ -72,16 +72,18 @@ public class QuestionDeserializer implements JsonDeserializer<Question> {
   }
 
   private void addLandmarkToRoom(int type, boolean isBoundary, Location location, RoomBuilder roomBuilder) {
-    // TODO: review this to see a better use of the enum here?
-    switch (type) {
-      case 0:
+    Tile tileType = Tile.values()[type];
+
+    switch (tileType) {
+      case WALL:
         if (!isBoundary) {
           roomBuilder.addWall(location.xCoordinate, location.yCoordinate);
         }
         return;
-      case 1:
+      case WALKABLE:
+        // the type of a landmark is a tile so we don't need to  add anything heredo
         return;
-      case 2:
+      case DOOR:
         roomBuilder.addDoor(location.xCoordinate, location.yCoordinate);
         return;
       default:
@@ -123,13 +125,16 @@ public class QuestionDeserializer implements JsonDeserializer<Question> {
    * The different kind tiles in a layout
    */
   private enum Tile {
-    WALL(0), WALKABLE(1), DOOR(2);
+    WALL(0),
+    WALKABLE(1),
+    DOOR(2);
 
-    int value;
+    final int value;
 
     Tile(int value) {
       this.value = value;
     }
+
   }
 
 }
