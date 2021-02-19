@@ -12,6 +12,7 @@ public class TestHarness {
     Scanner scanner = new Scanner(System.in);
 
     Gson gson = new GsonBuilder().registerTypeAdapter(LevelBuilder.class,
-        new LevelBuilderDeserializer()).create();
+        new QuestionDeserializer()).create();
+
   }
 }

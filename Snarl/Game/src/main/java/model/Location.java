@@ -9,8 +9,8 @@ import java.util.function.Predicate;
  */
 public class Location {
 
-  int xCoordinate;
-  int yCoordinate;
+  public int xCoordinate;
+  public int yCoordinate;
 
   /**
    * Creates a location with the given coordinates.
