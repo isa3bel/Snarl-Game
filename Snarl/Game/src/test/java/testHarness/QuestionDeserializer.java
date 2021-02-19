@@ -30,23 +30,15 @@ public class QuestionDeserializer implements JsonDeserializer<Question> {
 
     JsonArray jsonArray = (JsonArray) jsonElement;
     JsonElement room = jsonArray.get(0);
-    Location location = this.parseLocation(jsonArray.get(1));
+    Location locationOfInterest = this.parseLocation(jsonArray.get(1));
 
 
     LevelBuilder levelBuilder = new LevelBuilder();
     // check type of object here before parsing room
     levelBuilder.addRoom(this.parseRoom(room));
-    // TODO: parse the location (second element in that array)
-    // TODO: figure out where the "calculation" is going to be called - here or in main
-    //  (and if here then what the "result" from this deserializer is going to look like)
-    //  maybe this will be a function object applied to a level that will find the moveable locations ?
     Level level = levelBuilder.build();
-    return new LocationQuery(level, location);
-  }
 
-  private LevelBuilder parseLevel() throws JsonParseException {
-    // helper to ^^ for parsing the level
-    return null;
+    return new LocationQuery(level, locationOfInterest);
   }
 
   private RoomBuilder parseRoom(JsonElement jsonElement) throws JsonParseException {
