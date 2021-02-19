@@ -30,8 +30,9 @@ public class LocationQuery implements Question {
     }
     allValidStringMoves+= locationToString(validMoves.get(validMoves.size() - 1)) + "]";
 
-    return "[ \"Success: Traversable points from \", [2, 2], \" in room at \", [0, 1] , \" are \",\n" + allValidStringMoves + "\n" +
-        "]";
+    return "[ \"Success: Traversable points from \", "
+        + locationToString(this.location) + ", \" in room at \", [0, 1] , \" are \",\n" + allValidStringMoves + "\n"
+        + "]";
   }
 
   public String locationToString(Location loc) {
