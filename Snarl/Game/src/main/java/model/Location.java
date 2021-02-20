@@ -9,8 +9,8 @@ import java.util.function.Predicate;
  */
 public class Location {
 
-  int xCoordinate;
-  int yCoordinate;
+  public int xCoordinate;
+  public int yCoordinate;
 
   /**
    * Creates a location with the given coordinates.
@@ -96,9 +96,20 @@ public class Location {
    * @param other the location to compare to
    * @return the euclidian distance to that location
    */
-  int euclidianDistance(Location other) {
+  public int euclidianDistance(Location other) {
     return Math.abs(this.xCoordinate - other.xCoordinate)
         + Math.abs(this.yCoordinate - other.yCoordinate);
+  }
+
+  /**
+   * Is this location directly next to that location?
+   * @param that location to compare to
+   * @return if this is adjacent to that
+   */
+  public boolean isAdjacentTo(Location that) {
+    int xDiff = Math.abs(this.xCoordinate - that.xCoordinate);
+    int yDiff = Math.abs(this.yCoordinate - that.yCoordinate);
+    return xDiff + yDiff == 1;
   }
 
   @Override

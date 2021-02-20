@@ -9,4 +9,8 @@ public abstract class Space {
   String group;
 
   public abstract <T> T acceptVisitor(SpaceVisitor<T> visitor);
+
+  public boolean sameGroup(Space that) {
+    return this.group != null && this.group == that.group;
+  }
 }
