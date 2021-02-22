@@ -11,9 +11,9 @@ import model.*;
  */
 public class LocationQuery implements Question {
 
-  private Level level;
-  private Location location;
-  private Location roomOrigin;
+  private final Level level;
+  private final Location location;
+  private final Location roomOrigin;
 
   LocationQuery(Level level, Location location, Location roomOrigin) {
     this.level = level;
@@ -33,7 +33,7 @@ public class LocationQuery implements Question {
 
     Space space = this.level.get(this.location);
     HashMap<Location, Space> validMoves = this.level.filter(new CalculateMovableTiles(this.location, space));
-    String joinedMoves = validMoves.keySet().stream().map(valid -> locationToString(valid))
+    String joinedMoves = validMoves.keySet().stream().map(this::locationToString)
         .collect(Collectors.joining(", "));
     String allValidStringMoves = String.format("[ %s ]", joinedMoves);
 
@@ -67,8 +67,8 @@ public class LocationQuery implements Question {
    */
   private static class CalculateMovableTiles implements BiPredicate<Space, Location> {
 
-    private Space space;
-    private Location location;
+    private final Space space;
+    private final Location location;
 
     CalculateMovableTiles(Location location, Space space) {
       this.location = location;
@@ -84,7 +84,7 @@ public class LocationQuery implements Question {
     @Override
     public boolean test(Space thatSpace, Location thatLocation) {
       return this.location.isAdjacentTo(thatLocation) && this.space.sameGroup(thatSpace) &&
-          thatSpace.acceptVisitor(new IsWalkable());
+          thatSpace.acceptVisitor(new IsTraverable());
     }
   }
 }
