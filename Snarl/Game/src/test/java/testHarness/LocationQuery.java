@@ -84,7 +84,7 @@ public class LocationQuery implements Question {
     @Override
     public boolean test(Space thatSpace, Location thatLocation) {
       return this.location.isAdjacentTo(thatLocation) && this.space.sameGroup(thatSpace) &&
-          thatSpace.acceptVisitor(new IsTraverable());
+          thatSpace.acceptVisitor(new IsTraversable());
     }
   }
 }

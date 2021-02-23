@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 /**
- * Represents a class that builds spaces
+ * Represents a class that constructs itself in a 2D array of spaces.
  */
 public abstract class SpaceBuilder {
 

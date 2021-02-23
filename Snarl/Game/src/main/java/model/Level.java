@@ -57,7 +57,7 @@ public class Level {
 
     for (int col = 0; col < this.spaces.size(); col++) {
       for (int row = 0; row < this.spaces.get(col).size(); row++) {
-        Location location = new Location(col, row);
+        Location location = new Location(row, col);
         Space space = this.spaces.get(col).get(row);
 
         if (function.test(space, location)) {

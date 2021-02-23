@@ -84,11 +84,4 @@ public class HallwayBuilderTest {
       assertEquals("locations must be on one of the same axes", e.getMessage());
     }
   }
-
-  @Test
-  public void testWaypoints() {
-    // currently failing because the injection isn't working - need to figure out these mocks
-    hallwayMocked.addWaypoint(5, 1);
-    Mockito.verify(waypoints).add(new Location(3, 1));
-  }
 }

@@ -10,12 +10,12 @@ public class SnarlRunner {
   public static void main(String[] args) {
     View view = new ASCIIView();
     GameManager gameManager = makeGameManager();
-    gameManager.draw(view);
+    gameManager.buildView(view);
 
     System.out.println("\n");
 
     GameManager complicated = setupComplicatedLevel();
-    complicated.draw(view);
+    complicated.buildView(view);
   }
 
   /**
@@ -34,8 +34,7 @@ public class SnarlRunner {
         .addWall(6,5)
         .addWall(7,5);
     Level level = new LevelBuilder().addRoom(room1).build();
-    GameManager gameManager = new GameManager(level);
-    return gameManager;
+    return new GameManagerBuilder(level).build();
   }
 
   private static GameManager setupComplicatedLevel() {
@@ -64,7 +63,7 @@ public class SnarlRunner {
         .addHallway(hallway1)
         .addHallway(hallway2)
         .build();
-    return new GameManager(twoRoomsLevel);
+    return new GameManagerBuilder(twoRoomsLevel).build();
   }
 
 }

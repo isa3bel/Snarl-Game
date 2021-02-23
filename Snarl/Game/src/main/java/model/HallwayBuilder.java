@@ -15,7 +15,7 @@ public class HallwayBuilder extends SpaceBuilder {
    * Constructor for this HallwayBuilder
    * @param toRoom the room that this HallwayBuilder leads to
    * @param fromRoom the room that this HallwayBuilder goes to
-   * @throws if either the 'toRoom' or 'fromRoom' room is null
+   * @throws IllegalArgumentException if either the 'toRoom' or 'fromRoom' room is null
    */
   public HallwayBuilder(RoomBuilder toRoom, RoomBuilder fromRoom) throws IllegalArgumentException {
     if (toRoom == null || fromRoom == null) {

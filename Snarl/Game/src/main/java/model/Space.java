@@ -11,6 +11,6 @@ public abstract class Space {
   public abstract <T> T acceptVisitor(SpaceVisitor<T> visitor);
 
   public boolean sameGroup(Space that) {
-    return this.group != null && this.group == that.group;
+    return this.group != null && this.group.equals(that.group);
   }
 }

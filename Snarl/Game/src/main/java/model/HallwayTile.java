@@ -13,4 +13,8 @@ public class HallwayTile extends Tile {
     super(hallway);
   }
 
+  @Override
+  public <T> T acceptVisitor(SpaceVisitor<T> visitor) {
+    return visitor.visitHallwayTile(this);
+  }
 }

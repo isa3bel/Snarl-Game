@@ -3,7 +3,7 @@ package model;
 /**
  * Currently for the express purposes of the LocationQuery in the test harness, is a space is "traversable"?
  */
-public class IsTraverable implements SpaceVisitor<Boolean> {
+public class IsTraversable implements SpaceVisitor<Boolean> {
 
   /**
    * A door is not walkable.
@@ -43,5 +43,15 @@ public class IsTraverable implements SpaceVisitor<Boolean> {
   @Override
   public Boolean visitTile(Tile tile) {
     return true;
+  }
+
+  /**
+   * A tile is walkable.
+   * @param tile the tile
+   * @return true
+   */
+  @Override
+  public Boolean visitHallwayTile(HallwayTile tile) {
+    return false;
   }
 }

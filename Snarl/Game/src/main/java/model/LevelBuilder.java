@@ -21,7 +21,6 @@ public class LevelBuilder {
    * @return the LevelBuilder with the added room
    */
   public LevelBuilder addRoom(RoomBuilder room) {
-    // DECISION: no validation to assert that there are no overlaps
     this.rooms.add(room);
     return this;
   }
@@ -50,11 +49,6 @@ public class LevelBuilder {
    * @throws IllegalStateException when the level has more than one exit
    */
   public Level build() throws IllegalStateException {
-    // DECISION: there is only one exit for a level per level
-    if (this.rooms.stream().filter(RoomBuilder::hasExit).count() != 1) {
-      throw new IllegalStateException("level must have exactly one level exit");
-    }
-
     ArrayList<ArrayList<Space>> spaces = new ArrayList<>();
     this.rooms.forEach(room -> room.build(spaces));
     this.hallways.forEach(hallway -> hallway.build(spaces));

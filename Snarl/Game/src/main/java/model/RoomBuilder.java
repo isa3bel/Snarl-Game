@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * Helper to create a room in a level.
@@ -129,15 +130,10 @@ public class RoomBuilder extends SpaceBuilder {
       throw new IllegalStateException("level exit cannot also be a door");
     }
 
-    Location bottomRight = new Location(this.topLeft.xCoordinate + this.width, this.topLeft.yCoordinate
+    Location bottomRightWall = new Location(this.topLeft.xCoordinate + this.width, this.topLeft.yCoordinate
         + this.height);
-    this.initSize(bottomRight, spaces);
-
-    for (int currY = this.topLeft.yCoordinate; currY < this.topLeft.yCoordinate + this.height; currY++) {
-      for (int currX = this.topLeft.xCoordinate; currX < this.topLeft.xCoordinate + this.width; currX++) {
-        spaces.get(currY).set(currX, new Tile(this.toString()));
-      }
-    }
+    this.initSize(bottomRightWall, spaces);
+    this.setRoomSpaces(bottomRightWall, spaces);
 
     this.doors.forEach(door -> spaces.get(door.yCoordinate).set(door.xCoordinate, new Door(this.toString())));
     if (this.exit != null) spaces.get(this.exit.yCoordinate).set(this.exit.xCoordinate, new Exit(this.toString()));
@@ -145,11 +141,24 @@ public class RoomBuilder extends SpaceBuilder {
   }
 
   /**
-   * Does this room have an exit?
-   * @return whether this room would be built with an exit
+   * Initialize the room tiles to be in the same group.
+   * @param bottomRightWall the wall corner tile at the bottom right of the room
+   * @param spaces the 2d spaces array of this level
    */
-  boolean hasExit() {
-    return this.exit != null;
+  private void setRoomSpaces(Location bottomRightWall, ArrayList<ArrayList<Space>> spaces) {
+    Location topLeftWall = new Location(this.topLeft.xCoordinate - 1, this.topLeft.yCoordinate - 1);
+    // for all the locations in the 2D space in the rectangle defined by topLeftWall and bottomRightWall
+    for (int currY = topLeftWall.yCoordinate; currY <= bottomRightWall.yCoordinate; currY++) {
+      for (int currX = topLeftWall.xCoordinate; currX <= bottomRightWall.xCoordinate; currX++) {
+        // check if the current location should be a wall tile or room tile
+        Predicate<Location> currPointAxis = new Location.SameAxis(new Location(currX, currY));
+        boolean isWallBoundary = currPointAxis.test(topLeftWall) || currPointAxis.test(bottomRightWall);
+
+        // assign the space accordingly
+        Space space = isWallBoundary ? new Wall(this.toString()) : new Tile(this.toString());
+        spaces.get(currY).set(currX, space);
+      }
+    }
   }
 
   /**

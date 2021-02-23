@@ -22,6 +22,4 @@ public class LevelBuilderTest {
       assertEquals("level must have exactly one level exit", e.getMessage());
     }
   }
-
-
 }
