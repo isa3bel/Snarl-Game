@@ -14,8 +14,8 @@ public class RoomBuilderTest {
       fail();
     }
     catch (IllegalArgumentException e) {
-      assertEquals("top left coordinate must have positive x" +
-          " and y coordinates, given: 0, 1", e.getMessage());
+      assertEquals("top left coordinate must have positive row" +
+          " and column, given: 0, 1", e.getMessage());
     }
   }
 
@@ -26,8 +26,8 @@ public class RoomBuilderTest {
       fail();
     }
     catch (IllegalArgumentException e) {
-      assertEquals("top left coordinate must have positive x" +
-          " and y coordinates, given: 1, -2", e.getMessage());
+      assertEquals("top left coordinate must have positive row" +
+          " and column, given: 1, -2", e.getMessage());
     }
   }
 
@@ -79,7 +79,8 @@ public class RoomBuilderTest {
   @Test
   public void testBuildDoorIsWall() {
     RoomBuilder room1 = new RoomBuilder(1,1,20,8)
-        .addDoor(0,2).addWall(0,2);
+        .addDoor(0,2)
+        .addWall(0,2);
 
     try {
       room1.build(new ArrayList<>());
@@ -106,7 +107,7 @@ public class RoomBuilderTest {
     try {
       room1.addExit(2,-9);
     } catch(IllegalArgumentException e) {
-      assertEquals("door must be on room boundary - x value on 0 or 21 or y value on 0 or 9, given: 2, -9", e.getMessage());
+      assertEquals("door must be on room boundary - row of 0 or 9 or column on 0 or 21, given: 2, -9", e.getMessage());
     }
   }
 
@@ -116,20 +117,22 @@ public class RoomBuilderTest {
     try {
       room1.addDoor(2,-9);
     } catch(IllegalArgumentException e) {
-      assertEquals("door must be on room boundary - x value on 0 or 21 or y value on 0 or 9, given: 2, -9", e.getMessage());
+      assertEquals("door must be on room boundary - row of 0 or 9 or column on 0 or 21, given: 2, -9", e.getMessage());
     }
   }
 
   @Test
   public void testSuccessfulBuild() {
     RoomBuilder room1 = new RoomBuilder(1,1,20,8)
-        .addDoor(0,2).addExit(0,5).addWall(2,6);
+        .addDoor(0,2)
+        .addExit(0,5)
+        .addWall(2,6);
 
     ArrayList<ArrayList<Space>> spaces = new ArrayList<>();
     room1.build(spaces);
 
-    assertTrue(spaces.get(2).get(0) instanceof Door);
-    assertTrue(spaces.get(5).get(0) instanceof Exit);
-    assertTrue(spaces.get(6).get(2) instanceof Wall);
+    assertTrue(spaces.get(0).get(2) instanceof Door);
+    assertTrue(spaces.get(0).get(5) instanceof Exit);
+    assertTrue(spaces.get(3).get(7) instanceof Wall);
   }
 }

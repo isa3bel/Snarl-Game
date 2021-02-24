@@ -12,12 +12,12 @@ import model.*;
 public class LocationQuery implements Question {
 
   private final Level level;
-  private final Location location;
+  private final Location queryLocation;
   private final Location roomOrigin;
 
-  LocationQuery(Level level, Location location, Location roomOrigin) {
+  LocationQuery(Level level, Location queryLocation, Location roomOrigin) {
     this.level = level;
-    this.location = location;
+    this.queryLocation = queryLocation;
     this.roomOrigin = roomOrigin;
   }
 
@@ -27,29 +27,35 @@ public class LocationQuery implements Question {
    */
   public String getAnswer() {
     if(!this.isInRoom()) {
-      return "[ \"Failure: Point \", " + this.locationToString(this.location)
+      return "[ \"Failure: Point \", " + this.locationToString(this.queryLocation)
           + ", \" is not in room at \", " + this.locationToString(this.roomOrigin) + "]";
     }
 
-    Space space = this.level.get(this.location);
-    HashMap<Location, Space> validMoves = this.level.filter(new CalculateMovableTiles(this.location, space));
-    String joinedMoves = validMoves.keySet().stream().map(this::locationToString)
+    Space space = this.level.get(this.queryLocation);
+    HashMap<Location, Space> validMoves = this.level.filter(new CalculateMovableTiles(this.queryLocation, space));
+    String joinedMoves = validMoves
+        .keySet()
+        .stream()
+        .sorted((location1, location2) -> location1.row == location2.row
+          ? location1.column - location2.column
+          : location1.row - location2.row)
+        .map(this::locationToString)
         .collect(Collectors.joining(", "));
     String allValidStringMoves = String.format("[ %s ]", joinedMoves);
 
     return "[ \"Success: Traversable points from \", "
-        + this.locationToString(this.location) + ", \" in room at \", "
-        + this.locationToString(this.roomOrigin) + ", \" are \",\n"
-        + allValidStringMoves + "\n" + "]";
+        + this.locationToString(this.queryLocation) + ", \" in room at \", "
+        + this.locationToString(this.roomOrigin) + ", \" are \", "
+        + allValidStringMoves + " ]";
   }
 
   /**
    * Given a location converts it to a string following specific format.
-   * @param loc the location to convert
+   * @param location the location to convert
    * @return a string representing the converted location
    */
-  private String locationToString(Location loc) {
-    return "[" + loc.xCoordinate + ", " + loc.yCoordinate + "]";
+  private String locationToString(Location location) {
+    return "[" + location.row + ", " + location.column + "]";
   }
 
   /**
@@ -58,7 +64,14 @@ public class LocationQuery implements Question {
    */
   private boolean isInRoom() {
     Space originSpace = this.level.get(this.roomOrigin);
-    Space location = this.level.get(this.location);
+    Space location;
+
+    try {
+      location = this.level.get(this.queryLocation);
+    } catch (IndexOutOfBoundsException exception) {
+      return false;
+    }
+
     return originSpace.sameGroup(location);
   }
 
@@ -83,8 +96,9 @@ public class LocationQuery implements Question {
      */
     @Override
     public boolean test(Space thatSpace, Location thatLocation) {
-      return this.location.isAdjacentTo(thatLocation) && this.space.sameGroup(thatSpace) &&
-          thatSpace.acceptVisitor(new IsTraversable());
+      return this.location.isAdjacentTo(thatLocation)
+          && this.space.sameGroup(thatSpace)
+          && thatSpace.acceptVisitor(new IsTraversable());
     }
   }
 }

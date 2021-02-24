@@ -25,8 +25,13 @@ public class Level {
    * @param location the location to fetch the space from
    * @return the space object
    */
-  public Space get(Location location) {
-    return this.spaces.get(location.yCoordinate).get(location.xCoordinate);
+  public Space get(Location location) throws IndexOutOfBoundsException {
+    try {
+      return this.spaces.get(location.row).get(location.column);
+    }
+    catch (IndexOutOfBoundsException exception) {
+      throw new IndexOutOfBoundsException(String.format("location %s not in level", location.toString()));
+    }
   }
 
   /**
@@ -55,10 +60,10 @@ public class Level {
   public HashMap<Location, Space> filter(BiPredicate<Space, Location> function) {
     HashMap<Location, Space> validTiles = new HashMap<>();
 
-    for (int col = 0; col < this.spaces.size(); col++) {
-      for (int row = 0; row < this.spaces.get(col).size(); row++) {
-        Location location = new Location(row, col);
-        Space space = this.spaces.get(col).get(row);
+    for (int row = 0; row < this.spaces.size(); row++) {
+      for (int column = 0; column < this.spaces.get(row).size(); column++) {
+        Location location = new Location(row, column);
+        Space space = this.spaces.get(row).get(column);
 
         if (function.test(space, location)) {
           validTiles.put(location, space);

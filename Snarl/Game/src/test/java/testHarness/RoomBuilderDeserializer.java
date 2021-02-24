@@ -50,7 +50,9 @@ public class RoomBuilderDeserializer implements JsonDeserializer<RoomBuilder> {
     //  expect the origin to actually be the top left corner of the walkable tiles in a room.
     //  we add 1 to the coordinates here because this origin is referencing the top left
     //  of the layout array (which also includes the room borders), not top left of the room
-    return new RoomBuilder(origin.xCoordinate + 1, origin.yCoordinate + 1, cols, rows);
+    //  we subtract two from the bounds because our boundaries are the number of rows or columns
+    //  in the room, not counting the outer boundaries
+    return new RoomBuilder(origin.row + 1, origin.column + 1, cols - 2, rows - 2);
   }
 
   /**

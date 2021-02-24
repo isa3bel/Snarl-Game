@@ -29,12 +29,12 @@ public class HallwayBuilder extends SpaceBuilder {
 
   /**
    * Add a waypoint at the given coordinates toRoom this hallway.
-   * @param x the x coordinates of the waypoint
-   * @param y the y coordinates of the waypoint
+   * @param row the row coordinates of the waypoint
+   * @param column the column coordinates of the waypoint
    * @return this builder with the waypoint
    */
-  public HallwayBuilder addWaypoint(int x, int y) {
-    this.waypoints.add(new Location(x, y));
+  public HallwayBuilder addWaypoint(int row, int column) {
+    this.waypoints.add(new Location(row, column));
     return this;
   }
 
@@ -50,9 +50,9 @@ public class HallwayBuilder extends SpaceBuilder {
         : this.calculateLocationsFromWaypoints();
 
     for (Location location : hallwayTiles) {
-      Location outer = new Location(location.xCoordinate + 1, location.yCoordinate + 1);
+      Location outer = new Location(location.row + 1, location.column + 1);
       this.initSize(outer, spaces);
-      spaces.get(location.yCoordinate).set(location.xCoordinate, new HallwayTile(this.toString()));
+      spaces.get(location.row).set(location.column, new HallwayTile(this.toString()));
     }
   }
 

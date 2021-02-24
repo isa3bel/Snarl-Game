@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 public class TestHarness {
 
+
   public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
     Gson gson = new GsonBuilder()
@@ -18,5 +19,12 @@ public class TestHarness {
         .registerTypeAdapter(RoomBuilder.class, new RoomBuilderDeserializer())
         .registerTypeAdapter(Location.class, new LocationDeserializer())
         .create();
+
+    StringBuilder stringBuilder = new StringBuilder();
+    while (scanner.hasNextLine()) {
+      stringBuilder.append(scanner.nextLine());
+    }
+    Question nextUnit = gson.fromJson(stringBuilder.toString(), Question.class);
+    System.out.print(nextUnit.getAnswer());
   }
 }

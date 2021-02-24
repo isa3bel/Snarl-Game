@@ -9,23 +9,23 @@ import java.util.function.Predicate;
  */
 public class Location {
 
-  public int xCoordinate;
-  public int yCoordinate;
+  public int row;
+  public int column;
 
   /**
    * Creates a location with the given coordinates.
-   * @param xCoordinate x coordinate of this location
-   * @param yCoordinate y coordinate of this location
-   * @throws IllegalArgumentException if x or y are negative
+   * @param row row of this location
+   * @param column column of this location
+   * @throws IllegalArgumentException if row or column are negative
    */
-  public Location(int xCoordinate, int yCoordinate) throws IllegalArgumentException {
-    if (xCoordinate < 0 || yCoordinate < 0) {
+  public Location(int row, int column) throws IllegalArgumentException {
+    if (row < 0 || column < 0) {
       throw new IllegalArgumentException("location coordinates must be non-negative, given: "
-          + xCoordinate + ", " + yCoordinate);
+          + row + ", " + column);
     }
 
-    this.xCoordinate = xCoordinate;
-    this.yCoordinate = yCoordinate;
+    this.row = row;
+    this.column = column;
   }
 
   /**
@@ -42,9 +42,9 @@ public class Location {
     ArrayList<Location> locations = new ArrayList<>();
     locations.add(this);
 
-    return this.xCoordinate == end.xCoordinate
-        ? this.calculateYAxisPoints(end, locations)
-        : this.calculateXAxisPoints(end, locations);
+    return this.row == end.row
+        ? this.calculateColumnAxisPoints(end, locations)
+        : this.calculateRowAxisPoints(end, locations);
   }
 
   /**
@@ -53,20 +53,20 @@ public class Location {
    * @param locations the locations so far
    * @return all the locations from the first Location to that
    */
-  private ArrayList<Location> calculateXAxisPoints(Location end, ArrayList<Location> locations) {
-    int xPosnBefore = this.xCoordinate - 1;
-    int xPosnNext = this.xCoordinate + 1;
-
+  private ArrayList<Location> calculateRowAxisPoints(Location end, ArrayList<Location> locations) {
     if (this.equals(end)) {
       return locations;
     }
 
-    Location next = this.xCoordinate > end.xCoordinate
-        ? new Location(xPosnBefore, this.yCoordinate)
-        : new Location(xPosnNext, this.yCoordinate);
+    int rowBefore = this.row - 1;
+    int rowNext = this.row + 1;
+
+    Location next = this.row > end.row
+        ? new Location(rowBefore, this.column)
+        : new Location(rowNext, this.column);
 
     locations.add(next);
-    return next.calculateXAxisPoints(end, locations);
+    return next.calculateRowAxisPoints(end, locations);
   }
 
   /**
@@ -75,20 +75,20 @@ public class Location {
    * @param locations the locations so far
    * @return all the locations from the first Location to that
    */
-  private ArrayList<Location> calculateYAxisPoints(Location end, ArrayList<Location> locations) {
+  private ArrayList<Location> calculateColumnAxisPoints(Location end, ArrayList<Location> locations) {
     if (this.equals(end)) {
       return locations;
     }
 
-    int yPosnBelow = this.yCoordinate - 1;
-    int yPosnAbove = this.yCoordinate + 1;
+    int columnBefore = this.column - 1;
+    int columnNext = this.column + 1;
 
-    Location next = this.yCoordinate > end.yCoordinate
-        ? new Location(this.xCoordinate, yPosnBelow)
-        : new Location(this.xCoordinate, yPosnAbove);
+    Location next = this.column > end.column
+        ? new Location(this.row, columnBefore)
+        : new Location(this.row, columnNext);
 
     locations.add(next);
-    return next.calculateYAxisPoints(end, locations);
+    return next.calculateColumnAxisPoints(end, locations);
   }
 
   /**
@@ -97,8 +97,8 @@ public class Location {
    * @return the euclidian distance to that location
    */
   public int euclidianDistance(Location other) {
-    return Math.abs(this.xCoordinate - other.xCoordinate)
-        + Math.abs(this.yCoordinate - other.yCoordinate);
+    return Math.abs(this.row - other.row)
+        + Math.abs(this.column - other.column);
   }
 
   /**
@@ -107,14 +107,14 @@ public class Location {
    * @return if this is adjacent to that
    */
   public boolean isAdjacentTo(Location that) {
-    int xDiff = Math.abs(this.xCoordinate - that.xCoordinate);
-    int yDiff = Math.abs(this.yCoordinate - that.yCoordinate);
-    return xDiff + yDiff == 1;
+    int rowDiff = Math.abs(this.row - that.row);
+    int columnDiff = Math.abs(this.column - that.column);
+    return rowDiff + columnDiff == 1;
   }
 
   @Override
   public String toString() {
-    return "(" + xCoordinate +", " + yCoordinate + ")";
+    return "(" + row +", " + column + ")";
   }
 
   @Override
@@ -126,12 +126,12 @@ public class Location {
       return false;
     }
     Location that = (Location) other;
-    return this.xCoordinate == that.xCoordinate && this.yCoordinate == that.yCoordinate;
+    return this.row == that.row && this.column == that.column;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(this.xCoordinate, this.yCoordinate);
+    return Objects.hash(this.row, this.column);
   }
 
   /**
@@ -147,8 +147,8 @@ public class Location {
 
     @Override
     public boolean test(Location other) {
-      return this.location.xCoordinate == other.xCoordinate
-          || this.location.yCoordinate == other.yCoordinate;
+      return this.location.row == other.row
+          || this.location.column == other.column;
     }
   }
 }

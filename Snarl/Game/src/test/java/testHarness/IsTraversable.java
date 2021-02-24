@@ -1,32 +1,34 @@
-package model;
+package testHarness;
+
+import model.*;
 
 /**
- * Currently for the express purposes of the LocationQuery in the test harness, is a space is "traversable"?
+ * Visits a space to see if it is traversable (based on the LocationQuery).
  */
 public class IsTraversable implements SpaceVisitor<Boolean> {
 
   /**
-   * A door is not walkable.
+   * A door is traversable.
    * @param door the door
-   * @return false
+   * @return true
    */
   @Override
   public Boolean visitDoor(Door door) {
-    return false;
+    return true;
   }
 
   /**
-   * An exit is not walkable.
+   * An exit is traversable.
    * @param exit the exit
-   * @return false
+   * @return true
    */
   @Override
   public Boolean visitExit(Exit exit) {
-    return false;
+    return true;
   }
 
   /**
-   * A wall is not walkable.
+   * A wall is not in a room.
    * @param wall the wall
    * @return false
    */
@@ -36,7 +38,7 @@ public class IsTraversable implements SpaceVisitor<Boolean> {
   }
 
   /**
-   * A tile is walkable.
+   * A tile is in this room if the group is not specified or the groups are the same.
    * @param tile the tile
    * @return true
    */
@@ -46,12 +48,12 @@ public class IsTraversable implements SpaceVisitor<Boolean> {
   }
 
   /**
-   * A tile is walkable.
+   * A HallwayTile is traversable.
    * @param tile the tile
    * @return true
    */
   @Override
   public Boolean visitHallwayTile(HallwayTile tile) {
-    return false;
+    return true;
   }
 }

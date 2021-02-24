@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.stream.Collectors;
 
 /**
@@ -37,12 +36,12 @@ public class GameManagerBuilder {
    */
   private void calculateCharacterLocations(Level level) {
     ArrayList<Location> roomTiles = level
-        .filter((space, location) -> space.acceptVisitor(new IsTraversable()))
+        .filter((space, location) -> space.acceptVisitor(new IsInRoom()))
         .keySet()
         .stream()
-        .sorted((location1, location2) -> location1.yCoordinate == location2.yCoordinate
-            ? location1.xCoordinate - location2.xCoordinate
-            : location1.yCoordinate - location2.yCoordinate
+        .sorted((location1, location2) -> location1.row == location2.row
+            ? location1.column - location2.column
+            : location1.row - location2.row
         )
         .collect(Collectors.toCollection(ArrayList::new));
     Space topLeft = level.get(roomTiles.get(0));

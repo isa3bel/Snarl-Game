@@ -1,0 +1,8 @@
+[
+  "Success: Traversable points from ",
+  [7, 10],
+  " in room at ",
+  [4, 6],
+  " are ",
+  [ [6, 10], [7, 9], [7, 11] ]
+]
