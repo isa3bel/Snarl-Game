@@ -16,6 +16,7 @@ public class RoomBuilder extends SpaceBuilder {
   private final int height;
   private final HashSet<Location> doors;
   private Location exit;
+  private boolean exitLocked;
   private final HashSet<Location> walls;
 
   /**
@@ -69,12 +70,24 @@ public class RoomBuilder extends SpaceBuilder {
    * @throws IllegalArgumentException if the exit is not on the room's boundary
    */
   public RoomBuilder addExit(int exitRow, int exitColumn) throws IllegalArgumentException {
+    return this.addExit(exitRow, exitColumn, false);
+  }
+
+  /**
+   * Adds a level exit to this room with a given locked status.
+   * @param exitRow the exit's x coordinate
+   * @param exitColumn the exit's y coordinate
+   * @param locked the exit's locked status
+   * @return this RoomBuilder with the door
+   * @throws IllegalArgumentException if the exit is not on the room's boundary
+   */
+  public RoomBuilder addExit(int exitRow, int exitColumn, boolean locked) throws IllegalArgumentException {
     checkDoorPlacement(exitRow, exitColumn);
     if (this.exit != null) {
       throw new IllegalStateException("an exit has already been made in this room");
     }
-
     this.exit = new Location(exitRow, exitColumn);
+    this.exitLocked = locked;
     return this;
   }
 

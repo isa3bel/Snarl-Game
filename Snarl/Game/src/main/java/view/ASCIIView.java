@@ -22,6 +22,11 @@ public class ASCIIView implements View {
    */
   public void renderLevel(Level level) {
     this.render = level.map(new ASCIISpace());
+
+    level.mapItems(item -> {
+      Location location = item.getCurrentLocation();
+      this.render.get(location.row).set(location.column, item.acceptVisitor(new ASCIIItem()));
+    });
   }
 
   /**
@@ -36,6 +41,8 @@ public class ASCIIView implements View {
   }
 
   /**
+<<<<<<< HEAD
+=======
    * Places the items in the 2D game representation.
    * @param items the items to place
    */
@@ -47,6 +54,7 @@ public class ASCIIView implements View {
   }
 
   /**
+>>>>>>> ddd35ccb021eb93c40afbe3ec7057941d2647a28
    * Outputs the drawn view to System.out.
    */
   @Override

@@ -22,4 +22,9 @@ public class LevelBuilderTest {
       assertEquals("level must have exactly one level exit", e.getMessage());
     }
   }
+
+  @Test
+  public void testCannotCreateMultipleKeys() {
+    // TODO: test error for multiple keys
+  }
 }

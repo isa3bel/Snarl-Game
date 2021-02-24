@@ -6,4 +6,10 @@ package model;
  */
 public interface Controller {
 
+  /**
+   * Queries whatever is controlling a Snarl character for the next move.
+   * @return the requested next move
+   */
+  Location getNextMove();
+
 }

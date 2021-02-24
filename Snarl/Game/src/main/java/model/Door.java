@@ -17,4 +17,5 @@ public class Door extends Space {
   public <T> T acceptVisitor(SpaceVisitor<T> visitor) {
     return visitor.visitDoor(this);
   }
+
 }

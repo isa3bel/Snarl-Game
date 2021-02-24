@@ -3,7 +3,7 @@ package model;
 /**
  * A space in the 2d plane of the dungeon crawler.
  */
-public abstract class Space {
+public abstract class Space implements Interactable {
 
   // the room or hallway identifier of this space
   String group;
@@ -12,5 +12,10 @@ public abstract class Space {
 
   public boolean sameGroup(Space that) {
     return this.group != null && this.group.equals(that.group);
+  }
+
+  @Override
+  public void acceptVisitor(InteractableVisitor visitor) {
+    // do nothing most of the time
   }
 }

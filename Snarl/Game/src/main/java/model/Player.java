@@ -19,8 +19,29 @@ public class Player extends Character {
 
   }
 
+  public void defend() {
+    this.currentLocation = null;
+  }
+
+  @Override
+  public MoveValidator getNextMove() {
+    Location nextLocation = this.controller.getNextMove();
+    return new PlayerMoveValidator(this, nextLocation);
+  }
+
+  @Override
+  public Interaction makeInteraction(GameManager gameManager) {
+    return new PlayerInteraction(this, gameManager);
+  }
+
   @Override
   public <T> T acceptVisitor(CharacterVisitor<T> visitor) {
     return visitor.visitPlayer(this);
   }
+
+  @Override
+  public void acceptVisitor(InteractableVisitor visitor) {
+    visitor.visitPlayer(this);
+  }
+
 }

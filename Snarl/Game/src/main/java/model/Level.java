@@ -1,9 +1,12 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * A level in the Snarl dungeon crawler.
@@ -11,13 +14,15 @@ import java.util.function.Function;
 public class Level {
 
   private final ArrayList<ArrayList<Space>> spaces;
+  private final ArrayList<Item> items;
 
   /**
    * Constructor for this Level
    * @param spaces that make up this level
    */
-  Level(ArrayList<ArrayList<Space>> spaces) {
+  Level(ArrayList<ArrayList<Space>> spaces, ArrayList<Item> items) {
     this.spaces = spaces;
+    this.items = items;
   }
 
   /**
@@ -32,6 +37,16 @@ public class Level {
     catch (IndexOutOfBoundsException exception) {
       throw new IndexOutOfBoundsException(String.format("location %s not in level", location.toString()));
     }
+  }
+
+  /**
+   * Execute the given interaction on this level.
+   * @param location the location that this interaction is taking place
+   * @param interaction the interaction that is occurring
+   */
+  public void interact(Location location, Interaction interaction) {
+    this.items.forEach(item -> item.acceptVisitor(interaction));
+    this.get(location).acceptVisitor(interaction);
   }
 
   /**
@@ -72,6 +87,54 @@ public class Level {
     }
 
     return validTiles;
+  }
+
+  /**
+   * Maps the given consumer across all of these items.
+   * @param itemConsumer the function object to apply to all the items
+   */
+  public void mapItems(Consumer<Item> itemConsumer) {
+    // TODO: if we do keep this as is, then we should combine this better with this.interact
+    this.items.forEach(itemConsumer);
+  }
+
+  /**
+   * Find all available locations in the room with the "most" something tile in the level.
+   * @param comparator how to sort the tiles to find the "most"
+   * @return all the available tiles in that room
+   */
+  private ArrayList<Location> calculateCharacterLocations(Comparator<Location> comparator) {
+    ArrayList<Location> roomTiles = this
+        .filter((space, location) -> space.acceptVisitor(new IsInRoom()))
+        .keySet()
+        .stream()
+        .sorted(comparator)
+        .collect(Collectors.toCollection(ArrayList::new));
+    Space firstTile = this.get(roomTiles.get(0));
+    return roomTiles
+        .stream()
+        .filter(location -> firstTile.sameGroup(this.get(location)))
+        .collect(Collectors.toCollection(ArrayList::new));
+  }
+
+  /**
+   * Calculate the locations for automatically placing players in top left room.
+   * @return the list of available locations in the top left room
+   */
+  public ArrayList<Location> calculatePlayerLocations() {
+    return this.calculateCharacterLocations((location1, location2) -> location1.row == location2.row
+        ? location1.column - location2.column
+        : location1.row - location2.row);
+  }
+
+  /**
+   * Calculate the locations for automatically placing adversaries in bottom right room.
+   * @return the list of available locations in the bottom right room
+   */
+  public ArrayList<Location> calculateAdversaryLocations() {
+    return this.calculateCharacterLocations((location1, location2) -> location1.row == location2.row
+        ? location2.column - location1.column
+        : location2.row - location1.row);
   }
 
 }

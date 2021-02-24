@@ -3,10 +3,10 @@ package model;
 /**
  * A mobile character in the Snarl game.
  */
-public abstract class Character {
+public abstract class Character implements Interactable {
 
-  private Location currentLocation;
-  Controller controller;
+  protected Location currentLocation;
+  protected Controller controller;
 
   Character(Location location) {
     this.currentLocation = location;
@@ -25,7 +25,18 @@ public abstract class Character {
    * @return the location of the character
    */
   public Location getCurrentLocation() {
-    return this.currentLocation;
+    return this.currentLocation == null ? null : new Location(this.currentLocation);
   }
+
+  /**
+   * Move this character to the given location.
+   * @param location the location to move to
+   */
+  public void moveTo(Location location) {
+    this.currentLocation = location;
+  }
+
+  public abstract MoveValidator getNextMove();
+  public abstract Interaction makeInteraction(GameManager gameManager);
 
 }

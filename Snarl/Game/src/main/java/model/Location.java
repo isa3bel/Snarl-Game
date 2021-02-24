@@ -29,6 +29,19 @@ public class Location {
   }
 
   /**
+   * Creates a copy of the given location.
+   * @param location the location to copy
+   * @throws IllegalArgumentException if the given location is null
+   */
+  public Location(Location location) throws IllegalArgumentException {
+    if (location == null)  {
+      throw new IllegalArgumentException("cannot copy a null location");
+    }
+    this.row = location.row;
+    this.column = location.column;
+  }
+
+  /**
    * Calculates all the locations between this Location and that Location.
    * @param end the location to go to
    * @return the locations between this and that

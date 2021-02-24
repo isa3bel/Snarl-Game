@@ -17,4 +17,25 @@ public class Adversary extends Character {
   public <T> T acceptVisitor(CharacterVisitor<T> visitor) {
     return visitor.visitAdversary(this);
   }
+
+  @Override
+  public void acceptVisitor(InteractableVisitor visitor) {
+    visitor.visitAdversary(this);
+  }
+
+  public void attack(Player player) {
+    player.defend();
+  }
+
+  @Override
+  public MoveValidator getNextMove() {
+    Location nextLocation = this.controller.getNextMove();
+    return new AdversaryMoveValidator(this, nextLocation);
+  }
+
+  @Override
+  public Interaction makeInteraction(GameManager gameManager) {
+    return new AdversaryInteraction(this);
+  }
+
 }

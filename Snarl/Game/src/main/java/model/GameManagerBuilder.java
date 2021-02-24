@@ -1,6 +1,8 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 /**
@@ -8,53 +10,35 @@ import java.util.stream.Collectors;
  */
 public class GameManagerBuilder {
 
-  private final Level level;
+  private final int currentLevel;
+  private final Level[] levels;
   private ArrayList<Location> playerLocations;
   private ArrayList<Location> adversaryLocations;
   private final ArrayList<Player> players;
   private final ArrayList<Adversary> adversaries;
-  private Key key;
 
   /**
    * Initializes a game manager with the bare minimum required - the level.
-   * @param level the first level of the Snarl game
+   * @param levels the array of levels for a snarl game
    * @throws IllegalArgumentException if level is null
    */
-  public GameManagerBuilder(Level level) throws IllegalArgumentException {
-    if (level == null) {
-      throw new IllegalArgumentException("must pass in a level to create a Snarl game");
+  public GameManagerBuilder(int currentLevel, Level[] levels) throws IllegalArgumentException {
+    if (levels == null) {
+      throw new IllegalArgumentException("must pass in an array of levels to create a Snarl game");
     }
-    this.level = level;
-    calculateCharacterLocations(level);
+    if (levels.length == 0) {
+      throw new IllegalArgumentException("level array must be non empty");
+    }
+    if (currentLevel >= levels.length) {
+      throw new IllegalArgumentException("current level must point to a level in levels," +
+          " expected a number in range [0, " + levels.length + "), got: " + currentLevel);
+    }
+    this.currentLevel = currentLevel;
+    this.levels = levels;
+    this.playerLocations = levels[currentLevel].calculatePlayerLocations();
+    this.adversaryLocations = levels[currentLevel].calculateAdversaryLocations();
     this.players = new ArrayList<>();
     this.adversaries = new ArrayList<>();
-  }
-
-  /**
-   * Creates the list of locations where players or adversaries can be automatically placed.
-   * @param level the level in which the players will be placed
-   */
-  private void calculateCharacterLocations(Level level) {
-    ArrayList<Location> roomTiles = level
-        .filter((space, location) -> space.acceptVisitor(new IsInRoom()))
-        .keySet()
-        .stream()
-        .sorted((location1, location2) -> location1.row == location2.row
-            ? location1.column - location2.column
-            : location1.row - location2.row
-        )
-        .collect(Collectors.toCollection(ArrayList::new));
-    Space topLeft = level.get(roomTiles.get(0));
-    Space bottomRight = level.get(roomTiles.get(roomTiles.size() - 1));
-
-    this.playerLocations = roomTiles
-        .stream()
-        .filter(location -> topLeft.sameGroup(level.get(location)))
-        .collect(Collectors.toCollection(ArrayList::new));
-    this.adversaryLocations = roomTiles
-        .stream()
-        .filter(location -> bottomRight.sameGroup(level.get(location)))
-        .collect(Collectors.toCollection(ArrayList::new));
   }
 
   /**
@@ -106,20 +90,6 @@ public class GameManagerBuilder {
   }
 
   /**
-   * Adds the key for this level at the given location.
-   * @param location the location of the key in the game
-   * @return this builder with the item
-   * @throws IllegalStateException if the key in the level already exists
-   */
-  public GameManagerBuilder addKey(Location location) throws IllegalStateException {
-    if (this.key != null) {
-      throw new IllegalStateException("this game already has a key");
-    }
-    this.key = new Key(location);
-    return this;
-  }
-
-  /**
    * Creates the GameManager with these values.
    * @return the constructed GameManager
    */
@@ -128,8 +98,6 @@ public class GameManagerBuilder {
     characters.addAll(this.players);
     characters.addAll(this.adversaries);
 
-    ArrayList<Item> items = new ArrayList<>();
-    if (this.key != null) items.add(this.key);
-    return new GameManager(this.level, characters, items);
+    return new GameManager(this.levels, characters);
   }
 }

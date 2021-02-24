@@ -15,8 +15,8 @@ public class ASCIIViewTest {
   private ByteArrayOutputStream out;
   private GameManager singleRoom;
   private GameManager twoRooms;
-  private GameManager complicatedLevel;
-  private GameManager anotherComplicatedLevel;
+  private GameManager complicated;
+  private GameManager anotherComplicated;
   private GameManager singleRoomWithCharacters;
   private GameManager twoRoomsTopRight;
 
@@ -38,10 +38,12 @@ public class ASCIIViewTest {
         .addWall(5,5)
         .addWall(6,5)
         .addWall(7,5);
-    Level singleRoomLevel = new LevelBuilder().addRoom(singleRoomBuilder).build();
-    this.singleRoom = new GameManagerBuilder(singleRoomLevel)
+    Level singleRoomLevel = new LevelBuilder()
+        .addRoom(singleRoomBuilder)
         .addKey(new Location(3, 6))
         .build();
+    Level[] levels = { singleRoomLevel };
+    this.singleRoom = new GameManagerBuilder(0, levels).build();
   }
 
   private void setupRoomWithPlayersAndAdversaries() {
@@ -55,9 +57,12 @@ public class ASCIIViewTest {
         .addWall(5,5)
         .addWall(6,5)
         .addWall(7,5);
-    Level singleRoomLevelWithCharacters = new LevelBuilder().addRoom(singleRoomBuilder).build();
-    this.singleRoomWithCharacters = new GameManagerBuilder(singleRoomLevelWithCharacters)
+    Level singleRoomLevelWithCharacters = new LevelBuilder()
+        .addRoom(singleRoomBuilder)
         .addKey(new Location(2, 5))
+        .build();
+    Level[] levels = { singleRoomLevelWithCharacters };
+    this.singleRoomWithCharacters = new GameManagerBuilder(0, levels)
         .addEnemy(new Location(6, 1))
         .addPlayer(new Location(7, 1))
         .addPlayer(new Location(8, 1))
@@ -74,9 +79,10 @@ public class ASCIIViewTest {
         .addRoom(room1)
         .addRoom(room2)
         .addHallway(new HallwayBuilder(room1, room2))
-        .build();
-    this.twoRooms = new GameManagerBuilder(twoRoomsLevel)
         .addKey(new Location(4,4))
+        .build();
+    Level[] levels = { twoRoomsLevel };
+    this.twoRooms = new GameManagerBuilder(0, levels)
         .build();
   }
 
@@ -98,16 +104,18 @@ public class ASCIIViewTest {
     RoomBuilder room3 = new RoomBuilder(12, 28, 4, 2)
         .addDoor(13, 27);
     HallwayBuilder hallway1 = new HallwayBuilder(room1, room2);
-    HallwayBuilder hallway2 = new HallwayBuilder(room1, room3).addWaypoint(13, 16);
-    Level twoRoomsLevel = new LevelBuilder()
+    HallwayBuilder hallway2 = new HallwayBuilder(room1, room3)
+        .addWaypoint(13, 16);
+    Level complicatedLevel = new LevelBuilder()
         .addRoom(room1)
         .addRoom(room2)
         .addRoom(room3)
         .addHallway(hallway1)
         .addHallway(hallway2)
-        .build();
-    this.complicatedLevel = new GameManagerBuilder(twoRoomsLevel)
         .addKey(new Location(7, 3))
+        .build();
+    Level[] levels = { complicatedLevel };
+    this.complicated = new GameManagerBuilder(0, levels)
         .build();
   }
 
@@ -135,7 +143,8 @@ public class ASCIIViewTest {
         .addWaypoint(2, 45);
     HallwayBuilder hallway5to4 = new HallwayBuilder(room5, room4)
         .addWaypoint(9, 36);
-    Level twoRoomsLevel = new LevelBuilder()
+    Level anotherComplicatedLevel = new LevelBuilder()
+        .addKey(new Location(3,3))
         .addRoom(room1)
         .addRoom(room2)
         .addRoom(room3)
@@ -146,8 +155,8 @@ public class ASCIIViewTest {
         .addHallway(hallway2to4)
         .addHallway(hallway5to4)
         .build();
-    this.anotherComplicatedLevel = new GameManagerBuilder(twoRoomsLevel)
-        .addKey(new Location(3,3))
+    Level[] levels = { anotherComplicatedLevel };
+    this.anotherComplicated = new GameManagerBuilder(0, levels)
         .addPlayer()
         .addPlayer()
         .addPlayer()
@@ -165,7 +174,8 @@ public class ASCIIViewTest {
         .addRoom(room1)
         .addRoom(room2)
         .build();
-    this.twoRoomsTopRight = new GameManagerBuilder(level)
+    Level[] levels = { level };
+    this.twoRoomsTopRight = new GameManagerBuilder(0, levels)
         .addPlayer()
         .addPlayer()
         .addEnemy()
@@ -212,7 +222,7 @@ public class ASCIIViewTest {
   @Test
   public void testComplicatedLevel() {
     this.setupComplicatedLevel();
-    complicatedLevel.buildView(view);
+    complicated.buildView(view);
     view.draw();
     String expected = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n"
         + "X                    XXXXXXXXXXXXXXX\n"
@@ -235,7 +245,7 @@ public class ASCIIViewTest {
   @Test
   public void testAnotherComplicatedLevel() {
     this.setupAnotherComplicatedLevelWithPlayer();
-    anotherComplicatedLevel.buildView(view);
+    anotherComplicated.buildView(view);
     view.draw();
     String expected = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n"
         + "X123                 XXXXXXXXXXXXXXXXXXXXXXXXXX\n"
@@ -249,8 +259,8 @@ public class ASCIIViewTest {
         + "XXXXXXXXXXXXXXXXDXXXXX      D        XXXXXXXXXX\n"
         + "XXXXXXXXXXXXXXXX XXXXX      XXXXXXXXXXXXXXXXXXX\n"
         + "XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n"
-        + "XXXXXXXXXXXXXXXX XXXXXXXXXXXAA  XXXXXXXXXXXXXXX\n"
-        + "XXXXXXXXXXXXXXXX           D    XXXXXXXXXXXXXXX\n"
+        + "XXXXXXXXXXXXXXXX XXXXXXXXXXX    XXXXXXXXXXXXXXX\n"
+        + "XXXXXXXXXXXXXXXX           D  AAXXXXXXXXXXXXXXX\n"
         + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n";
     assertEquals(expected, new String(out.toByteArray()));
   }
@@ -279,9 +289,9 @@ public class ASCIIViewTest {
     twoRoomsTopRight.buildView(view);
     view.draw();
     String expected = "XXXXXX\n" +
-        "X1XAAD\n" +
+        "X1X  D\n" +
         "X2X  X\n" +
-        "XDX  X\n" +
+        "XDXAAX\n" +
         "XXXXXX\n";
     assertEquals(expected, new String(out.toByteArray()));
   }

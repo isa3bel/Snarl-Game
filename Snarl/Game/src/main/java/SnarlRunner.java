@@ -34,7 +34,8 @@ public class SnarlRunner {
         .addWall(6,5)
         .addWall(7,5);
     Level level = new LevelBuilder().addRoom(room1).build();
-    return new GameManagerBuilder(level).build();
+    Level[] levels = { level };
+    return new GameManagerBuilder(0, levels).build();
   }
 
   private static GameManager setupComplicatedLevel() {
@@ -63,7 +64,8 @@ public class SnarlRunner {
         .addHallway(hallway1)
         .addHallway(hallway2)
         .build();
-    return new GameManagerBuilder(twoRoomsLevel).build();
+    Level[] levels = { twoRoomsLevel };
+    return new GameManagerBuilder(0, levels).build();
   }
 
 }

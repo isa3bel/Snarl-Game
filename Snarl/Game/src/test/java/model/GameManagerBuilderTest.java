@@ -24,30 +24,31 @@ public class GameManagerBuilderTest {
         .addWall(6,5)
         .addWall(7,5);
     this.singleRoomLevel = new LevelBuilder().addRoom(singleRoomBuilder).build();
-    this.gameManagerBuilder = new GameManagerBuilder(this.singleRoomLevel);
+    Level[] levels = { this.singleRoomLevel };
+    this.gameManagerBuilder = new GameManagerBuilder(0, levels);
   }
 
   @Test
-  public void testConstructorNullLevel() {
+  public void testConstructorNullLevels() {
     try {
-      new GameManagerBuilder(null);
+      new GameManagerBuilder(0, null);
       fail();
     }
     catch (IllegalArgumentException e) {
-      assertEquals("must pass in a level to create a Snarl game", e.getMessage());
+      assertEquals("must pass in an array of levels to create a Snarl game", e.getMessage());
     }
   }
 
   @Test
-  public void testKeyAlreadyAdded() {
-
+  public void testCurrentLevelGreaterThanLevelsSize() {
+    Level[] levels = { this.singleRoomLevel };
     try {
-      this.gameManagerBuilder
-          .addKey(new Location(4,4))
-          .addKey(new Location(3,4));
+      new GameManagerBuilder(1, levels);
       fail();
-    } catch (IllegalStateException e) {
-      assertEquals("this game already has a key", e.getMessage());
+    }
+    catch (IllegalArgumentException e) {
+      assertEquals("current level must point to a level in levels," +
+          " expected a number in range [0, 1), got: 1", e.getMessage());
     }
   }
 
@@ -55,7 +56,6 @@ public class GameManagerBuilderTest {
   public void testTooManyPlayers() {
     try {
       this.gameManagerBuilder
-          .addKey(new Location(4,4))
           .addPlayer(new Location(4,4))
           .addPlayer(new Location(3,4))
           .addPlayer(new Location(2,4))

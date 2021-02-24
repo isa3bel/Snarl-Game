@@ -9,6 +9,7 @@ public class LevelBuilder {
 
   private final ArrayList<RoomBuilder> rooms;
   private final ArrayList<HallwayBuilder> hallways;
+  private Location key;
 
   public LevelBuilder() {
     this.rooms = new ArrayList<>();
@@ -44,6 +45,43 @@ public class LevelBuilder {
   }
 
   /**
+   * Adds a key for this game at the given location.
+   * @param location the location to place this key at
+   * @return the game manager with this key
+   * @throws IllegalStateException if there is not a valid exit in this game
+   */
+  public LevelBuilder addKey(Location location) throws IllegalArgumentException {
+    if (location == null) {
+      throw new IllegalArgumentException("key must have a location");
+    }
+    this.key = location;
+    return this;
+  }
+
+  /**
+   * Creates a key for the given level.
+   * @param level the level that this key is for
+   * @return this builder with the item
+   * @throws IllegalStateException if the key in the level already exists
+   */
+  private Key makeKey(Level level) throws IllegalStateException {
+    Location forDoorAt = level
+        .filter((space, spaceLocation) -> space.acceptVisitor(new IsExit()))
+        .keySet()
+        .stream()
+        .findFirst()
+        .orElseThrow(() -> new IllegalStateException("exit exists in this level"));
+
+    Space maybeExit = level.get(forDoorAt);
+    if (!(maybeExit instanceof Exit)) {
+      throw new IllegalStateException("location of given exit for this key is not actually an exit");
+    }
+
+    Exit exit = (Exit) maybeExit;
+    return new Key(this.key, exit);
+  }
+
+  /**
    * Creates the level that this RoomBuilder would create.
    * @return the Level built by this LevelBuilder
    * @throws IllegalStateException when the level has more than one exit
@@ -52,6 +90,10 @@ public class LevelBuilder {
     ArrayList<ArrayList<Space>> spaces = new ArrayList<>();
     this.rooms.forEach(room -> room.build(spaces));
     this.hallways.forEach(hallway -> hallway.build(spaces));
-    return new Level(spaces);
+
+    ArrayList<Item> items = new ArrayList<>();
+    Level level = new Level(spaces, items);
+    if (this.key != null) items.add(this.makeKey(level));
+    return level;
   }
 }
