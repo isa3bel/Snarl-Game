@@ -65,18 +65,6 @@ public class RoomBuilderTest {
   }
 
   @Test
-  public void testBuildExitIsWall() {
-    RoomBuilder room1 = new RoomBuilder(1,1,20,8)
-        .addExit(0,2).addWall(0,2);
-
-    try {
-      room1.build(new ArrayList<>());
-    } catch(IllegalStateException e) {
-      assertEquals("level exit cannot also be a wall", e.getMessage());
-    }
-  }
-
-  @Test
   public void testBuildDoorIsWall() {
     RoomBuilder room1 = new RoomBuilder(1,1,20,8)
         .addDoor(0,2)
@@ -86,28 +74,6 @@ public class RoomBuilderTest {
       room1.build(new ArrayList<>());
     } catch(IllegalStateException e) {
       assertEquals("no door can also be a wall", e.getMessage());
-    }
-  }
-
-  @Test
-  public void testBuildDoorIsExit() {
-    RoomBuilder room1 = new RoomBuilder(1,1,20,8)
-        .addDoor(0,2).addExit(0,2);
-
-    try {
-      room1.build(new ArrayList<>());
-    } catch(IllegalStateException e) {
-      assertEquals("level exit cannot also be a door", e.getMessage());
-    }
-  }
-
-  @Test
-  public void testBadExitPlacement() {
-    RoomBuilder room1 = new RoomBuilder(1,1,20,8);
-    try {
-      room1.addExit(2,-9);
-    } catch(IllegalArgumentException e) {
-      assertEquals("door must be on room boundary - row of 0 or 9 or column on 0 or 21, given: 2, -9", e.getMessage());
     }
   }
 
@@ -125,14 +91,12 @@ public class RoomBuilderTest {
   public void testSuccessfulBuild() {
     RoomBuilder room1 = new RoomBuilder(1,1,20,8)
         .addDoor(0,2)
-        .addExit(0,5)
         .addWall(2,6);
 
     ArrayList<ArrayList<Space>> spaces = new ArrayList<>();
     room1.build(spaces);
 
     assertTrue(spaces.get(0).get(2) instanceof Door);
-    assertTrue(spaces.get(0).get(5) instanceof Exit);
     assertTrue(spaces.get(3).get(7) instanceof Wall);
   }
 }

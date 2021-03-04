@@ -33,7 +33,7 @@ public class IsTraversable implements SpaceVisitor<Boolean> {
    * @return false
    */
   @Override
-  public Boolean visitWall(Wall wall) {
+  public Boolean visitAnyWall(Wall wall) {
     return false;
   }
 

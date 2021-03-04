@@ -5,7 +5,7 @@ package model;
  */
 public class Wall extends Space {
 
-  Wall() {}
+  protected Wall() {}
 
   /**
    * Constructor for this Wall
@@ -17,6 +17,10 @@ public class Wall extends Space {
 
   @Override
   public <T> T acceptVisitor(SpaceVisitor<T> visitor) {
+    return visitor.visitAnyWall(this);
+  }
+
+  public <T> T acceptWallVisitor(WallVisitor<T> visitor) {
     return visitor.visitWall(this);
   }
 }

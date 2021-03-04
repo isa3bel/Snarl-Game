@@ -31,7 +31,7 @@ public class IsExit implements SpaceVisitor<Boolean> {
    * @return false
    */
   @Override
-  public Boolean visitWall(Wall wall) {
+  public Boolean visitAnyWall(Wall wall) {
     return false;
   }
 

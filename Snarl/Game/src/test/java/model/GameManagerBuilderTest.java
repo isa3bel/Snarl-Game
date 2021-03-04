@@ -14,7 +14,6 @@ public class GameManagerBuilderTest {
   @Before
   public void setup() {
     RoomBuilder singleRoomBuilder = new RoomBuilder(1,1,20,8)
-        .addExit(0, 6)
         .addWall(1,1)
         .addWall(2,1)
         .addWall(5,4)
@@ -23,7 +22,10 @@ public class GameManagerBuilderTest {
         .addWall(5,5)
         .addWall(6,5)
         .addWall(7,5);
-    this.singleRoomLevel = new LevelBuilder().addRoom(singleRoomBuilder).build();
+    this.singleRoomLevel = new LevelBuilder()
+        .addRoom(singleRoomBuilder)
+        .addExit(new Location(0, 6))
+        .build();
     Level[] levels = { this.singleRoomLevel };
     this.gameManagerBuilder = new GameManagerBuilder(0, levels);
   }

@@ -105,7 +105,7 @@ public class Level {
    */
   private ArrayList<Location> calculateCharacterLocations(Comparator<Location> comparator) {
     ArrayList<Location> roomTiles = this
-        .filter((space, location) -> space.acceptVisitor(new IsInRoom()))
+        .filter((space, location) -> space.acceptVisitor(new IsValidStartingLocation()))
         .keySet()
         .stream()
         .sorted(comparator)

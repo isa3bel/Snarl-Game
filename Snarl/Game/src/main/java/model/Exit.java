@@ -8,21 +8,13 @@ public class Exit extends Space {
   private boolean isLocked;
 
   /**
-   * Creates an exit in the given room.
-   * @param room the room that this exit will be in
-   */
-  Exit(String room) {
-    this(room, false);
-  }
-
-  /**
    * Creates an exit in the given room with a locked status.
-   * @param room the room this exit is in
-   * @param locked the locked status of this exit
+   * @param replacingSpace the space that this exit is replacing
+   * @param isLocked the locked status of this exit
    */
-  Exit(String room, boolean locked) {
-    this.group = room;
-    this.isLocked = locked;
+  Exit(Space replacingSpace, boolean isLocked) {
+    this.group = replacingSpace.group;
+    this.isLocked = isLocked;
   }
 
   public <T> T acceptVisitor(SpaceVisitor<T> visitor) {

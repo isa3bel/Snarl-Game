@@ -20,7 +20,7 @@ class ASCIISpace implements SpaceVisitor<String>, Function<Space, String> {
   }
 
   @Override
-  public String visitWall(Wall wall) {
+  public String visitAnyWall(Wall wall) {
     return "X";
   }
 
@@ -31,7 +31,7 @@ class ASCIISpace implements SpaceVisitor<String>, Function<Space, String> {
 
   @Override
   public String visitHallwayTile(HallwayTile tile) {
-    return " ";
+    return this.visitTile(tile);
   }
 
   @Override

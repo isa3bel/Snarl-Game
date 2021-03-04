@@ -12,8 +12,8 @@ public class GameManager {
   private final Level[] levels;
   private final ArrayList<Character> characters;
 
-  GameManager(Level[] levels, ArrayList<Character> characters) {
-    this.currentLevel = 0;
+  GameManager(int currentLevel, Level[] levels, ArrayList<Character> characters) {
+    this.currentLevel = currentLevel;
     this.levels = levels;
     this.characters = characters;
   }

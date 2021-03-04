@@ -9,7 +9,7 @@ import model.*;
 /**
  * A query about the neighbors to a location in a room.
  */
-public class LocationQuery implements Question {
+public class LocationQuery extends Question {
 
   private final Level level;
   private final Location queryLocation;
@@ -19,6 +19,15 @@ public class LocationQuery implements Question {
     this.level = level;
     this.queryLocation = queryLocation;
     this.roomOrigin = roomOrigin;
+  }
+
+  /**
+   * Deserializes a LocationQuery from the given string.
+   * @param locationQuery the location query to deserialize
+   * @return the LocationQuery
+   */
+  static Question deserialize(String locationQuery) {
+    return Question.deserialize(locationQuery, new LocationQueryDeserializer());
   }
 
   /**
@@ -47,15 +56,6 @@ public class LocationQuery implements Question {
         + this.locationToString(this.queryLocation) + ", \" in room at \", "
         + this.locationToString(this.roomOrigin) + ", \" are \", "
         + allValidStringMoves + " ]";
-  }
-
-  /**
-   * Given a location converts it to a string following specific format.
-   * @param location the location to convert
-   * @return a string representing the converted location
-   */
-  private String locationToString(Location location) {
-    return "[" + location.row + ", " + location.column + "]";
   }
 
   /**

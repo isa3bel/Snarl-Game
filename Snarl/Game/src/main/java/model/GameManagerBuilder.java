@@ -1,9 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.stream.Collectors;
 
 /**
  * Builds a Snarl game.
@@ -12,8 +9,8 @@ public class GameManagerBuilder {
 
   private final int currentLevel;
   private final Level[] levels;
-  private ArrayList<Location> playerLocations;
-  private ArrayList<Location> adversaryLocations;
+  private final ArrayList<Location> playerLocations;
+  private final ArrayList<Location> adversaryLocations;
   private final ArrayList<Player> players;
   private final ArrayList<Adversary> adversaries;
 
@@ -98,6 +95,6 @@ public class GameManagerBuilder {
     characters.addAll(this.players);
     characters.addAll(this.adversaries);
 
-    return new GameManager(this.levels, characters);
+    return new GameManager(this.currentLevel, this.levels, characters);
   }
 }

@@ -15,8 +15,6 @@ public class RoomBuilder extends SpaceBuilder {
   private final int width;
   private final int height;
   private final HashSet<Location> doors;
-  private Location exit;
-  private boolean exitLocked;
   private final HashSet<Location> walls;
 
   /**
@@ -59,35 +57,6 @@ public class RoomBuilder extends SpaceBuilder {
     checkDoorPlacement(doorRow, doorColumn);
 
     this.doors.add(new Location(doorRow, doorColumn));
-    return this;
-  }
-
-  /**
-   * Adds a level exit to this room.
-   * @param exitRow the exit's row
-   * @param exitColumn the exit's column
-   * @return this RoomBuilder with the door
-   * @throws IllegalArgumentException if the exit is not on the room's boundary
-   */
-  public RoomBuilder addExit(int exitRow, int exitColumn) throws IllegalArgumentException {
-    return this.addExit(exitRow, exitColumn, false);
-  }
-
-  /**
-   * Adds a level exit to this room with a given locked status.
-   * @param exitRow the exit's x coordinate
-   * @param exitColumn the exit's y coordinate
-   * @param locked the exit's locked status
-   * @return this RoomBuilder with the door
-   * @throws IllegalArgumentException if the exit is not on the room's boundary
-   */
-  public RoomBuilder addExit(int exitRow, int exitColumn, boolean locked) throws IllegalArgumentException {
-    checkDoorPlacement(exitRow, exitColumn);
-    if (this.exit != null) {
-      throw new IllegalStateException("an exit has already been made in this room");
-    }
-    this.exit = new Location(exitRow, exitColumn);
-    this.exitLocked = locked;
     return this;
   }
 
@@ -140,17 +109,8 @@ public class RoomBuilder extends SpaceBuilder {
    * @throws IllegalStateException if the room has no doors or has a door that is also a wall
    */
   void build(ArrayList<ArrayList<Space>> spaces) throws IllegalStateException {
-    if (this.doors.size() < 1 && this.exit == null) {
-      throw new IllegalStateException("room must have at least 1 door");
-    }
     if (this.doors.stream().anyMatch(this.walls::contains)) {
       throw new IllegalStateException("no door can also be a wall");
-    }
-    if (this.walls.contains(this.exit)) {
-      throw new IllegalStateException("level exit cannot also be a wall");
-    }
-    if (this.doors.contains(this.exit)) {
-      throw new IllegalStateException("level exit cannot also be a door");
     }
 
     Location bottomRightWall = new Location(this.topLeft.row + this.height, this.topLeft.column
@@ -159,7 +119,6 @@ public class RoomBuilder extends SpaceBuilder {
     this.setRoomSpaces(bottomRightWall, spaces);
 
     this.doors.forEach(door -> spaces.get(door.row).set(door.column, new Door(this.toString())));
-    if (this.exit != null) spaces.get(this.exit.row).set(this.exit.column, new Exit(this.toString()));
     this.walls.forEach(wall -> spaces.get(wall.row).set(wall.column, new Wall(this.toString())));
   }
 
@@ -178,25 +137,10 @@ public class RoomBuilder extends SpaceBuilder {
         boolean isWallBoundary = currPointAxis.test(topLeftWall) || currPointAxis.test(bottomRightWall);
 
         // assign the space accordingly
-        Space space = isWallBoundary ? new Wall(this.toString()) : new Tile(this.toString());
+        Space space = isWallBoundary ? new EdgeWall(this.toString()) : new Tile(this.toString());
         spaces.get(currY).set(currX, space);
       }
     }
-  }
-
-  /**
-   * Gets all the locations that would make up a hallway directly between these two rooms.
-   * @param otherRoom the room to go to
-   * @return the locations between the door on this room and the door on the given room
-   */
-  ArrayList<Location> calculateLocationsFromRoomDoors(RoomBuilder otherRoom) {
-    Location startingDoor = this.getClosestConnectingDoor(otherRoom);
-    Location endingDoor = otherRoom.getClosestDoorOnAxis(startingDoor);
-
-    ArrayList<Location> locations = startingDoor.to(endingDoor);
-    locations.remove(startingDoor);
-    locations.remove(endingDoor);
-    return locations;
   }
 
   /**
@@ -204,15 +148,23 @@ public class RoomBuilder extends SpaceBuilder {
    * @param otherRoom the room this room is connecting to
    * @return the location of the door leading to the other room
    */
-  private Location getClosestConnectingDoor(RoomBuilder otherRoom) {
-    Optional<Location> maybeDoor = this.doors.stream().min(Comparator.comparingInt(
-        thisDoor -> otherRoom.doors.stream()
-            .filter(new Location.SameAxis(thisDoor))
-            .map(thisDoor::euclidianDistance)
-            .min(Comparator.comparingInt(a -> a))
-            .orElse(Integer.MAX_VALUE)));
+  Location[] getClosestConnectingDoors(RoomBuilder otherRoom) {
+    Optional<Location[]> maybeDoorPair = this.doors.stream()
+        .map(door -> {
+          try {
+            return new Location[]{door, otherRoom.getClosestDoorOnAxis(door)};
+          }
+          catch (IllegalArgumentException exception) {
+            return null;
+          }
+        })
+        .filter(doorPair -> doorPair != null)
+        .min(Comparator.comparingInt(doorPair -> doorPair[0].euclidianDistance(doorPair[1])));
 
-    return maybeDoor.orElseThrow(() -> new IllegalStateException("no valid doors to connect these rooms"));
+    Location[] doorPair = maybeDoorPair.orElseThrow(
+        () -> new IllegalStateException("no valid doors to connect these rooms")
+    );
+    return doorPair;
   }
 
   /**
@@ -226,8 +178,6 @@ public class RoomBuilder extends SpaceBuilder {
         .stream()
         .filter(new Location.SameAxis(locationToFind))
         .min(Comparator.comparingInt(door -> door.euclidianDistance(locationToFind)));
-    doorLocation.orElseThrow(() -> new IllegalArgumentException("no doors on the same axis as the given location"));
-
-    return doorLocation.get();
+    return doorLocation.orElseThrow(() -> new IllegalArgumentException("no doors on the same axis as the given location"));
   }
 }

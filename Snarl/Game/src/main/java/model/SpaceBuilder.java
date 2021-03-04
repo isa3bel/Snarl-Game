@@ -26,7 +26,7 @@ public abstract class SpaceBuilder {
     for (ArrayList<Space> row : spaces) {
       // guarantee the min number of spaces in that row
       while (row.size() <= maxX) {
-        row.add(new Wall());
+        row.add(new VoidWall());
       }
     }
   }

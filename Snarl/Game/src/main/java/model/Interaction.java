@@ -4,7 +4,7 @@ public abstract class Interaction<T extends Character> implements InteractableVi
 
   protected T character;
 
-  Interaction(T character) {
+  public Interaction(T character) {
     this.character = character;
   }
 

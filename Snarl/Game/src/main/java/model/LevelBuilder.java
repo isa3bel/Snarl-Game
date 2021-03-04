@@ -10,6 +10,8 @@ public class LevelBuilder {
   private final ArrayList<RoomBuilder> rooms;
   private final ArrayList<HallwayBuilder> hallways;
   private Location key;
+  private Location exit;
+  private boolean exitLocked;
 
   public LevelBuilder() {
     this.rooms = new ArrayList<>();
@@ -59,26 +61,47 @@ public class LevelBuilder {
   }
 
   /**
-   * Creates a key for the given level.
-   * @param level the level that this key is for
-   * @return this builder with the item
-   * @throws IllegalStateException if the key in the level already exists
+   * Adds a level exit to this room.
+   * @param exitLocation the exit's location in the level
+   * @return this RoomBuilder with the door
+   * @throws IllegalArgumentException if the exit is not on the room's boundary
    */
-  private Key makeKey(Level level) throws IllegalStateException {
-    Location forDoorAt = level
-        .filter((space, spaceLocation) -> space.acceptVisitor(new IsExit()))
-        .keySet()
-        .stream()
-        .findFirst()
-        .orElseThrow(() -> new IllegalStateException("exit exists in this level"));
+  public LevelBuilder addExit(Location exitLocation) throws IllegalArgumentException {
+    return this.addExit(exitLocation, false);
+  }
 
-    Space maybeExit = level.get(forDoorAt);
-    if (!(maybeExit instanceof Exit)) {
-      throw new IllegalStateException("location of given exit for this key is not actually an exit");
+  /**
+   * Adds a level exit to this room with a given locked status.
+   * @param exitLocation the exit's location in the level
+   * @param locked the exit's locked status
+   * @return this RoomBuilder with the door
+   * @throws IllegalArgumentException if the exit is not on the room's boundary
+   */
+  public LevelBuilder addExit(Location exitLocation, boolean locked) throws IllegalArgumentException {
+    if (this.exit != null) {
+      throw new IllegalStateException("an exit has already been made in this room");
     }
+    this.exit = exitLocation;
+    this.exitLocked = locked;
+    return this;
+  }
 
-    Exit exit = (Exit) maybeExit;
-    return new Key(this.key, exit);
+  /**
+   * Creates the exit in spaces in and returns the result
+   * @param spaces the spaces to reset the exit in
+   * @return the exit created
+   * @throws IllegalStateException if the exit is null
+   * @throws IllegalArgumentException if this exit would be replacing an invalid tile
+   */
+  private Exit makeExit(ArrayList<ArrayList<Space>> spaces) throws IllegalStateException, IllegalArgumentException {
+    if (this.exit == null) {
+      throw new IllegalStateException("level must have exactly one level exit");
+    }
+    // TODO: exit doesn't have to be a wall space?
+    Space spaceToReplace = spaces.get(this.exit.row).get(this.exit.column);
+    Exit exit = new Exit(spaceToReplace, this.exitLocked);
+    spaces.get(this.exit.row).set(this.exit.column, exit);
+    return exit;
   }
 
   /**
@@ -90,10 +113,11 @@ public class LevelBuilder {
     ArrayList<ArrayList<Space>> spaces = new ArrayList<>();
     this.rooms.forEach(room -> room.build(spaces));
     this.hallways.forEach(hallway -> hallway.build(spaces));
+    Exit exit = this.makeExit(spaces);
 
     ArrayList<Item> items = new ArrayList<>();
     Level level = new Level(spaces, items);
-    if (this.key != null) items.add(this.makeKey(level));
+    if (this.key != null) items.add(new Key(this.key, exit));
     return level;
   }
 }

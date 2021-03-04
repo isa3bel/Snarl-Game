@@ -9,7 +9,7 @@ import java.lang.reflect.Type;
 /**
  * A deserializer for a Question.
  */
-public class QuestionDeserializer implements JsonDeserializer<Question> {
+public class LocationQueryDeserializer implements JsonDeserializer<Question> {
 
   /**
    * Deserializes a question for the Snarl test harness.
