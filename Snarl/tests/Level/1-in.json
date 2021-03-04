@@ -1,15 +1,16 @@
-[
-  {
-    "type" : "room",
-    "origin" : [4, 6],
-    "bounds" : { "rows" : 5, "columns" : 5 },
-    "layout" : [
-      [0, 0, 2, 0, 0],
-      [0, 1, 1, 1, 0],
-      [0, 1, 0, 1, 0],
-      [0, 1, 1, 1, 0],
-      [0, 0, 2, 0, 0]
-    ]
-  },
-  [7, 11]
+[ { "type": "level",
+  "rooms": [ { "type": "room",
+               "origin": [ 0, 0 ],
+               "bounds": { "rows": 4, "columns": 4 },
+               "layout": [ [ 0, 0, 2, 0 ],
+                           [ 0, 1, 1, 0 ],
+                           [ 0, 1, 1, 0 ],
+                           [ 0, 2, 0, 0 ] ] }
+             ],
+  "objects": [ { "type": "key", "position": [ 1, 2 ] },
+               { "type": "exit", "position": [ 0, 3 ] } ],
+  "hallways": [ ]
+	},
+	[1, 2]
 ]
+
