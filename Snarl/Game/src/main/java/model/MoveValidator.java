@@ -7,7 +7,7 @@ public abstract class MoveValidator<T extends Character> {
   protected T character;
   protected Location nextMove;
 
-  MoveValidator(T character, Location location) {
+  public MoveValidator(T character, Location location) {
     this.character = character;
     this.nextMove = location;
   }

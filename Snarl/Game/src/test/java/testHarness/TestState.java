@@ -1,8 +1,11 @@
 package testHarness;
 
+import testHarness.answer.Answer;
+import testHarness.query.StateQuery;
+
 import java.util.Scanner;
 
-public class TestHarness {
+public class TestState {
 
   public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
@@ -10,7 +13,7 @@ public class TestHarness {
     while (scanner.hasNextLine()) {
       stringBuilder.append(scanner.nextLine());
     }
-    Question nextUnit = LocationQuery.deserialize(stringBuilder.toString());
-    System.out.print(nextUnit.getAnswer());
+    Answer answer = StateQuery.deserialize(stringBuilder.toString());
+    System.out.print(answer.toString());
   }
 }

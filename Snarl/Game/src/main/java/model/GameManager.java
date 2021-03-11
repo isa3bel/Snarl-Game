@@ -12,27 +12,10 @@ public class GameManager {
   private final Level[] levels;
   private final ArrayList<Character> characters;
 
-  GameManager(int currentLevel, Level[] levels, ArrayList<Character> characters) {
+  public GameManager(int currentLevel, Level[] levels, ArrayList<Character> characters) {
     this.currentLevel = currentLevel;
     this.levels = levels;
     this.characters = characters;
-  }
-
-  /**
-   * Advance this game to the next level.
-   */
-  public void nextLevel() {
-    if (++this.currentLevel == levels.length) {
-      // game finished - do something?
-      return;
-    }
-
-    ArrayList<Location> playerLocations = this.levels[this.currentLevel].calculatePlayerLocations();
-    this.characters
-        .stream()
-        // TODO: bad - move adversary to level ?
-        .filter(character -> character instanceof Player)
-        .forEach(character -> character.moveTo(playerLocations.remove(0)));
   }
 
   /**
@@ -46,11 +29,11 @@ public class GameManager {
    * Does this character's turn in the game.
    * @param currentCharacter the character whose turn it is
    */
-  private void doTurn(Character currentCharacter) {
+  public void doTurn(Character currentCharacter) {
     MoveValidator moveValidator;
     do {
       moveValidator = currentCharacter.getNextMove();
-    } while (!moveValidator.isValid(this.levels[this.currentLevel], this.characters));
+    } while (!this.isMoveValid(moveValidator));
     moveValidator.executeMove();
 
     Interaction interaction = currentCharacter.makeInteraction(this);
@@ -65,6 +48,15 @@ public class GameManager {
   public void buildView(View view) {
     view.renderLevel(this.levels[this.currentLevel]);
     view.placeCharacters(this.characters);
+  }
+
+  /**
+   * Are the rules of the given moveValidator valid for this game state?
+   * @param moveValidator the move validator to validate the move
+   * @return whether this game state is compatible with the given move validator
+   */
+  public boolean isMoveValid(MoveValidator moveValidator) {
+    return moveValidator.isValid(this.levels[this.currentLevel], this.characters);
   }
 
 }

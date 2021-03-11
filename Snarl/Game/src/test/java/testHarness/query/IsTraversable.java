@@ -1,4 +1,4 @@
-package testHarness;
+package testHarness.query;
 
 import model.*;
 

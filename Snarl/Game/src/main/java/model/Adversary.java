@@ -29,6 +29,8 @@ public class Adversary extends Character {
 
   @Override
   public MoveValidator getNextMove() {
+    // TODO: update the controller with the view of the game manager?
+    //  if that happens here?
     Location nextLocation = this.controller.getNextMove();
     return new AdversaryMoveValidator(this, nextLocation);
   }

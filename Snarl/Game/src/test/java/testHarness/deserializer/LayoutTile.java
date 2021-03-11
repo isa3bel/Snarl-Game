@@ -1,4 +1,4 @@
-package testHarness;
+package testHarness.deserializer;
 
 import model.Location;
 import model.RoomBuilder;

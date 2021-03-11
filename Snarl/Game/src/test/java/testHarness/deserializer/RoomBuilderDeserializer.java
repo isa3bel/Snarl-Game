@@ -1,4 +1,4 @@
-package testHarness;
+package testHarness.deserializer;
 
 import com.google.gson.*;
 import model.Location;

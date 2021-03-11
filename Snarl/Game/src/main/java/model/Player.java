@@ -13,10 +13,9 @@ public class Player extends Character {
    * @param location the location to initialize the player at
    * @param id the player's id
    */
-  Player(Location location, int id) {
+  public Player(Location location, int id) {
     super(location);
     this.id = id;
-
   }
 
   public void defend() {

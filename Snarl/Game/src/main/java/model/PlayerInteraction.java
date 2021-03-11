@@ -4,7 +4,7 @@ public class PlayerInteraction extends Interaction<Player> {
 
   private final GameManager gameManager;
 
-  PlayerInteraction(Player player, GameManager gameManager) throws IllegalArgumentException {
+  public PlayerInteraction(Player player, GameManager gameManager) throws IllegalArgumentException {
     super(player);
 
     if (gameManager == null) {
@@ -27,7 +27,7 @@ public class PlayerInteraction extends Interaction<Player> {
 
   @Override
   public void visitExit(Exit exit) {
-    this.gameManager.nextLevel();
+    this.character.moveTo(null);
   }
 
 }

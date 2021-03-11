@@ -66,7 +66,7 @@ public class LevelBuilder {
    * @return this RoomBuilder with the door
    * @throws IllegalArgumentException if the exit is not on the room's boundary
    */
-  public LevelBuilder addExit(Location exitLocation) throws IllegalArgumentException {
+  public LevelBuilder addExit(Location exitLocation) throws IllegalStateException {
     return this.addExit(exitLocation, false);
   }
 
@@ -77,11 +77,25 @@ public class LevelBuilder {
    * @return this RoomBuilder with the door
    * @throws IllegalArgumentException if the exit is not on the room's boundary
    */
-  public LevelBuilder addExit(Location exitLocation, boolean locked) throws IllegalArgumentException {
+  public LevelBuilder addExit(Location exitLocation, boolean locked) throws IllegalStateException {
     if (this.exit != null) {
       throw new IllegalStateException("an exit has already been made in this room");
     }
     this.exit = exitLocation;
+    this.exitLocked = locked;
+    return this;
+  }
+
+  /**
+   * Sets the locked status of the exit in this level.
+   * @param locked is the exit locked?
+   * @return this game state with the updated exit status
+   * @throws IllegalStateException the state of the exit
+   */
+  public LevelBuilder setExitLocked(boolean locked) throws IllegalStateException {
+    if (this.exit == null) {
+      throw new IllegalStateException("an exit must be added to the level before its locked status can be set");
+    }
     this.exitLocked = locked;
     return this;
   }
