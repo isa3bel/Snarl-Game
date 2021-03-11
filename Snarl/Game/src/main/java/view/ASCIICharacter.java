@@ -1,10 +1,10 @@
 package view;
 
 import java.util.function.Function;
-import model.Adversary;
-import model.Character;
-import model.CharacterVisitor;
-import model.Player;
+import model.characters.Adversary;
+import model.characters.Character;
+import model.characters.CharacterVisitor;
+import model.characters.Player;
 
 /**
  * Translates a Character to its ASCII representation.

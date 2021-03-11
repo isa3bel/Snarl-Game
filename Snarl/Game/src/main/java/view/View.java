@@ -1,7 +1,7 @@
 package view;
 
-import model.Character;
-import model.Level;
+import model.characters.Character;
+import model.level.Level;
 
 import java.util.List;
 

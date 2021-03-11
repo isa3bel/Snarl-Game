@@ -2,8 +2,11 @@ package testHarness.deserializer;
 
 import com.google.gson.*;
 import model.*;
-import model.Character;
-import org.mockito.Mock;
+import model.builders.LevelBuilder;
+import model.characters.Adversary;
+import model.characters.Character;
+import model.level.Level;
+import model.level.Location;
 import testHarness.answer.StateAnswer;
 import testHarness.query.MockPlayer;
 import testHarness.query.StateQuery;

@@ -1,7 +1,7 @@
 package testHarness.answer;
 
 import model.GameManager;
-import model.Location;
+import model.level.Location;
 import view.JSONView;
 
 import java.io.ByteArrayOutputStream;

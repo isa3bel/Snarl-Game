@@ -3,6 +3,11 @@ package model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import model.builders.GameManagerBuilder;
+import model.builders.LevelBuilder;
+import model.builders.RoomBuilder;
+import model.level.Level;
+import model.level.Location;
 import org.junit.Before;
 import org.junit.Test;
 

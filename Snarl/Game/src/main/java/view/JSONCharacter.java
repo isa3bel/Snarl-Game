@@ -1,6 +1,7 @@
 package view;
 
-import model.*;
+import model.characters.*;
+import model.level.Location;
 
 /**
  * Translates a character into json.

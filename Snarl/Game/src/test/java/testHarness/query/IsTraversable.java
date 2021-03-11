@@ -1,6 +1,9 @@
 package testHarness.query;
 
-import model.*;
+import model.level.*;
+import model.level.Door;
+import model.level.Exit;
+import model.level.HallwayTile;
 
 /**
  * Visits a space to see if it is traversable (based on the LocationQuery).

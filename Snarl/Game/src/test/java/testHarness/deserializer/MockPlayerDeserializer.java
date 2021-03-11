@@ -1,11 +1,10 @@
 package testHarness.deserializer;
 
 import com.google.gson.*;
-import model.Location;
+import model.level.Location;
 import testHarness.query.MockPlayer;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
 
 public class MockPlayerDeserializer implements JsonDeserializer<MockPlayer> {
 

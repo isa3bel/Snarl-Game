@@ -1,14 +1,13 @@
 package view;
 
 import java.util.List;
-import model.Character;
-import model.JSONObject;
-import model.Level;
+import model.characters.Character;
+import model.level.Level;
 
 public class JSONView implements View{
 
-  private String roomString;
-  private String hallwayString;
+  private final String roomString;
+  private final String hallwayString;
   private String levelString;
   private String playerString;
   private String adversaryString;
@@ -21,17 +20,18 @@ public class JSONView implements View{
 
   @Override
   public void renderLevel(Level level) {
-    StringBuilder levelStringBuilder = new StringBuilder();
+    StringBuilder objectsStringBuilder = new StringBuilder();
     StringBuilder isLocked = new StringBuilder();
-    level.filter((a, b) -> true).keySet().stream().forEach(location -> {
-          JSONObject jsonObject = new JSONObject(location, levelStringBuilder, isLocked);
+    level.filter((a, b) -> true).keySet().forEach(location -> {
+          JSONObject jsonObject = new JSONObject(location, objectsStringBuilder, isLocked);
           level.interact(location, jsonObject);
         });
+
     this.exitLockedString = isLocked.toString();
-    this.levelString = "{ \"type\": \"level\",\n"
-        + "\"rooms\": " + this.roomString + "\n"
-        + "\"objects\": " + "[ " + levelStringBuilder + " ]\n"
-        + "\"hallways\": " + this.hallwayString + "\n" + "}";
+    this.levelString = "{\n  \"type\": \"level\",\n"
+        + "  \"rooms\": " + this.roomString + ",\n"
+        + "  \"objects\": " + "[ " + objectsStringBuilder + " ],\n"
+        + "  \"hallways\": " + this.hallwayString + "\n}";
   }
 
   @Override
@@ -39,19 +39,18 @@ public class JSONView implements View{
     StringBuilder playerString = new StringBuilder();
     StringBuilder adversaryString = new StringBuilder();
 
-    characters.forEach(character -> {
-        character.acceptVisitor(new JSONCharacter(playerString, adversaryString));
-    });
+    characters.forEach(character ->
+        character.acceptVisitor(new JSONCharacter(playerString, adversaryString)));
     this.playerString = playerString.toString();
     this.adversaryString = adversaryString.toString();
   }
 
   @Override
   public void draw() {
-    System.out.print("{\n" + "\"type\": \"state\",\n"
-        + "\"level\": " + this.levelString + "\n"
-        + "\"players\": " + this.playerString + "\n"
-        + "\"adversaries\": " + this.adversaryString
-        + "\"exit-locked\": " + this.exitLockedString);
+    System.out.print("{\n\"type\": \"state\",\n"
+        + "\"level\": " + this.levelString + ",\n"
+        + "\"players\": [" + this.playerString + "],\n"
+        + "\"adversaries\": [" + this.adversaryString
+        + "],\n\"exit-locked\": " + this.exitLockedString + "}");
   }
 }

@@ -6,8 +6,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
-import model.HallwayBuilder;
-import model.Location;
+import model.builders.HallwayBuilder;
+import model.level.Location;
 
 public class HallwayBuilderDeserializer implements JsonDeserializer<HallwayBuilder> {
 

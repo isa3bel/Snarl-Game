@@ -1,9 +1,9 @@
 package testHarness.query;
 
 import model.GameManager;
-import model.Player;
-import model.Location;
-import model.MoveValidator;
+import model.characters.Player;
+import model.level.Location;
+import model.characters.MoveValidator;
 import testHarness.answer.StateAnswer;
 import testHarness.answer.Success;
 import testHarness.answer.SuccessEjected;

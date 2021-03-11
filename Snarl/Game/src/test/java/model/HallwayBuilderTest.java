@@ -1,5 +1,9 @@
 package model;
 
+import model.builders.HallwayBuilder;
+import model.builders.RoomBuilder;
+import model.level.Location;
+import model.level.Space;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;

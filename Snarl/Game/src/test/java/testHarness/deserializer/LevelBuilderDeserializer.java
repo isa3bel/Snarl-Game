@@ -2,10 +2,10 @@ package testHarness.deserializer;
 
 import com.google.gson.*;
 
-import model.HallwayBuilder;
-import model.LevelBuilder;
-import model.Location;
-import model.RoomBuilder;
+import model.builders.HallwayBuilder;
+import model.builders.LevelBuilder;
+import model.level.Location;
+import model.builders.RoomBuilder;
 
 import java.lang.reflect.Type;
 

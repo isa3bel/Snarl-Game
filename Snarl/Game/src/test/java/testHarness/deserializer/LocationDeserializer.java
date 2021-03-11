@@ -1,7 +1,7 @@
 package testHarness.deserializer;
 
 import com.google.gson.*;
-import model.Location;
+import model.level.Location;
 
 import java.lang.reflect.Type;
 

@@ -3,13 +3,13 @@ package testHarness.query;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
-import com.google.gson.reflect.TypeToken;
-import model.*;
+import model.builders.HallwayBuilder;
+import model.builders.LevelBuilder;
+import model.builders.RoomBuilder;
+import model.characters.Adversary;
+import model.level.Location;
 import testHarness.answer.Answer;
 import testHarness.deserializer.*;
-
-import java.lang.reflect.Type;
-import java.util.HashMap;
 
 /**
  * A question to ask about the implementation of our Snarl game.

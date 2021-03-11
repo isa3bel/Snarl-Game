@@ -1,5 +1,7 @@
 package model;
 
+import model.builders.LevelBuilder;
+import model.builders.RoomBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;

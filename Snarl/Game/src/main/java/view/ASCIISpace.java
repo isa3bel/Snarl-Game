@@ -2,7 +2,10 @@ package view;
 
 import java.util.function.Function;
 
-import model.*;
+import model.level.*;
+import model.level.Door;
+import model.level.Exit;
+import model.level.HallwayTile;
 
 /**
  * Translates a space to its ASCII representation.

@@ -1,7 +1,9 @@
 package testHarness.query;
 
-import model.*;
-import model.Character;
+import model.characters.*;
+import model.characters.Character;
+import model.level.Level;
+import model.level.Location;
 
 import java.util.ArrayList;
 

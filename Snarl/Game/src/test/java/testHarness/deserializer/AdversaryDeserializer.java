@@ -1,10 +1,10 @@
 package testHarness.deserializer;
 
 import com.google.gson.*;
-import model.Adversary;
-import model.Ghost;
-import model.Location;
-import model.Zombie;
+import model.characters.Adversary;
+import model.characters.Ghost;
+import model.level.Location;
+import model.characters.Zombie;
 
 import java.lang.reflect.Type;
 

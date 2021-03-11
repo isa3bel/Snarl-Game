@@ -1,7 +1,7 @@
 package testHarness.deserializer;
 
-import model.Location;
-import model.RoomBuilder;
+import model.level.Location;
+import model.builders.RoomBuilder;
 
 /**
  * The types of tiles in a tile layout.

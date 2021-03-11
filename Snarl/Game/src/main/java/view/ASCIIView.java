@@ -2,10 +2,9 @@ package view;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import model.Character;
-import model.Item;
-import model.Level;
-import model.Location;
+import model.characters.Character;
+import model.level.Level;
+import model.level.Location;
 
 import java.util.ArrayList;
 

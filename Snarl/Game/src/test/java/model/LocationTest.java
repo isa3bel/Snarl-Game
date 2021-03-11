@@ -1,11 +1,11 @@
 package model;
 
+import model.level.Location;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.function.Predicate;
 
 import static org.junit.Assert.*;

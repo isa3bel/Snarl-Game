@@ -1,6 +1,12 @@
 package view;
 
 import model.*;
+import model.builders.GameManagerBuilder;
+import model.builders.HallwayBuilder;
+import model.builders.LevelBuilder;
+import model.builders.RoomBuilder;
+import model.level.Level;
+import model.level.Location;
 import org.junit.Before;
 import org.junit.Test;
 

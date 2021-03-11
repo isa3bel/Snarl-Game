@@ -1,8 +1,8 @@
 package testHarness.deserializer;
 
 import com.google.gson.*;
-import model.Location;
-import model.RoomBuilder;
+import model.level.Location;
+import model.builders.RoomBuilder;
 
 import java.lang.reflect.Type;
 

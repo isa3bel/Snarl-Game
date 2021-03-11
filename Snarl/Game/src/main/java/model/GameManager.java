@@ -1,6 +1,11 @@
 package model;
 
 import java.util.ArrayList;
+
+import model.characters.Character;
+import model.characters.MoveValidator;
+import model.interactions.Interaction;
+import model.level.Level;
 import view.View;
 
 /**

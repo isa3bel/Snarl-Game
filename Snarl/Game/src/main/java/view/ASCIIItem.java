@@ -1,9 +1,9 @@
 package view;
 
 import java.util.function.Function;
-import model.Item;
-import model.ItemVisitor;
-import model.Key;
+import model.item.Item;
+import model.item.ItemVisitor;
+import model.item.Key;
 
 /**
  * Translates an Item to its ASCII representation.

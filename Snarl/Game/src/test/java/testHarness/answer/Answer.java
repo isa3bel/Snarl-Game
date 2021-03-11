@@ -1,6 +1,6 @@
 package testHarness.answer;
 
-import model.Location;
+import model.level.Location;
 
 public abstract class Answer {
 

@@ -1,6 +1,11 @@
 package model;
 
 import java.util.ArrayList;
+
+import model.builders.RoomBuilder;
+import model.level.Door;
+import model.level.Space;
+import model.level.Wall;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

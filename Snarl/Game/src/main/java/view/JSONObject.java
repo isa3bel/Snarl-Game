@@ -1,7 +1,12 @@
 package view;
 
-import model.*;
-import model.Character;
+import model.characters.Character;
+import model.interactions.Interaction;
+import model.item.Item;
+import model.item.ItemVisitor;
+import model.item.Key;
+import model.level.*;
+import model.level.Exit;
 
 public class JSONObject extends Interaction<Character> {
 
