@@ -5,7 +5,7 @@ import model.characters.Player;
 
 public class AdversaryInteraction extends Interaction<Adversary> {
 
-  AdversaryInteraction(Adversary adversary) {
+  public AdversaryInteraction(Adversary adversary) {
     super(adversary);
   }
 

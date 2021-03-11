@@ -1,6 +1,7 @@
 package model.characters;
 
 import model.level.Location;
+import view.View;
 
 /**
  * The controller of a Character for a Snarl game - could be a library,
@@ -13,5 +14,11 @@ public interface Controller {
    * @return the requested next move
    */
   Location getNextMove();
+
+  /**
+   * Updates the controller with the given view.
+   * @param view the view of the game
+   */
+  void update(View view);
 
 }

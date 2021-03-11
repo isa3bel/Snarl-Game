@@ -1,10 +1,11 @@
 package model.characters;
 
-import model.*;
+import model.GameManager;
 import model.interactions.AdversaryInteraction;
 import model.interactions.InteractableVisitor;
 import model.interactions.Interaction;
 import model.level.Location;
+import view.AdversaryView;
 
 /**
  * An automated adversary in a Snarl game.
@@ -45,8 +46,14 @@ public abstract class Adversary extends Character {
   }
 
   @Override
-  public Interaction makeInteraction(GameManager gameManager) {
+  public Interaction makeInteraction() {
     return new AdversaryInteraction(this);
+  }
+
+  @Override
+  public void updateController(GameManager gameManager) {
+    AdversaryView view = new AdversaryView();
+    this.controller.update(view);
   }
 
 }

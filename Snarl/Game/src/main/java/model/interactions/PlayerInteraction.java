@@ -3,20 +3,12 @@ package model.interactions;
 import model.characters.Adversary;
 import model.characters.Player;
 import model.level.Exit;
-import model.GameManager;
 import model.item.Item;
 
 public class PlayerInteraction extends Interaction<Player> {
 
-  private final GameManager gameManager;
-
-  public PlayerInteraction(Player player, GameManager gameManager) throws IllegalArgumentException {
+  public PlayerInteraction(Player player) throws IllegalArgumentException {
     super(player);
-
-    if (gameManager == null) {
-      throw new IllegalArgumentException("player interaction must have a game manager");
-    }
-    this.gameManager = gameManager;
   }
 
   @Override

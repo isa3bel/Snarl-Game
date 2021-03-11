@@ -41,9 +41,11 @@ public class GameManager {
     } while (!this.isMoveValid(moveValidator));
     moveValidator.executeMove();
 
-    Interaction interaction = currentCharacter.makeInteraction(this);
+    Interaction interaction = currentCharacter.makeInteraction();
     this.characters.forEach(character -> character.acceptVisitor(interaction));
     this.levels[this.currentLevel].interact(currentCharacter.getCurrentLocation(), interaction);
+
+    this.characters.forEach(character -> character.updateController(this));
   }
 
   /**

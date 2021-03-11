@@ -49,7 +49,13 @@ public abstract class Character implements Interactable {
    */
   public String getName() { return this.name; }
 
+  /**
+   * Updates this character with the current game state.
+   * @return the character's name
+   */
+  public abstract void updateController(GameManager gameManager);
+
   public abstract MoveValidator getNextMove();
-  public abstract Interaction makeInteraction(GameManager gameManager);
+  public abstract Interaction makeInteraction();
 
 }

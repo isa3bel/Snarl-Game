@@ -5,6 +5,7 @@ import model.interactions.InteractableVisitor;
 import model.interactions.Interaction;
 import model.interactions.PlayerInteraction;
 import model.level.Location;
+import view.PlayerView;
 
 /**
  * A player controller by a user in the Snarl dungeon crawler.
@@ -35,13 +36,19 @@ public class Player extends Character {
   }
 
   @Override
-  public Interaction makeInteraction(GameManager gameManager) {
-    return new PlayerInteraction(this, gameManager);
+  public Interaction makeInteraction() {
+    return new PlayerInteraction(this);
   }
 
   @Override
   public <T> T acceptVisitor(CharacterVisitor<T> visitor) {
     return visitor.visitPlayer(this);
+  }
+
+  @Override
+  public void updateController(GameManager gameManager) {
+    PlayerView view = new PlayerView();
+    this.controller.update(view);
   }
 
   @Override
