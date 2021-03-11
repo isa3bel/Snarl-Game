@@ -6,7 +6,7 @@ import model.level.Level;
 import model.level.Location;
 import model.ruleChecker.PlayerMoveValidator;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class MockPlayerMoveValidator extends PlayerMoveValidator {
 
@@ -15,7 +15,7 @@ public class MockPlayerMoveValidator extends PlayerMoveValidator {
   }
 
   @Override
-  public boolean isValid(Level level, ArrayList<Character> characters) {
+  public boolean isValid(Level level, List<Character> characters) {
     return level.get(this.nextMove).acceptVisitor(new IsTraversable()) &&
         characters.stream()
             .filter(c -> !c.equals(this.character))

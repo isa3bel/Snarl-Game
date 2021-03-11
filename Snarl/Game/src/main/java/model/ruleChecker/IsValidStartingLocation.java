@@ -7,7 +7,7 @@ import model.level.*;
  */
 public class IsValidStartingLocation implements SpaceVisitor<Boolean> {
 
-  IsValidStartingLocation() {}
+  public IsValidStartingLocation() {}
 
   @Override
   public Boolean visitDoor(Door door) {
