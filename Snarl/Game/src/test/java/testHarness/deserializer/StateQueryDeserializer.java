@@ -3,6 +3,7 @@ package testHarness.deserializer;
 import com.google.gson.*;
 import model.*;
 import model.Character;
+import org.mockito.Mock;
 import testHarness.answer.StateAnswer;
 import testHarness.query.MockPlayer;
 import testHarness.query.StateQuery;
@@ -10,36 +11,34 @@ import testHarness.query.StateQuery;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  * A deserializer for a Question.
  */
 public class StateQueryDeserializer implements JsonDeserializer<StateAnswer> {
 
-  HashMap<String, MockPlayer> players;
+  MockPlayer player;
 
   /**
    * Deserializes a question for the Snarl test harness.
-   * @param jsonElement the element to deserialize
+   * @param wrapper the wrapper around the query to deserialize (e.g. { "query": queryJson })
    * @param type the type to deserialize to
    * @param context the context in which to continue deserialization
    * @return the question that needs to be deserialized
    * @throws JsonParseException if the input is not formed as expected for this question
    */
   @Override
-  public StateAnswer deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context)
+  public StateAnswer deserialize(JsonElement wrapper, Type type, JsonDeserializationContext context)
       throws JsonParseException {
+    JsonElement jsonElement = wrapper.getAsJsonObject().get("query");
     if (!jsonElement.isJsonArray()) {
       throw new JsonParseException("Expecting a JSON array, received: " + jsonElement.toString());
     }
-    JsonArray jsonArray = (JsonArray) jsonElement;
-    GameManager gameManager = this.parseGameManager(jsonArray.get(0), context);
+    JsonArray jsonArray = jsonElement.getAsJsonArray();
     String playerName = jsonArray.get(1).getAsString();
+    GameManager gameManager = this.parseGameManager(jsonArray.get(0), playerName, context);
     Location location = context.deserialize(jsonArray.get(2), Location.class);
-
-    MockPlayer player = this.players.get(playerName);
-    player.setNextLocation(location);
+    if (this.player != null) this.player.setNextLocation(location);
 
     StateQuery query = new StateQuery(gameManager, player);
     return setupStateAnswer(query, jsonArray.get(0), playerName, location);
@@ -51,7 +50,7 @@ public class StateQueryDeserializer implements JsonDeserializer<StateAnswer> {
    * @param context the context in which to continue deserialization
    * @return the game manager that was parsed
    */
-  private GameManager parseGameManager(JsonElement jsonElement, JsonDeserializationContext context) {
+  private GameManager parseGameManager(JsonElement jsonElement, String playerName, JsonDeserializationContext context) {
     if (!jsonElement.isJsonObject()) {
       throw new IllegalArgumentException("expected state to be a json object");
     }
@@ -61,10 +60,13 @@ public class StateQueryDeserializer implements JsonDeserializer<StateAnswer> {
     levelBuilder.setExitLocked(state.get("exit-locked").getAsBoolean());
     Level[] levels = new Level[]{ levelBuilder.build() };
 
-    this.players = context.deserialize(state.get("players"), HashMap.class);
-    ArrayList<Character> characters = new ArrayList<>(this.players.values());
+    ArrayList<Character> characters = new ArrayList<>();
+    MockPlayer[] players = context.deserialize(state.get("players"), MockPlayer[].class);
+    characters.addAll(Arrays.asList(players));
     Adversary[] adversaries = context.deserialize(state.get("adversaries"), Adversary[].class);
     characters.addAll(Arrays.asList(adversaries));
+
+    this.player = Arrays.stream(players).filter(p -> p.getName().equals(playerName)).findFirst().orElse(null);
 
     return new GameManager(0, levels, characters);
   }
@@ -80,13 +82,13 @@ public class StateQueryDeserializer implements JsonDeserializer<StateAnswer> {
   private static StateAnswer setupStateAnswer(StateQuery query, JsonElement jsonObject,
                                               String playerName, Location location) {
     JsonElement levelJson = jsonObject.getAsJsonObject().get("level");
-    String roomsList = levelJson.getAsJsonObject().get("rooms").getAsString();
-    String hallwaysList = levelJson.getAsJsonObject().get("hallways").getAsString();
+    JsonElement roomsList = levelJson.getAsJsonObject().get("rooms");
+    JsonElement hallwaysList = levelJson.getAsJsonObject().get("hallways");
     StateAnswer answer = query.getAnswer();
     return answer
         .setPlayerName(playerName)
-        .setRooms(roomsList)
-        .setHallways(hallwaysList)
+        .setRooms(roomsList.toString())
+        .setHallways(hallwaysList.toString())
         .setQueryLocation(location);
   }
 }

@@ -21,12 +21,13 @@ public class AdversaryDeserializer implements JsonDeserializer<Adversary> {
     }
     JsonObject adversaryJson = jsonElement.getAsJsonObject();
     Location location = context.deserialize(adversaryJson.get("position"), Location.class);
+    String name = adversaryJson.get("name").getAsString();
 
     switch (adversaryJson.get("type").getAsString()) {
       case "zombie":
-        return new Zombie(location);
+        return new Zombie(location, name);
       case "ghost":
-        return new Ghost(location);
+        return new Ghost(location, name);
       default:
         throw new JsonParseException("adversary type must be one of ['zombie', 'ghost'], given:  " +
             adversaryJson.get("type").getAsString());

@@ -25,9 +25,12 @@ public class Exit extends Space {
     this.isLocked = false;
   }
 
+  public boolean isLocked() {
+    return this.isLocked;
+  }
+
   @Override
   public void acceptVisitor(InteractableVisitor visitor) {
-    if (this.isLocked) return;
     visitor.visitExit(this);
   }
 }

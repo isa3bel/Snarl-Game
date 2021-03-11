@@ -46,7 +46,7 @@ public class Level {
    */
   public void interact(Location location, Interaction interaction) {
     this.items.forEach(item -> item.acceptVisitor(interaction));
-    this.get(location).acceptVisitor(interaction);
+    if (location != null) this.get(location).acceptVisitor(interaction);
   }
 
   /**

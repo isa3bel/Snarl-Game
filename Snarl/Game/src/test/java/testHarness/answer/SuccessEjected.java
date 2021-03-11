@@ -12,7 +12,7 @@ public class SuccessEjected extends StateAnswer {
 
   @Override
   public String toString() {
-    return "[ \"Success\", \"Player \", " + this.playerName + ", \" was ejected.\", " +
+    return "[ \"Success\", \"Player \", \"" + this.playerName + "\", \" was ejected.\", " +
         this.getStateJson(this.gameManager) + " ]";
   }
 }

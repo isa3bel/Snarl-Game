@@ -3,10 +3,12 @@ package testHarness.query;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
+import com.google.gson.reflect.TypeToken;
 import model.*;
 import testHarness.answer.Answer;
 import testHarness.deserializer.*;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 
 /**
@@ -16,21 +18,22 @@ public abstract class Question {
 
   /**
    * Deserializes a question from the given string using the given type deserializer.
-   * @param questionString the string to deserialize
-   * @param questionDeserializer the deserializer to use
+   * @param json the string to deserialize
+   * @param deserializer the deserializer to use
+   * @param classOfT the type to deserialize to
    * @return the Question that was deserialized
    */
-  protected static <T extends Answer> T deserialize(String questionString, JsonDeserializer<T> questionDeserializer, Class<T> classOfT) {
+  protected static <T extends Answer> T deserialize(String json, JsonDeserializer<T> deserializer, Class<T> classOfT) {
     Gson gson = new GsonBuilder()
-        .registerTypeAdapter(Answer.class, questionDeserializer)
+        .registerTypeAdapter(classOfT, deserializer)
         .registerTypeAdapter(LevelBuilder.class, new LevelBuilderDeserializer())
         .registerTypeAdapter(RoomBuilder.class, new RoomBuilderDeserializer())
         .registerTypeAdapter(HallwayBuilder.class, new HallwayBuilderDeserializer())
         .registerTypeAdapter(Location.class, new LocationDeserializer())
-        .registerTypeAdapter(HashMap.class, new MockPlayerHashMapDeserializer())
+        .registerTypeAdapter(MockPlayer.class, new MockPlayerDeserializer())
         .registerTypeAdapter(Adversary.class, new AdversaryDeserializer())
         .create();
-    return gson.fromJson(questionString, classOfT);
+    return gson.fromJson(json, classOfT);
   }
 
   /**

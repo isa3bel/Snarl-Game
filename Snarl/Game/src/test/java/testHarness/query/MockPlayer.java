@@ -17,8 +17,8 @@ public class MockPlayer extends Player {
   private InteractionResult result;
   private Location nextLocation;
 
-  public MockPlayer(Location location, int id) {
-    super(location, id);
+  public MockPlayer(Location location, int id, String name) {
+    super(location, id, name);
     this.result = InteractionResult.DEFAULT;
   }
 
@@ -36,7 +36,7 @@ public class MockPlayer extends Player {
   @Override
   public void moveTo(Location location) {
     super.moveTo(location);
-    this.result = location == null ? this.result : InteractionResult.EXITED;
+    this.result = location != null ? this.result : InteractionResult.EXITED;
   }
 
   /**

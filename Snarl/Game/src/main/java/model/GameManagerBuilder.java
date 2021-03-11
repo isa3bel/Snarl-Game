@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Builds a Snarl game.
@@ -60,7 +61,7 @@ public class GameManagerBuilder {
     if (this.players.size() >= 4) {
       throw new IllegalArgumentException("cannot have more than 4 players in a Snarl game");
     }
-    this.players.add(new Player(location, this.players.size() + 1));
+    this.players.add(new Player(location, this.players.size() + 1, null));
     return this;
   }
 
@@ -82,7 +83,10 @@ public class GameManagerBuilder {
    * @return this builder with the adversary
    */
   public GameManagerBuilder addEnemy(Location location) {
-    this.adversaries.add(new Adversary(location));
+    Adversary adversary = new Random().nextBoolean()
+        ? new Ghost(location, null)
+        : new Zombie(location, null);
+    this.adversaries.add(adversary);
     return this;
   }
 

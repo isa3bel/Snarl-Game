@@ -5,6 +5,7 @@ import testHarness.deserializer.StateQueryDeserializer;
 import testHarness.answer.InvalidMove;
 import testHarness.answer.InvalidPlayer;
 import testHarness.answer.StateAnswer;
+import view.ASCIIView;
 
 /**
  * A query about the neighbors to a location in a room.
@@ -41,6 +42,10 @@ public class StateQuery extends Question {
     if (!this.gameManager.isMoveValid(this.player.getNextMove())) {
       return new InvalidMove();
     }
+
+//    ASCIIView view = new ASCIIView();
+//    this.gameManager.buildView(view);
+//    view.draw();
 
     this.gameManager.doTurn(this.player);
     return this.player.getInteractionAnswer(this.gameManager);

@@ -3,20 +3,22 @@ package model;
 /**
  * An automated adversary in a Snarl game.
  */
-public class Adversary extends Character {
+public abstract class Adversary extends Character {
 
   /**
    * The location of this adversary.
    * @param location the location to initialize this adversary
+   * @param name arbitrary unused string for the name of the adversary
    */
-  Adversary(Location location) {
-    super(location);
+  Adversary(Location location, String name) {
+    super(location, name);
   }
 
   @Override
   public <T> T acceptVisitor(CharacterVisitor<T> visitor) {
     return visitor.visitAdversary(this);
   }
+  public abstract <T> T acceptVisitor(AdversaryVisitor<T> visitor);
 
   @Override
   public void acceptVisitor(InteractableVisitor visitor) {
@@ -24,6 +26,7 @@ public class Adversary extends Character {
   }
 
   public void attack(Player player) {
+    if (this.currentLocation.equals(player.getCurrentLocation()))
     player.defend();
   }
 

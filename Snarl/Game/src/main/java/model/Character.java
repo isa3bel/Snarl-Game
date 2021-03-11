@@ -5,11 +5,13 @@ package model;
  */
 public abstract class Character implements Interactable {
 
+  private final String name;
   protected Location currentLocation;
   protected Controller controller;
 
-  Character(Location location) {
+  Character(Location location, String name) {
     this.currentLocation = location;
+    this.name = name;
   }
 
   /**
@@ -35,6 +37,12 @@ public abstract class Character implements Interactable {
   public void moveTo(Location location) {
     this.currentLocation = location;
   }
+
+  /**
+   * Gets the name of this character.
+   * @returns the character's name
+   */
+  public String getName() { return this.name; }
 
   public abstract MoveValidator getNextMove();
   public abstract Interaction makeInteraction(GameManager gameManager);

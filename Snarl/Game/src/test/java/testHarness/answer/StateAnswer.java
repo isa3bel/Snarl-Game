@@ -2,7 +2,7 @@ package testHarness.answer;
 
 import model.GameManager;
 import model.Location;
-import view.JsonView;
+import view.JSONView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -41,8 +41,9 @@ public abstract class StateAnswer extends Answer {
   protected String getStateJson(GameManager gameManager) {
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     System.setOut(new PrintStream(outputStream));
-    JsonView view = new JsonView(this.rooms, this.hallways);
+    JSONView view = new JSONView(this.rooms, this.hallways);
     gameManager.buildView(view);
+    view.draw();
     return outputStream.toString();
   }
 

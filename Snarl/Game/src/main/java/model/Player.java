@@ -13,8 +13,8 @@ public class Player extends Character {
    * @param location the location to initialize the player at
    * @param id the player's id
    */
-  public Player(Location location, int id) {
-    super(location);
+  public Player(Location location, int id, String name) {
+    super(location, name);
     this.id = id;
   }
 

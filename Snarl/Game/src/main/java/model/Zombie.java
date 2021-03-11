@@ -1,13 +1,16 @@
 package model;
 
+/**
+ * A Zombie adversary in the Snarl game
+ */
 public class Zombie extends Adversary {
 
-  /**
-   * The location of this adversary.
-   *
-   * @param location the location to initialize this adversary
-   */
-  public Zombie(Location location) {
-    super(location);
+  public Zombie(Location location, String name) {
+    super(location, name);
+  }
+
+  @Override
+  public <T> T acceptVisitor(AdversaryVisitor<T> visitor) {
+    return visitor.visitZombie(this);
   }
 }

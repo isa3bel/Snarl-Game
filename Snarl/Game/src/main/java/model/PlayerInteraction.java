@@ -27,6 +27,7 @@ public class PlayerInteraction extends Interaction<Player> {
 
   @Override
   public void visitExit(Exit exit) {
+    if (exit.isLocked()) return;
     this.character.moveTo(null);
   }
 

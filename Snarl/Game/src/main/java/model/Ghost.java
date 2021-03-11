@@ -7,7 +7,12 @@ public class Ghost extends Adversary {
    *
    * @param location the location to initialize this adversary
    */
-  public Ghost(Location location) {
-    super(location);
+  public Ghost(Location location, String name) {
+    super(location, name);
+  }
+
+  @Override
+  public <T> T acceptVisitor(AdversaryVisitor<T> visitor) {
+    return visitor.visitGhost(this);
   }
 }
