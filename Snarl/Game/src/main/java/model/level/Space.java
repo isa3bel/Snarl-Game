@@ -1,7 +1,7 @@
 package model.level;
 
-import model.interactions.Interactable;
-import model.interactions.InteractableVisitor;
+import model.ruleChecker.Interactable;
+import model.ruleChecker.InteractableVisitor;
 
 /**
  * A space in the 2d plane of the dungeon crawler.

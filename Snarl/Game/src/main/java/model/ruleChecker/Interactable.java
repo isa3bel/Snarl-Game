@@ -1,4 +1,4 @@
-package model.interactions;
+package model.ruleChecker;
 
 public interface Interactable {
 

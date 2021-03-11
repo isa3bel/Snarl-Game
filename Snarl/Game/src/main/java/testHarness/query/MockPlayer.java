@@ -1,7 +1,6 @@
 package testHarness.query;
 
 import model.GameManager;
-import model.characters.MoveValidator;
 import model.characters.Player;
 import model.level.Location;
 import testHarness.answer.StateAnswer;
@@ -23,7 +22,7 @@ public class MockPlayer extends Player {
   }
 
   @Override
-  public MoveValidator<Player> getNextMove() {
+  public MockPlayerMoveValidator getNextMove() {
     return new MockPlayerMoveValidator(this, this.nextLocation);
   }
 

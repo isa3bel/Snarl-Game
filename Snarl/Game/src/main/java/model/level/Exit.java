@@ -1,8 +1,6 @@
 package model.level;
 
-import model.interactions.InteractableVisitor;
-import model.level.Space;
-import model.level.SpaceVisitor;
+import model.ruleChecker.InteractableVisitor;
 
 /**
  * An exit from the level.

@@ -1,7 +1,8 @@
 package model.level;
 
-import model.interactions.Interaction;
+import model.ruleChecker.Interaction;
 import model.item.Item;
+import model.ruleChecker.IsValidStartingLocation;
 
 import java.util.ArrayList;
 import java.util.Comparator;

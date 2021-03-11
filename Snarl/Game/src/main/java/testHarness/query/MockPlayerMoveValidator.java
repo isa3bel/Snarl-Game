@@ -4,10 +4,11 @@ import model.characters.Character;
 import model.characters.*;
 import model.level.Level;
 import model.level.Location;
+import model.ruleChecker.PlayerMoveValidator;
 
 import java.util.ArrayList;
 
-public class MockPlayerMoveValidator extends MoveValidator<Player> {
+public class MockPlayerMoveValidator extends PlayerMoveValidator {
 
   MockPlayerMoveValidator(MockPlayer mockPlayer, Location nextLocation) {
     super(mockPlayer, nextLocation);
@@ -16,10 +17,10 @@ public class MockPlayerMoveValidator extends MoveValidator<Player> {
   @Override
   public boolean isValid(Level level, ArrayList<Character> characters) {
     return level.get(this.nextMove).acceptVisitor(new IsTraversable()) &&
-        !characters.stream()
+        characters.stream()
             .filter(c -> !c.equals(this.character))
             .filter(c -> c.acceptVisitor(new CanShareSpace()))
-            .anyMatch(c -> c.getCurrentLocation().equals(this.nextMove));
+            .noneMatch(c -> c.getCurrentLocation().equals(this.nextMove));
   }
 
   private static class CanShareSpace implements CharacterVisitor<Boolean> {

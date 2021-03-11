@@ -1,9 +1,10 @@
 package model.characters;
 
 import model.*;
-import model.interactions.Interactable;
-import model.interactions.Interaction;
+import model.ruleChecker.Interactable;
+import model.ruleChecker.Interaction;
 import model.level.Location;
+import model.ruleChecker.MoveValidator;
 
 /**
  * A mobile character in the Snarl game.

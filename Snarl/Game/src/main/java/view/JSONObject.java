@@ -1,7 +1,7 @@
 package view;
 
 import model.characters.Character;
-import model.interactions.Interaction;
+import model.ruleChecker.Interaction;
 import model.item.Item;
 import model.item.ItemVisitor;
 import model.item.Key;

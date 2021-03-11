@@ -1,16 +1,20 @@
-package model.characters;
+package model.ruleChecker;
 
+import model.characters.Character;
 import model.level.Level;
 import model.level.Location;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public abstract class MoveValidator<T extends Character> {
+/**
+ * Validates the move of a character.
+ */
+public abstract class MoveValidator {
 
-  protected T character;
+  protected Character character;
   protected Location nextMove;
 
-  public MoveValidator(T character, Location location) {
+  public MoveValidator(Character character, Location location) {
     this.character = character;
     this.nextMove = location;
   }
@@ -26,6 +30,6 @@ public abstract class MoveValidator<T extends Character> {
    * Is the nextMove valid for this character?
    * @return if the move is valid
    */
-  public abstract boolean isValid(Level level, ArrayList<Character> characters);
+  public abstract boolean isValid(Level level, List<Character> characters);
 
 }

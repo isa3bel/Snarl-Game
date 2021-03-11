@@ -1,9 +1,7 @@
 package model.characters;
 
 import model.GameManager;
-import model.interactions.AdversaryInteraction;
-import model.interactions.InteractableVisitor;
-import model.interactions.Interaction;
+import model.ruleChecker.*;
 import model.level.Location;
 import view.AdversaryView;
 
@@ -42,7 +40,7 @@ public abstract class Adversary extends Character {
   }
 
   @Override
-  public MoveValidator<Adversary> getNextMove() {
+  public AdversaryMoveValidator getNextMove() {
     // TODO: update the controller with the view of the game manager?
     //  if that happens here?
     Location nextLocation = this.controller.getNextMove();

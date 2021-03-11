@@ -1,9 +1,7 @@
 package model.characters;
 
 import model.GameManager;
-import model.interactions.InteractableVisitor;
-import model.interactions.Interaction;
-import model.interactions.PlayerInteraction;
+import model.ruleChecker.*;
 import model.level.Location;
 import view.PlayerView;
 
@@ -25,12 +23,15 @@ public class Player extends Character {
     this.id = id;
   }
 
+  /**
+   * Updates the player after defending against an attack from an adversary.
+   */
   public void defend() {
     this.currentLocation = null;
   }
 
   @Override
-  public MoveValidator<Player> getNextMove() {
+  public PlayerMoveValidator getNextMove() {
     Location nextLocation = this.controller.getNextMove();
     return new PlayerMoveValidator(this, nextLocation);
   }
@@ -41,14 +42,14 @@ public class Player extends Character {
   }
 
   @Override
-  public <T> T acceptVisitor(CharacterVisitor<T> visitor) {
-    return visitor.visitPlayer(this);
-  }
-
-  @Override
   public void updateController(GameManager gameManager) {
     PlayerView view = new PlayerView();
     this.controller.update(view);
+  }
+
+  @Override
+  public <T> T acceptVisitor(CharacterVisitor<T> visitor) {
+    return visitor.visitPlayer(this);
   }
 
   @Override

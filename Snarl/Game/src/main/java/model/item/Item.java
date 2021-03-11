@@ -1,7 +1,7 @@
 package model.item;
 
-import model.interactions.Interactable;
-import model.interactions.InteractableVisitor;
+import model.ruleChecker.Interactable;
+import model.ruleChecker.InteractableVisitor;
 import model.characters.Player;
 import model.level.Location;
 

@@ -1,7 +1,9 @@
-package model.level;
+package model.ruleChecker;
+
+import model.level.*;
 
 /**
- * Visits a space to see if it is in the same room as this Space group.
+ * Is the given space a valid starting location?
  */
 public class IsValidStartingLocation implements SpaceVisitor<Boolean> {
 

@@ -1,4 +1,4 @@
-package model.interactions;
+package model.ruleChecker;
 
 import model.characters.Adversary;
 import model.characters.Player;

@@ -1,10 +1,13 @@
-package model.interactions;
+package model.ruleChecker;
 
 import model.characters.Adversary;
 import model.characters.Player;
 import model.level.Exit;
 import model.item.Item;
 
+/**
+ * Controls a player interaction with an Interactable - what happens and when.
+ */
 public class PlayerInteraction extends Interaction<Player> {
 
   public PlayerInteraction(Player player) throws IllegalArgumentException {
