@@ -30,13 +30,13 @@ public class Player extends Character {
   }
 
   @Override
-  public MoveValidator getNextMove() {
+  public MoveValidator<Player> getNextMove() {
     Location nextLocation = this.controller.getNextMove();
     return new PlayerMoveValidator(this, nextLocation);
   }
 
   @Override
-  public Interaction makeInteraction() {
+  public Interaction<Player> makeInteraction() {
     return new PlayerInteraction(this);
   }
 

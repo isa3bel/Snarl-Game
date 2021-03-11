@@ -21,6 +21,15 @@ public abstract class Adversary extends Character {
     super(location, name);
   }
 
+  /**
+   * Attacks the given character.
+   * @param player the player to attack
+   */
+  public void attack(Player player) {
+    if (this.currentLocation.equals(player.getCurrentLocation()))
+      player.defend();
+  }
+
   @Override
   public <T> T acceptVisitor(CharacterVisitor<T> visitor) {
     return visitor.visitAdversary(this);
@@ -32,13 +41,8 @@ public abstract class Adversary extends Character {
     visitor.visitAdversary(this);
   }
 
-  public void attack(Player player) {
-    if (this.currentLocation.equals(player.getCurrentLocation()))
-    player.defend();
-  }
-
   @Override
-  public MoveValidator getNextMove() {
+  public MoveValidator<Adversary> getNextMove() {
     // TODO: update the controller with the view of the game manager?
     //  if that happens here?
     Location nextLocation = this.controller.getNextMove();
@@ -46,7 +50,7 @@ public abstract class Adversary extends Character {
   }
 
   @Override
-  public Interaction makeInteraction() {
+  public Interaction<Adversary> makeInteraction() {
     return new AdversaryInteraction(this);
   }
 

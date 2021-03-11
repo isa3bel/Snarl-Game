@@ -17,6 +17,7 @@ public abstract class Character implements Interactable {
   Character(Location location, String name) {
     this.currentLocation = location;
     this.name = name;
+    this.controller = new StdinController();
   }
 
   /**
@@ -51,11 +52,19 @@ public abstract class Character implements Interactable {
 
   /**
    * Updates this character with the current game state.
-   * @return the character's name
    */
   public abstract void updateController(GameManager gameManager);
 
+  /**
+   * Gets the next move as validated by this characters rules.
+   * @return the move validator for the next move of this character
+   */
   public abstract MoveValidator getNextMove();
+
+  /**
+   * Makes a character interaction for this character.
+   * @return the interaction object of this character
+   */
   public abstract Interaction makeInteraction();
 
 }
