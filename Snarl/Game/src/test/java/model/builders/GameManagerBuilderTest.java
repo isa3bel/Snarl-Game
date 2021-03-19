@@ -1,11 +1,8 @@
-package model;
+package model.builders;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import model.builders.GameManagerBuilder;
-import model.builders.LevelBuilder;
-import model.builders.RoomBuilder;
 import model.level.Level;
 import model.level.Location;
 import org.junit.Before;
@@ -18,15 +15,15 @@ public class GameManagerBuilderTest {
 
   @Before
   public void setup() {
-    RoomBuilder singleRoomBuilder = new RoomBuilder(1,1,20,8)
-        .addWall(1,1)
-        .addWall(2,1)
-        .addWall(5,4)
-        .addWall(6,4)
-        .addWall(7,4)
-        .addWall(5,5)
-        .addWall(6,5)
-        .addWall(7,5);
+    RoomBuilder singleRoomBuilder = new RoomBuilder(new Location(1,1),20,8)
+        .addWall(new Location(1,1))
+        .addWall(new Location(2,1))
+        .addWall(new Location(5,4))
+        .addWall(new Location(6,4))
+        .addWall(new Location(7,4))
+        .addWall(new Location(5,5))
+        .addWall(new Location(6,5))
+        .addWall(new Location(7,5));
     this.singleRoomLevel = new LevelBuilder()
         .addRoom(singleRoomBuilder)
         .addExit(new Location(0, 6))

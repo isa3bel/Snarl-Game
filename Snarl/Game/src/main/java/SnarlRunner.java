@@ -29,15 +29,15 @@ public class SnarlRunner {
    * @return the game
    */
   public static GameManager makeGameManager() {
-    RoomBuilder room1 = new RoomBuilder(1,1,20,8)
-        .addWall(1,1)
-        .addWall(2,1)
-        .addWall(5,4)
-        .addWall(6,4)
-        .addWall(7,4)
-        .addWall(5,5)
-        .addWall(6,5)
-        .addWall(7,5);
+    RoomBuilder room1 = new RoomBuilder(new Location(1,1),20,8)
+        .addWall(new Location(1,1))
+        .addWall(new Location(2,1))
+        .addWall(new Location(5,4))
+        .addWall(new Location(6,4))
+        .addWall(new Location(7,4))
+        .addWall(new Location(5,5))
+        .addWall(new Location(6,5))
+        .addWall(new Location(7,5));
     Level level = new LevelBuilder()
         .addRoom(room1)
         .addExit(new Location(0, 6))
@@ -47,21 +47,21 @@ public class SnarlRunner {
   }
 
   private static GameManager setupComplicatedLevel() {
-    RoomBuilder room1 = new RoomBuilder(1,1,20,8)
-        .addDoor(21, 4)
-        .addDoor(16, 9)
-        .addWall(1, 1)
-        .addWall(2, 1)
-        .addWall(5, 4)
-        .addWall(6, 4)
-        .addWall(7, 4)
-        .addWall(5, 5)
-        .addWall(6, 5)
-        .addWall(7, 5);
-    RoomBuilder room2 = new RoomBuilder(25, 3, 10, 3)
-        .addDoor(24, 4);
-    RoomBuilder room3 = new RoomBuilder(28, 12, 4, 2)
-        .addDoor(27, 13);
+    RoomBuilder room1 = new RoomBuilder(new Location(1,1),20,8)
+        .addDoor(new Location(9, 0))
+        .addDoor(new Location(0, 0))
+        .addWall(new Location(1, 1))
+        .addWall(new Location(2, 1))
+        .addWall(new Location(5, 4))
+        .addWall(new Location(6, 4))
+        .addWall(new Location(7, 4))
+        .addWall(new Location(5, 5))
+        .addWall(new Location(6, 5))
+        .addWall(new Location(7, 5));
+    RoomBuilder room2 = new RoomBuilder(new Location(25, 3), 10, 3)
+        .addDoor(new Location(24, 3));
+    RoomBuilder room3 = new RoomBuilder(new Location(28, 12), 4, 2)
+        .addDoor(new Location(28, 11));
 
     HallwayBuilder hallway1 = new HallwayBuilder(room1, room2, null);
     Location[] hallway2Waypoints = new Location[]{new Location(16, 13)};

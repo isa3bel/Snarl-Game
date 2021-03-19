@@ -55,7 +55,7 @@ abstract class LayoutTile {
       // DECISION: our representation of a room does not include the boundaries
       //  need to subtract 1 so that the origin is from the top left of the room,
       //  not the top left of the layout array
-      roomBuilder.addWall(this.location.row - 1, this.location.column - 1);
+      roomBuilder.addWall(new Location(this.location.getRow() - 1, this.location.getColumn() - 1));
     }
   }
 
@@ -89,7 +89,7 @@ abstract class LayoutTile {
      * @param isBoundary is this tile on the room's boundary
      */
     void addTo(RoomBuilder roomBuilder, Location origin, boolean isBoundary) {
-      roomBuilder.addDoor(this.location.row + origin.row, this.location.column + origin.column);
+      roomBuilder.addDoor(new Location(this.location.getRow() + origin.getRow(), this.location.getColumn() + origin.getColumn()));
     }
   }
 }

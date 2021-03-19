@@ -10,7 +10,7 @@ public abstract class Answer {
    * @return a string representing the converted location
    */
   protected String locationToString(Location location) {
-    return "[" + location.row + ", " + location.column + "]";
+    return "[" + location.getRow() + ", " + location.getColumn() + "]";
   }
 
 }

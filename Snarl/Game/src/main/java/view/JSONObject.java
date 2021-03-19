@@ -38,9 +38,9 @@ public class JSONObject extends Interaction<Character> {
     this.objectString
         .append(delimiter)
         .append("{ \"type\": \"exit\", \"position\": [ ")
-        .append(this.location.row)
+        .append(this.location.getRow())
         .append(", ")
-        .append(this.location.column)
+        .append(this.location.getColumn())
         .append(" ] }");
   }
 
@@ -56,7 +56,7 @@ public class JSONObject extends Interaction<Character> {
 
     @Override
     public String visitKey(Key key) {
-      return "{ \"type\": \"key\", \"position\": [ " + this.location.row + ", " + this.location.column + " ] }";
+      return "{ \"type\": \"key\", \"position\": [ " + this.location.getRow() + ", " + this.location.getColumn() + " ] }";
     }
   }
 }

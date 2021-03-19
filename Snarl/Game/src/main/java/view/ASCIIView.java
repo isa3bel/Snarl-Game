@@ -24,7 +24,7 @@ public class ASCIIView implements View {
 
     level.mapItems(item -> {
       Location location = item.getCurrentLocation();
-      this.render.get(location.row).set(location.column, item.acceptVisitor(new ASCIIItem()));
+      this.render.get(location.getRow()).set(location.getColumn(), item.acceptVisitor(new ASCIIItem()));
     });
   }
 
@@ -35,7 +35,7 @@ public class ASCIIView implements View {
   public void placeCharacters(List<Character> characters) {
     characters.forEach(character -> {
       Location location = character.getCurrentLocation();
-      this.render.get(location.row).set(location.column, character.acceptVisitor(new ASCIICharacter()));
+      this.render.get(location.getRow()).set(location.getColumn(), character.acceptVisitor(new ASCIICharacter()));
     });
   }
 

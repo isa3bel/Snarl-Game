@@ -1,7 +1,6 @@
-package model;
+package model.builders;
 
-import model.builders.LevelBuilder;
-import model.builders.RoomBuilder;
+import model.level.Location;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -12,8 +11,8 @@ public class LevelBuilderTest {
 
   @Before
   public void setUp() {
-    this.roomX1Y1 = new RoomBuilder(1, 1, 1, 1).addDoor(2, 1);
-
+    this.roomX1Y1 = new RoomBuilder(new Location(0, 0), 3, 3)
+        .addDoor(new Location(2, 1));
   }
   @Test
   public void testBuildingLevelWithoutExit() {

@@ -34,15 +34,15 @@ public class ASCIIViewTest {
   }
 
   private void setupSingleRoom() {
-    RoomBuilder singleRoomBuilder = new RoomBuilder(1,1,20,8)
-        .addWall(1,1)
-        .addWall(2,1)
-        .addWall(5,4)
-        .addWall(6,4)
-        .addWall(7,4)
-        .addWall(5,5)
-        .addWall(6,5)
-        .addWall(7,5);
+    RoomBuilder singleRoomBuilder = new RoomBuilder(new Location(0, 0),22,10)
+        .addWall(new Location(2, 2 ))
+        .addWall(new Location(3, 2))
+        .addWall(new Location(6, 5))
+        .addWall(new Location(7, 5))
+        .addWall(new Location(8, 5))
+        .addWall(new Location(6,6))
+        .addWall(new Location(7, 6))
+        .addWall(new Location(8, 6));
     Level singleRoomLevel = new LevelBuilder()
         .addRoom(singleRoomBuilder)
         .addKey(new Location(3, 6))
@@ -53,15 +53,15 @@ public class ASCIIViewTest {
   }
 
   private void setupRoomWithPlayersAndAdversaries() {
-    RoomBuilder singleRoomBuilder = new RoomBuilder(1,1,20,8)
-        .addWall(1,1)
-        .addWall(2,1)
-        .addWall(5,4)
-        .addWall(6,4)
-        .addWall(7,4)
-        .addWall(5,5)
-        .addWall(6,5)
-        .addWall(7,5);
+    RoomBuilder singleRoomBuilder = new RoomBuilder(new Location(0, 0),22,10)
+        .addWall(new Location(2, 2 ))
+        .addWall(new Location(3, 2))
+        .addWall(new Location(6, 5))
+        .addWall(new Location(7, 5))
+        .addWall(new Location(8, 5))
+        .addWall(new Location(6,6))
+        .addWall(new Location(7, 6))
+        .addWall(new Location(8, 6));
     Level singleRoomLevelWithCharacters = new LevelBuilder()
         .addRoom(singleRoomBuilder)
         .addKey(new Location(2, 5))
@@ -76,10 +76,10 @@ public class ASCIIViewTest {
   }
 
   private void setupTwoRooms() {
-    RoomBuilder room1 = new RoomBuilder(1,1,20,8)
-        .addDoor(4, 21);
-    RoomBuilder room2 = new RoomBuilder(3, 25, 10, 3)
-        .addDoor(4, 24);
+    RoomBuilder room1 = new RoomBuilder(new Location(0,0),22, 10)
+        .addDoor(new Location(4, 21));
+    RoomBuilder room2 = new RoomBuilder(new Location(2, 24), 12, 5)
+        .addDoor(new Location(4, 24));
     Level twoRoomsLevel = new LevelBuilder()
         .addRoom(room1)
         .addRoom(room2)
@@ -93,21 +93,21 @@ public class ASCIIViewTest {
   }
 
   private void setupComplicatedLevel() {
-    RoomBuilder room1 = new RoomBuilder(1,1,20, 8)
-        .addDoor(4, 21)
-        .addDoor(9, 16)
-        .addWall(1, 1)
-        .addWall(2, 1)
-        .addWall(5, 4)
-        .addWall(6, 4)
-        .addWall(7, 4)
-        .addWall(5, 5)
-        .addWall(6, 5)
-        .addWall(7, 5);
-    RoomBuilder room2 = new RoomBuilder(3, 25, 10, 3)
-        .addDoor(4, 24);
-    RoomBuilder room3 = new RoomBuilder(12, 28, 4, 2)
-        .addDoor(13, 27);
+    RoomBuilder room1 = new RoomBuilder(new Location(0, 0),22, 10)
+        .addDoor(new Location(4, 21))
+        .addDoor(new Location(9, 16))
+        .addWall(new Location(2, 2 ))
+        .addWall(new Location(3, 2))
+        .addWall(new Location(6, 5))
+        .addWall(new Location(7, 5))
+        .addWall(new Location(8, 5))
+        .addWall(new Location(6,6))
+        .addWall(new Location(7, 6))
+        .addWall(new Location(8, 6));
+    RoomBuilder room2 = new RoomBuilder(new Location(2, 24), 12, 5)
+        .addDoor(new Location(4, 24));
+    RoomBuilder room3 = new RoomBuilder(new Location(11, 27), 6, 4)
+        .addDoor(new Location(13, 27));
 
     HallwayBuilder hallway1to2 = new HallwayBuilder(room1, room2, null);
     Location[] hallway1to3Waypoints = new Location[]{new Location(13, 16)};
@@ -128,19 +128,19 @@ public class ASCIIViewTest {
   }
 
   private void setupAnotherComplicatedLevelWithPlayer() {
-    RoomBuilder room1 = new RoomBuilder(1,1,20,8)
-        .addDoor(4, 21)
-        .addDoor(9, 16);
-    RoomBuilder room2 = new RoomBuilder(3, 25, 10, 3)
-        .addDoor(4, 24)
-        .addDoor(2, 34);
-    RoomBuilder room3 = new RoomBuilder(12, 28, 4, 2)
-        .addDoor(13, 27);
-    RoomBuilder room4 = new RoomBuilder(7, 35, 4, 1)
-        .addDoor(6, 36)
-        .addDoor(8, 36);
-    RoomBuilder room5 = new RoomBuilder(8, 22, 6, 3)
-        .addDoor(9, 28);
+    RoomBuilder room1 = new RoomBuilder(new Location(0, 0),22, 10)
+        .addDoor(new Location(4, 21))
+        .addDoor(new Location(9, 16));
+    RoomBuilder room2 = new RoomBuilder(new Location(2, 24), 12, 5)
+        .addDoor(new Location(4, 24))
+        .addDoor(new Location(2, 34));
+    RoomBuilder room3 = new RoomBuilder(new Location(11, 27), 6, 4)
+        .addDoor(new Location(13, 27));
+    RoomBuilder room4 = new RoomBuilder(new Location(6, 34), 6, 3)
+        .addDoor(new Location(6, 36))
+        .addDoor(new Location(8, 36));
+    RoomBuilder room5 = new RoomBuilder(new Location(7, 21), 8, 5)
+        .addDoor(new Location(9, 28));
 
     HallwayBuilder hallway1to2 = new HallwayBuilder(room1, room2, null);
     Location[] hallway1to3Waypoints = new Location[]{new Location(13, 16)};
@@ -178,10 +178,10 @@ public class ASCIIViewTest {
   }
 
   private void setupTwoRoomsTopRight() {
-    RoomBuilder room1 = new RoomBuilder(1, 1, 1, 2)
-        .addDoor(3, 1);
-    RoomBuilder room2 = new RoomBuilder(1, 3, 2, 3)
-        .addDoor(1, 5);
+    RoomBuilder room1 = new RoomBuilder(new Location(0, 0), 3, 4)
+        .addDoor(new Location(3, 1));
+    RoomBuilder room2 = new RoomBuilder(new Location(0, 2), 4, 5)
+        .addDoor(new Location(1, 5));
     Level level = new LevelBuilder()
         .addRoom(room1)
         .addRoom(room2)

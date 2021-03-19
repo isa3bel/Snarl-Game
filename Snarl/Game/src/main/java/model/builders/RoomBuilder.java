@@ -24,22 +24,17 @@ public class RoomBuilder extends SpaceBuilder {
 
   /**
    * Instantiates a RoomBuilder with the required properties.
-   * @param row row of the top left corner of this room
-   * @param column column of the top left corner of this room
+   * @param location the location of the top left corner of the room
    * @param width width of the room
    * @param height height of the room
    * @throws IllegalArgumentException if row coordinate or column are negative or width or height are not positive
    */
-  public RoomBuilder(int row, int column, int width, int height) throws IllegalArgumentException {
-    if (row <= 0 || column <= 0) {
-      throw new IllegalArgumentException("top left coordinate must have positive row and column, given: " +
-          row + ", " + column);
-    }
-    if (width <= 0 || height <= 0) {
-      throw new IllegalArgumentException("width and height must be positive, given: " + width + ", " + height);
+  public RoomBuilder(Location location, int width, int height) throws IllegalArgumentException {
+    if (width < 3 || height < 3) {
+      throw new IllegalArgumentException("width and height must be at least 3, given: " + width + ", " + height);
     }
 
-    this.topLeft = new Location(row, column);
+    this.topLeft = location;
     this.width = width;
     this.height = height;
     this.doors = new HashSet<>();
@@ -48,63 +43,60 @@ public class RoomBuilder extends SpaceBuilder {
 
   /**
    * Adds a door to this room.
-   * @param doorRow the door's row
-   * @param doorColumn the door's column
+   * @param doorLoc the door's coordinates (location)
    * @return this RoomBuilder with the door
    * @throws IllegalArgumentException if the door is not on the room's boundary
    */
-  public RoomBuilder addDoor(int doorRow, int doorColumn) throws IllegalArgumentException {
+  public RoomBuilder addDoor(Location doorLoc) throws IllegalArgumentException {
     // DECISION: not validating if a door is reachable (e.g. no walls in front or
     // the door is on the corner of the room
     // e.g. XXXXD  OR XXDX
     //      XX  X     X XX  (if the room is technically 2 wide but
     //      XXXXX     XXXX   a wall is placed at the edge of the room)
-    checkDoorPlacement(doorRow, doorColumn);
+    checkDoorPlacement(doorLoc);
 
-    this.doors.add(new Location(doorRow, doorColumn));
+    this.doors.add(doorLoc);
     return this;
   }
 
   /**
    * Determines whether the given door coordinates are on a room boundary
-   * @param doorRow the door's row
-   * @param doorColumn the door's column
+   * @param doorLoc the door's coordinates (location)
    */
-  private void checkDoorPlacement(int doorRow, int doorColumn) throws IllegalArgumentException {
-    if (!(doorRow == this.topLeft.row - 1
-        || doorRow == this.topLeft.row + this.height
-        || doorColumn == this.topLeft.column - 1
-        || doorColumn == this.topLeft.column + this.width)) {
+  private void checkDoorPlacement(Location doorLoc) throws IllegalArgumentException {
+    if (!(doorLoc.getRow() == this.topLeft.getRow()
+        || doorLoc.getRow() == this.topLeft.getRow() + this.height - 1
+        || doorLoc.getColumn() == this.topLeft.getColumn()
+        || doorLoc.getColumn() == this.topLeft.getColumn() + this.width - 1)) {
       throw new IllegalArgumentException("door must be on room boundary - row of " +
-          (this.topLeft.row - 1) + " or " + (this.topLeft.row + this.height) + " or column on " +
-          (this.topLeft.column - 1) + " or " + (this.topLeft.column + this.width) + ", given: "
-          + doorRow + ", " + doorColumn);
+          this.topLeft.getRow() + " or " + (this.topLeft.getRow() + this.height - 1) + " or column on " +
+          this.topLeft.getColumn() + " or " + (this.topLeft.getColumn() + this.width - 1) + ", given: "
+          + doorLoc.getRow() + ", " + doorLoc.getColumn());
     }
-    if (doorRow < this.topLeft.row - 1
-        || doorRow > this.topLeft.row + this.height
-        || doorColumn < this.topLeft.column - 1
-        || doorColumn > this.topLeft.column + this.width) {
+    if (doorLoc.getRow() < this.topLeft.getRow()
+        || doorLoc.getRow() > this.topLeft.getRow() + this.height - 1
+        || doorLoc.getColumn() < this.topLeft.getColumn()
+        || doorLoc.getColumn() > this.topLeft.getColumn() + this.width - 1) {
       throw new IllegalArgumentException("door must be on room bounds - row between " +
-          (this.topLeft.row - 1) + " and " + (this.topLeft.row + this.height) + " and column between" +
-          (this.topLeft.column - 1) + " and " + (this.topLeft.column + this.width) + ", given: "
-          + doorRow + ", " + doorColumn);
+          this.topLeft.getRow() + " and " + (this.topLeft.getRow() + this.height - 1) + " and column between" +
+          this.topLeft.getColumn() + " and " + (this.topLeft.getColumn() + this.width - 1) + ", given: "
+          + doorLoc.getRow() + ", " + doorLoc.getColumn());
     }
   }
 
   /**
    * Adds a wall to this room.
-   * @param wallRow the wall's column relative to topLeft
-   * @param wallColumn the wall's row relative to topLeft
+   * @param wallLoc the wall's location
    * @return this RoomBuilder with the wall
    * @throws IllegalArgumentException if x coordinate or y coordinate are negative or outside room bounds
    */
-  public RoomBuilder addWall(int wallRow, int wallColumn) throws IllegalArgumentException {
-    if (wallRow >= this.height || wallColumn >= this.width) {
+  public RoomBuilder addWall(Location wallLoc) throws IllegalArgumentException {
+    if (wallLoc.getRow() >= this.height || wallLoc.getColumn() >= this.width) {
       throw new IllegalArgumentException("wall added to this room must be inside room bounds of (" +
-          this.height + ", " + this.width +  "), given: " + wallRow + ", " + wallColumn);
+          this.height + ", " + this.width +  "), given: " + wallLoc.getRow() + ", " + wallLoc.getColumn());
     }
 
-    this.walls.add(new Location(this.topLeft.row + wallRow, this.topLeft.column + wallColumn));
+    this.walls.add(new Location(this.topLeft.getRow() + wallLoc.getRow(), this.topLeft.getColumn() + wallLoc.getColumn()));
     return this;
   }
 
@@ -118,13 +110,13 @@ public class RoomBuilder extends SpaceBuilder {
       throw new IllegalStateException("no door can also be a wall");
     }
 
-    Location bottomRightWall = new Location(this.topLeft.row + this.height, this.topLeft.column
-        + this.width);
+    Location bottomRightWall = new Location(this.topLeft.getRow() + this.height - 1,
+        this.topLeft.getColumn() + this.width - 1);
     this.initSize(bottomRightWall, spaces);
     this.setRoomSpaces(bottomRightWall, spaces);
 
-    this.doors.forEach(door -> spaces.get(door.row).set(door.column, new Door(this.toString())));
-    this.walls.forEach(wall -> spaces.get(wall.row).set(wall.column, new Wall(this.toString())));
+    this.doors.forEach(door -> spaces.get(door.getRow()).set(door.getColumn(), new Door(this.toString())));
+    this.walls.forEach(wall -> spaces.get(wall.getRow()).set(wall.getColumn(), new Wall(this.toString())));
   }
 
   /**
@@ -133,10 +125,10 @@ public class RoomBuilder extends SpaceBuilder {
    * @param spaces the 2d spaces array of this level
    */
   private void setRoomSpaces(Location bottomRightWall, ArrayList<ArrayList<Space>> spaces) {
-    Location topLeftWall = new Location(this.topLeft.row - 1, this.topLeft.column - 1);
+    Location topLeftWall = new Location(this.topLeft.getRow(), this.topLeft.getColumn());
     // for all the locations in the 2D space in the rectangle defined by topLeftWall and bottomRightWall
-    for (int currY = topLeftWall.row; currY <= bottomRightWall.row; currY++) {
-      for (int currX = topLeftWall.column; currX <= bottomRightWall.column; currX++) {
+    for (int currY = topLeftWall.getRow(); currY <= bottomRightWall.getRow(); currY++) {
+      for (int currX = topLeftWall.getColumn(); currX <= bottomRightWall.getColumn(); currX++) {
         // check if the current location should be a wall tile or room tile
         Predicate<Location> currPointAxis = new Location.SameAxis(new Location(currY, currX));
         boolean isWallBoundary = currPointAxis.test(topLeftWall) || currPointAxis.test(bottomRightWall);
@@ -166,10 +158,9 @@ public class RoomBuilder extends SpaceBuilder {
         .filter(doorPair -> doorPair != null)
         .min(Comparator.comparingInt(doorPair -> doorPair[0].euclidianDistance(doorPair[1])));
 
-    Location[] doorPair = maybeDoorPair.orElseThrow(
+    return maybeDoorPair.orElseThrow(
         () -> new IllegalStateException("no valid doors to connect these rooms")
     );
-    return doorPair;
   }
 
   /**

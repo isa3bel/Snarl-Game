@@ -9,8 +9,8 @@ import java.util.function.Predicate;
  */
 public class Location {
 
-  public int row;
-  public int column;
+  private int row;
+  private int column;
 
   /**
    * Creates a location with the given coordinates.
@@ -39,6 +39,23 @@ public class Location {
     }
     this.row = location.row;
     this.column = location.column;
+  }
+
+  /**
+   * Gets the row of this location
+   * @return int representing row
+   */
+  public int getRow() {
+    return this.row;
+  }
+
+
+  /**
+   * Gets the column of this location
+   * @return int representing column
+   */
+  public int getColumn() {
+    return this.column;
   }
 
   /**

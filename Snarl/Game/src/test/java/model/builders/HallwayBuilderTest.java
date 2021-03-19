@@ -1,7 +1,5 @@
-package model;
+package model.builders;
 
-import model.builders.HallwayBuilder;
-import model.builders.RoomBuilder;
 import model.level.Location;
 import model.level.Space;
 import org.junit.Before;
@@ -32,8 +30,10 @@ public class HallwayBuilderTest {
   @Before
   public void setup() {
     this.spaces = new ArrayList<>();
-    this.roomX1Y1 = new RoomBuilder(1, 1, 1, 1).addDoor(2, 1);
-    this.roomX5Y5 = new RoomBuilder(5, 5, 1, 1).addDoor(5, 4);
+    this.roomX1Y1 = new RoomBuilder(new Location(0, 0), 3, 3)
+        .addDoor(new Location(2,1));
+    this.roomX5Y5 = new RoomBuilder(new Location(4, 4), 3, 3)
+        .addDoor(new Location(5,4));
   }
 
   @Test

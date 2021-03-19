@@ -52,7 +52,7 @@ public class RoomBuilderDeserializer implements JsonDeserializer<RoomBuilder> {
     //  of the layout array (which also includes the room borders), not top left of the room
     //  we subtract two from the bounds because our boundaries are the number of rows or columns
     //  in the room, not counting the outer boundaries
-    return new RoomBuilder(origin.row + 1, origin.column + 1, cols - 2, rows - 2);
+    return new RoomBuilder(new Location(origin.getRow() + 1, origin.getColumn() + 1), cols - 2, rows - 2);
   }
 
   /**

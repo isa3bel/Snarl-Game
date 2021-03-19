@@ -1,6 +1,5 @@
-package model;
+package model.level;
 
-import model.level.Location;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -62,7 +61,7 @@ public class LocationTest {
     }
     assertEquals(alongX, this.x4y4.to(this.x1y4));
 
-    alongX.sort(Comparator.comparingInt(location -> location.row));
+    alongX.sort(Comparator.comparingInt(location -> location.getRow()));
     assertEquals(alongX, this.x1y4.to(this.x4y4));
 
     ArrayList<Location> alongY = new ArrayList<>();

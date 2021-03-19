@@ -119,9 +119,9 @@ public class LevelBuilder {
       throw new IllegalStateException("level must have exactly one level exit");
     }
     // TODO: exit doesn't have to be a wall space?
-    Space spaceToReplace = spaces.get(this.exit.row).get(this.exit.column);
+    Space spaceToReplace = spaces.get(this.exit.getRow()).get(this.exit.getColumn());
     Exit exit = new Exit(spaceToReplace, this.exitLocked);
-    spaces.get(this.exit.row).set(this.exit.column, exit);
+    spaces.get(this.exit.getRow()).set(this.exit.getColumn(), exit);
     return exit;
   }
 

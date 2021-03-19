@@ -36,7 +36,7 @@ public class Level {
    */
   public Space get(Location location) throws IndexOutOfBoundsException {
     try {
-      return this.spaces.get(location.row).get(location.column);
+      return this.spaces.get(location.getRow()).get(location.getColumn());
     }
     catch (IndexOutOfBoundsException exception) {
       throw new IndexOutOfBoundsException(String.format("location %s not in level", location.toString()));
@@ -126,9 +126,9 @@ public class Level {
    * @return the list of available locations in the top left room
    */
   public ArrayList<Location> calculatePlayerLocations() {
-    return this.calculateCharacterLocations((location1, location2) -> location1.row == location2.row
-        ? location1.column - location2.column
-        : location1.row - location2.row);
+    return this.calculateCharacterLocations((location1, location2) -> location1.getRow() == location2.getRow()
+        ? location1.getColumn() - location2.getColumn()
+        : location1.getRow() - location2.getRow());
   }
 
   /**
@@ -136,9 +136,9 @@ public class Level {
    * @return the list of available locations in the bottom right room
    */
   public ArrayList<Location> calculateAdversaryLocations() {
-    return this.calculateCharacterLocations((location1, location2) -> location1.row == location2.row
-        ? location2.column - location1.column
-        : location2.row - location1.row);
+    return this.calculateCharacterLocations((location1, location2) -> location1.getRow() == location2.getRow()
+        ? location2.getColumn() - location1.getColumn()
+        : location2.getRow() - location1.getRow());
   }
 
 }

@@ -59,9 +59,9 @@ public class HallwayBuilder extends SpaceBuilder {
     ArrayList<Location> hallwayTiles = this.calculateLocations();
 
     for (Location location : hallwayTiles) {
-      Location outer = new Location(location.row + 1, location.column + 1);
+      Location outer = new Location(location.getRow() + 1, location.getColumn() + 1);
       this.initSize(outer, spaces);
-      spaces.get(location.row).set(location.column, new HallwayTile(this.toString()));
+      spaces.get(location.getRow()).set(location.getColumn(), new HallwayTile(this.toString()));
     }
   }
 
