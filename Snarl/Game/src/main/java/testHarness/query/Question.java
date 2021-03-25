@@ -30,7 +30,7 @@ public abstract class Question {
         .registerTypeAdapter(RoomBuilder.class, new RoomBuilderDeserializer())
         .registerTypeAdapter(HallwayBuilder.class, new HallwayBuilderDeserializer())
         .registerTypeAdapter(Location.class, new LocationDeserializer())
-        .registerTypeAdapter(MockPlayer.class, new MockPlayerDeserializer())
+        .registerTypeAdapter(MockPlayerController.class, new MockPlayerControllerDeserializer())
         .registerTypeAdapter(Adversary.class, new AdversaryDeserializer())
         .create();
     return gson.fromJson(json, classOfT);

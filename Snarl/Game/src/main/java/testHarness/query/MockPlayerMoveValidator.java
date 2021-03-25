@@ -1,7 +1,6 @@
 package testHarness.query;
 
 import model.characters.Character;
-import model.characters.*;
 import model.level.Level;
 import model.level.Location;
 import model.ruleChecker.PlayerMoveValidator;
@@ -10,29 +9,26 @@ import java.util.List;
 
 public class MockPlayerMoveValidator extends PlayerMoveValidator {
 
-  MockPlayerMoveValidator(MockPlayer mockPlayer, Location nextLocation) {
+  private final StringBuilder testOutput;
+
+  MockPlayerMoveValidator(MockPlayer mockPlayer, Location nextLocation, StringBuilder testOutput) {
     super(mockPlayer, nextLocation);
+    this.testOutput = testOutput;
   }
 
   @Override
   public boolean isValid(Level level, List<Character> characters) {
-    return level.get(this.nextMove).acceptVisitor(new IsTraversable()) &&
-        characters.stream()
-            .filter(c -> !c.equals(this.character))
-            .filter(c -> c.acceptVisitor(new CanShareSpace()))
-            .noneMatch(c -> c.getCurrentLocation().equals(this.nextMove));
-  }
+    boolean isValid = super.isValid(level, characters);
 
-  private static class CanShareSpace implements CharacterVisitor<Boolean> {
-
-    @Override
-    public Boolean visitPlayer(Player player) {
-      return true;
+    if (!isValid) {
+      this.testOutput
+          .append("[ ")
+          .append(this.character.getName())
+          .append(", ")
+          .append(this.nextMove.toString())
+          .append(", \"Invalid\"]");
     }
 
-    @Override
-    public Boolean visitAdversary(Adversary adversary) {
-      return false;
-    }
+    return isValid;
   }
 }

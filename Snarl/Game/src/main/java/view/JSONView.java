@@ -47,10 +47,15 @@ public class JSONView implements View{
 
   @Override
   public void draw() {
-    System.out.print("{\n\"type\": \"state\",\n"
+    System.out.print(this.toString());
+  }
+
+  @Override
+  public String toString() {
+    return "{\n\"type\": \"state\",\n"
         + "\"level\": " + this.levelString + ",\n"
         + "\"players\": [" + this.playerString + "],\n"
         + "\"adversaries\": [" + this.adversaryString
-        + "],\n\"exit-locked\": " + this.exitLockedString + "}");
+        + "],\n\"exit-locked\": " + this.exitLockedString + "}";
   }
 }

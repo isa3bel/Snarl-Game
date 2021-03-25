@@ -94,10 +94,10 @@ public class LocationTest {
 
   @Test
   public void testToString() {
-    assertEquals("(0, 0)", this.x0y0.toString());
-    assertEquals("(13, 5)", this.x13y5.toString());
-    assertEquals("(4, 12)", this.x4y12.toString());
-    assertEquals("(1, 4)", this.x1y4.toString());
+    assertEquals("[0, 0]", this.x0y0.toString());
+    assertEquals("[13, 5]", this.x13y5.toString());
+    assertEquals("[4, 12]", this.x4y12.toString());
+    assertEquals("[1, 4]", this.x1y4.toString());
   }
 
   @Test

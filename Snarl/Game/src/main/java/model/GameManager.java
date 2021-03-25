@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 
 import model.characters.Character;
+import model.ruleChecker.GameStateValidator;
+import model.ruleChecker.GameStatus;
 import model.ruleChecker.MoveValidator;
 import model.ruleChecker.Interaction;
 import model.level.Level;
@@ -16,18 +18,28 @@ public class GameManager {
   private int currentLevel;
   private final Level[] levels;
   private final ArrayList<Character> characters;
+  private final GameStateValidator gameStateValidator;
+  private final Publisher publisher;
 
   public GameManager(int currentLevel, Level[] levels, ArrayList<Character> characters) {
     this.currentLevel = currentLevel;
     this.levels = levels;
     this.characters = characters;
+    this.gameStateValidator = new GameStateValidator();
+    this.publisher = new Publisher();
+  }
+
+  public void addObserver(Observer o) {
+    this.publisher.addObserver(o);
   }
 
   /**
    * Advances the game through a round, which is a turn for every character in the game.
+   * @return the status of the game at the end of the round
    */
-  public void doRound() {
+  public GameStatus doRound() {
     this.characters.forEach(this::doTurn);
+    return this.gameStateValidator.evaluateGameState(this.currentLevel, this.levels, this.characters);
   }
 
   /**
@@ -35,9 +47,12 @@ public class GameManager {
    * @param currentCharacter the character whose turn it is
    */
   public void doTurn(Character currentCharacter) {
+    currentCharacter.updateController(this);
     MoveValidator moveValidator;
+
     do {
       moveValidator = currentCharacter.getNextMove();
+      // TODO: number of retries?
     } while (!this.isMoveValid(moveValidator));
     moveValidator.executeMove();
 
@@ -45,7 +60,7 @@ public class GameManager {
     this.characters.forEach(character -> character.acceptVisitor(interaction));
     this.levels[this.currentLevel].interact(currentCharacter.getCurrentLocation(), interaction);
 
-    this.characters.forEach(character -> character.updateController(this));
+    this.publisher.update(this);
   }
 
   /**

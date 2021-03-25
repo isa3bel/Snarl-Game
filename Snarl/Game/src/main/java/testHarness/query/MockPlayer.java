@@ -2,67 +2,75 @@ package testHarness.query;
 
 import model.GameManager;
 import model.characters.Player;
+import model.item.Item;
 import model.level.Location;
-import testHarness.answer.StateAnswer;
-import testHarness.answer.Success;
-import testHarness.answer.SuccessEjected;
-import testHarness.answer.SuccessExited;
+import model.ruleChecker.PlayerMoveValidator;
 
 /**
  * Player class to be used for the state query in the test harness.
  */
 public class MockPlayer extends Player {
 
-  private InteractionResult result;
-  private Location nextLocation;
+  private final StringBuilder testOutput;
+  private String recentMoveString;
 
-  public MockPlayer(Location location, int id, String name) {
-    super(location, id, name);
-    this.result = InteractionResult.DEFAULT;
+  public MockPlayer(Location location, int id, String name, MockPlayerController controller,
+      StringBuilder testOutput) {
+    super(location, id, name, controller);
+    this.testOutput = testOutput;
   }
 
   @Override
-  public MockPlayerMoveValidator getNextMove() {
-    return new MockPlayerMoveValidator(this, this.nextLocation);
+  public PlayerMoveValidator getNextMove() {
+    return new MockPlayerMoveValidator(this, this.controller.getNextMove(), this.testOutput);
+  }
+
+  @Override
+  public void updateController(GameManager gameManager) {
+    this.testOutput.append(this.recentMoveString);
+    MockPlayerView view = new MockPlayerView(this);
+    this.controller.update(view);
   }
 
   @Override
   public void defend() {
     super.defend();
-    this.result = InteractionResult.EJECTED;
+
+    this.testOutput.append(this.getMoveResponse(this.getCurrentLocation(), "Eject"));
+    this.recentMoveString = "";
+  }
+
+  public void addToInventory(Item item) {
+    super.addToInventory(item);
+
+    // TODO: right now, if a key is placed on top of the exit or adversary, this might add multiple
+    //  responses to the test output for the same move - is this expected? (and how would that actually work)
+    this.testOutput.append(this.getMoveResponse(this.getCurrentLocation(), "Key"));
+    this.recentMoveString = "";
   }
 
   @Override
   public void moveTo(Location location) {
     super.moveTo(location);
-    this.result = location != null ? this.result : InteractionResult.EXITED;
-  }
 
-  /**
-   * Sets the value of the next move for this character.
-   * @param nextLocation the next location to move this character to
-   */
-  public void setNextLocation(Location nextLocation) {
-    this.nextLocation = nextLocation;
-  }
-
-  /**
-   * Constructs the result of the testing query for judging this mock player's interaction.
-   * @param gameManager the gameManager of this interaction
-   * @return the resulting interaction string as specified by milestone 5 tests
-   */
-  public StateAnswer getInteractionAnswer(GameManager gameManager) {
-    switch (this.result) {
-      case EJECTED:
-        return new SuccessEjected(gameManager);
-      case EXITED:
-        return new SuccessExited(gameManager);
-      default:
-        return new Success(gameManager);
+    if (location == null) {
+      this.testOutput.append(this.getMoveResponse(this.getCurrentLocation(), "Exit"));
+      this.recentMoveString = "";
+    }
+    else {
+      this.recentMoveString = this.getMoveResponse(location, "Ok");
     }
   }
 
-  private enum InteractionResult {
-    EJECTED, EXITED, DEFAULT
+  /**
+   * Formats the string for the test output of a move response.
+   * @param location the location of the move
+   * @param result the result of the move
+   * @return the formatted string
+   */
+  private String getMoveResponse(Location location, String result) {
+    return "[ " + this.getName() + ", { \"type\": \"move\", \"to\": " + location.toString()
+        + "}, \"" + result + "\"]";
   }
+
 }

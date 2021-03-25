@@ -16,9 +16,13 @@ public abstract class Character implements Interactable {
   protected Controller controller;
 
   Character(Location location, String name) {
-    this.currentLocation = location;
+    this(location, name, new StdinController());
+  }
+
+  Character(Location location, String name, Controller controller) {
     this.name = name;
-    this.controller = new StdinController();
+    this.currentLocation = location;
+    this.controller = controller;
   }
 
   /**

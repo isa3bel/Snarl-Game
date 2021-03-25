@@ -27,5 +27,7 @@ public abstract class Item implements Interactable {
     return this.currentLocation == null ? null : new Location(this.currentLocation);
   }
 
-  public abstract void pickedUp(Player player);
+  public void pickedUp(Player player) {
+    player.addToInventory(this);
+  }
 }

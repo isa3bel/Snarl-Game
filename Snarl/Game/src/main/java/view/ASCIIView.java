@@ -44,9 +44,14 @@ public class ASCIIView implements View {
    */
   @Override
   public void draw() {
-    final String outputString = render.stream()
+    System.out.print(this.toString());
+  }
+
+  @Override
+  public String toString() {
+    String outputString = render.stream()
         .map(row -> String.join("", row))
         .collect(Collectors.joining("\n"));
-    System.out.print(outputString + "\n");
+    return outputString + "\n";
   }
 }

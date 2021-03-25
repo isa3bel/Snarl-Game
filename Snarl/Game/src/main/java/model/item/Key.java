@@ -22,6 +22,7 @@ public class Key extends Item {
 
   @Override
   public void pickedUp(Player player) {
+    super.pickedUp(player);
     this.currentLocation = null;
     this.exit.unlock();
   }
