@@ -1,6 +1,7 @@
 package view;
 
 import model.characters.Character;
+import model.characters.Player;
 import model.level.Level;
 
 import java.util.List;
@@ -22,8 +23,8 @@ public class AdversaryView implements View {
   }
 
   @Override
-  public void placeCharacters(List<Character> character) {
-    this.view.placeCharacters(character);
+  public void placePlayers(List<Player> players) {
+    this.view.placePlayers(players);
   }
 
   @Override

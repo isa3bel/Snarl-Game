@@ -3,11 +3,10 @@ package model.builders;
 import model.GameManager;
 import model.level.Location;
 import model.characters.*;
-import model.characters.Character;
 import model.level.Level;
 
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.HashMap;
 
 /**
  * Builds a Snarl game.
@@ -17,9 +16,9 @@ public class GameManagerBuilder {
   private final int currentLevel;
   private final Level[] levels;
   private final ArrayList<Location> playerLocations;
-  private final ArrayList<Location> adversaryLocations;
+  private final HashMap<Integer, ArrayList<Location>> adversaryLocations;
   private final ArrayList<Player> players;
-  private final ArrayList<Adversary> adversaries;
+  private final HashMap<Integer, ArrayList<Adversary>> adversaries;
 
   /**
    * Initializes a game manager with the bare minimum required - the level.
@@ -40,9 +39,13 @@ public class GameManagerBuilder {
     this.currentLevel = currentLevel;
     this.levels = levels;
     this.playerLocations = levels[currentLevel].calculatePlayerLocations();
-    this.adversaryLocations = levels[currentLevel].calculateAdversaryLocations();
     this.players = new ArrayList<>();
-    this.adversaries = new ArrayList<>();
+
+    this.adversaryLocations = new HashMap<>();
+    for (int levelIdx = 0; levelIdx < levels.length; levelIdx++) {
+      this.adversaryLocations.put(levelIdx, levels[levelIdx].calculateAdversaryLocations());
+    }
+    this.adversaries = new HashMap<>();
   }
 
   /**
@@ -72,27 +75,37 @@ public class GameManagerBuilder {
   }
 
   /**
-   * Adds an enemy with a generated game location (the most bottom right available space in the level).
-   * @return this builder with the enemy
+   * Adds a player with a generated game location (the most top left available space in the level).
+   * @return this builder with the player
    */
-  public GameManagerBuilder addEnemy() {
-    if (this.adversaryLocations.size() < 1) {
-      throw new IllegalStateException("bottom right room does not have enough available tiles" +
+  public GameManagerBuilder addAdversary(int level) throws IllegalStateException {
+    if (level >= this.levels.length) {
+      throw new IllegalArgumentException("level does not exist in this game");
+    }
+    if (this.adversaryLocations.get(level).size() < 1) {
+      throw new IllegalStateException("top left room does not have enough available tiles" +
           " for automatic adversary placement");
     }
-    return this.addEnemy(this.adversaryLocations.remove(0));
+    return this.addAdversary(level, this.adversaryLocations.get(level).remove(0));
   }
 
   /**
-   * Adds an enemy to the game at the given location.
-   * @param location the location to place the adversary
-   * @return this builder with the adversary
+   * Adds a player with the given location.
+   * @param location the location where the player should be added
+   * @return this builder with the player
+   * @throws IllegalArgumentException if there are already 4 players in the game
    */
-  public GameManagerBuilder addEnemy(Location location) {
-    Adversary adversary = new Random().nextBoolean()
-        ? new Ghost(location, null)
-        : new Zombie(location, null);
-    this.adversaries.add(adversary);
+  public GameManagerBuilder addAdversary(int level, Location location) throws IllegalArgumentException {
+    if (level >= this.levels.length) {
+      throw new IllegalArgumentException("level does not exist in this game");
+    }
+    ArrayList<Adversary> levelAdversaries = this.adversaries.get(level);
+    if (levelAdversaries == null) {
+      levelAdversaries = new ArrayList<>();
+      this.adversaries.put(level, levelAdversaries);
+    }
+
+    levelAdversaries.add(new Ghost(location, "ghost" + levelAdversaries.size()));
     return this;
   }
 
@@ -101,10 +114,9 @@ public class GameManagerBuilder {
    * @return the constructed GameManager
    */
   public GameManager build() throws IllegalStateException {
-    ArrayList<Character> characters = new ArrayList<>();
-    characters.addAll(this.players);
-    characters.addAll(this.adversaries);
-
-    return new GameManager(this.currentLevel, this.levels, characters);
+    for (int levelIdx = 0; levelIdx < this.levels.length; levelIdx++) {
+      this.levels[levelIdx].addAdversaries(this.adversaries.get(levelIdx));
+    }
+    return new GameManager(this.currentLevel, this.levels, this.players);
   }
 }

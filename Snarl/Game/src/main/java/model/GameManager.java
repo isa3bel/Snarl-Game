@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 
 import model.characters.Character;
+import model.characters.Player;
 import model.ruleChecker.GameStateValidator;
 import model.ruleChecker.GameStatus;
 import model.ruleChecker.MoveValidator;
@@ -17,20 +18,24 @@ public class GameManager {
 
   private int currentLevel;
   private final Level[] levels;
-  private final ArrayList<Character> characters;
+  private final ArrayList<Player> players;
   private final GameStateValidator gameStateValidator;
   private final Publisher publisher;
 
-  public GameManager(int currentLevel, Level[] levels, ArrayList<Character> characters) {
+  public GameManager(int currentLevel, Level[] levels, ArrayList<Player> players) {
     this.currentLevel = currentLevel;
     this.levels = levels;
-    this.characters = characters;
+    this.players = players;
     this.gameStateValidator = new GameStateValidator();
     this.publisher = new Publisher();
   }
 
-  public void addObserver(Observer o) {
-    this.publisher.addObserver(o);
+  /**
+   * Adds an observer to the GameManager.
+   * @param observer the observer to add
+   */
+  public void addObserver(Observer observer) {
+    this.publisher.addObserver(observer);
   }
 
   /**
@@ -38,8 +43,16 @@ public class GameManager {
    * @return the status of the game at the end of the round
    */
   public GameStatus doRound() {
-    this.characters.forEach(this::doTurn);
-    return this.gameStateValidator.evaluateGameState(this.currentLevel, this.levels, this.characters);
+    this.players.forEach(this::doTurn);
+    // this.levels[this.currentLevel].moveAdversaries();
+    return this.gameStateValidator.evaluateGameState(this.currentLevel, this.levels, this.players);
+  }
+
+  /**
+   * Updates all the players in this game - TODO: explicit method should only be for testing task of milestone 7.
+   */
+  public void updatePlayers() {
+    this.players.forEach(character -> character.updateController(this));
   }
 
   /**
@@ -47,9 +60,9 @@ public class GameManager {
    * @param currentCharacter the character whose turn it is
    */
   public void doTurn(Character currentCharacter) {
-    currentCharacter.updateController(this);
-    MoveValidator moveValidator;
+    if (!currentCharacter.isInGame()) return;
 
+    MoveValidator moveValidator;
     do {
       moveValidator = currentCharacter.getNextMove();
       // TODO: number of retries?
@@ -57,8 +70,8 @@ public class GameManager {
     moveValidator.executeMove();
 
     Interaction interaction = currentCharacter.makeInteraction();
-    this.characters.forEach(character -> character.acceptVisitor(interaction));
     this.levels[this.currentLevel].interact(currentCharacter.getCurrentLocation(), interaction);
+    this.players.forEach(player -> player.updateController(this));
 
     this.publisher.update(this);
   }
@@ -69,7 +82,7 @@ public class GameManager {
    */
   public void buildView(View view) {
     view.renderLevel(this.levels[this.currentLevel]);
-    view.placeCharacters(this.characters);
+    view.placePlayers(this.players);
   }
 
   /**
@@ -78,7 +91,7 @@ public class GameManager {
    * @return whether this game state is compatible with the given move validator
    */
   public boolean isMoveValid(MoveValidator moveValidator) {
-    return moveValidator.isValid(this.levels[this.currentLevel], this.characters);
+    return moveValidator.isValid(this.levels[this.currentLevel], this.players);
   }
 
 }

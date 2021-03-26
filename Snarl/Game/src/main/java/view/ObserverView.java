@@ -1,16 +1,13 @@
 package view;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import model.characters.Character;
+import model.characters.Player;
 import model.level.Level;
-import model.level.Location;
 
 // should be similar to Adversary view in that an Observer can see everything (for debugging purposes)
 public class ObserverView implements View {
 
-  private ASCIIView view;
+  private final ASCIIView view;
 
   public ObserverView() {
     view = new ASCIIView();
@@ -22,8 +19,8 @@ public class ObserverView implements View {
   }
 
   @Override
-  public void placeCharacters(List<Character> character) {
-    this.view.placeCharacters(character);
+  public void placePlayers(List<Player> players) {
+    this.view.placePlayers(players);
   }
 
   @Override

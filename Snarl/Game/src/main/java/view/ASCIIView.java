@@ -2,7 +2,7 @@ package view;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import model.characters.Character;
+import model.characters.Player;
 import model.level.Level;
 import model.level.Location;
 
@@ -24,18 +24,26 @@ public class ASCIIView implements View {
 
     level.mapItems(item -> {
       Location location = item.getCurrentLocation();
+      if (location == null) return;
       this.render.get(location.getRow()).set(location.getColumn(), item.acceptVisitor(new ASCIIItem()));
+    });
+
+    level.mapAdversaries(adversary -> {
+      Location location = adversary.getCurrentLocation();
+      if (location == null) return;
+      this.render.get(location.getRow()).set(location.getColumn(), adversary.acceptVisitor(new ASCIICharacter()));
     });
   }
 
   /**
    * Places the characters in the 2D game representation.
-   * @param characters the characters to place
+   * @param players the players to place
    */
-  public void placeCharacters(List<Character> characters) {
-    characters.forEach(character -> {
-      Location location = character.getCurrentLocation();
-      this.render.get(location.getRow()).set(location.getColumn(), character.acceptVisitor(new ASCIICharacter()));
+  public void placePlayers(List<Player> players) {
+    players.forEach(player -> {
+      Location location = player.getCurrentLocation();
+      if (location == null) return;
+      this.render.get(location.getRow()).set(location.getColumn(), player.acceptVisitor(new ASCIICharacter()));
     });
   }
 

@@ -69,7 +69,7 @@ public class ASCIIViewTest {
         .build();
     Level[] levels = { singleRoomLevelWithCharacters };
     this.singleRoomWithCharacters = new GameManagerBuilder(0, levels)
-        .addEnemy(new Location(6, 1))
+        .addAdversary(0, new Location(6, 1))
         .addPlayer(new Location(7, 1))
         .addPlayer(new Location(8, 1))
         .build();
@@ -172,8 +172,8 @@ public class ASCIIViewTest {
         .addPlayer()
         .addPlayer()
         .addPlayer()
-        .addEnemy()
-        .addEnemy()
+        .addAdversary(0)
+        .addAdversary(0)
         .build();
   }
 
@@ -191,8 +191,8 @@ public class ASCIIViewTest {
     this.twoRoomsTopRight = new GameManagerBuilder(0, levels)
         .addPlayer()
         .addPlayer()
-        .addEnemy()
-        .addEnemy()
+        .addAdversary(0)
+        .addAdversary(0)
         .build();
   }
 

@@ -16,7 +16,10 @@ public class PlayerInteraction extends Interaction<Player> {
 
   @Override
   public void visitItem(Item item) {
-    if (!item.getCurrentLocation().equals(this.character.getCurrentLocation())) return;
+    if (item.getCurrentLocation() == null ||
+        !item.getCurrentLocation().equals(this.character.getCurrentLocation())) {
+      return;
+    }
     item.pickedUp(this.character);
   }
 

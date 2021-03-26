@@ -4,6 +4,8 @@ import model.characters.Controller;
 import model.level.Location;
 import view.View;
 
+import java.util.ArrayList;
+
 /**
  * A controller for a MockPlayer for the GameQuery (Milestone 7).
  */
@@ -11,7 +13,7 @@ public class MockPlayerController implements Controller {
 
   private final Location[] locations;
   private int index;
-  private StringBuilder testOutput;
+  private ArrayList<String> testOutput;
 
   public MockPlayerController(Location[] locations) {
     this.locations = locations;
@@ -22,7 +24,7 @@ public class MockPlayerController implements Controller {
    * Set the output of this MockController to be the given StringBuilder.
    * @param testOutput where the MockController will write updates
    */
-  public void setTestOutput(StringBuilder testOutput) {
+  public void setTestOutput(ArrayList<String> testOutput) {
     this.testOutput = testOutput;
   }
 
@@ -33,7 +35,7 @@ public class MockPlayerController implements Controller {
    */
   @Override
   public Location getNextMove() {
-    if (this.index > this.locations.length) {
+    if (this.index >= this.locations.length) {
       throw new NoMovesLeft();
     }
 
@@ -46,7 +48,7 @@ public class MockPlayerController implements Controller {
    */
   @Override
   public void update(View view) {
-    this.testOutput.append(view.toString());
+    this.testOutput.add(view.toString());
   }
 
   /**

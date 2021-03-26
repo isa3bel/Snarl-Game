@@ -5,13 +5,15 @@ import model.ruleChecker.GameStatus;
 import testHarness.answer.GameAnswer;
 import testHarness.deserializer.GameQueryDeserializer;
 
+import java.util.ArrayList;
+
 public class GameQuery extends Question {
 
   private final int rounds;
   private final GameManager gameManager;
-  private final StringBuilder testOutput;
+  private final ArrayList<String> testOutput;
 
-  public GameQuery(int rounds, GameManager gameManager, StringBuilder testOutput) {
+  public GameQuery(int rounds, GameManager gameManager, ArrayList<String> testOutput) {
     this.rounds = rounds;
     this.gameManager = gameManager;
     this.testOutput = testOutput;
@@ -21,6 +23,7 @@ public class GameQuery extends Question {
   public GameAnswer getAnswer() {
     int round = 0;
     GameStatus status = GameStatus.PLAYING;
+    this.gameManager.updatePlayers();
 
     while (round < this.rounds && status == GameStatus.PLAYING) {
       try {
@@ -32,7 +35,7 @@ public class GameQuery extends Question {
       round++;
     }
 
-    return new GameAnswer(this.gameManager, testOutput.toString());
+    return new GameAnswer(this.gameManager, String.join(", ", this.testOutput));
   }
 
   /**

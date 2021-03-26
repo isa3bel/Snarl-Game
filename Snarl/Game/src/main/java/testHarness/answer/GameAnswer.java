@@ -20,6 +20,6 @@ public class GameAnswer extends Answer {
    */
   @Override
   public String toString() {
-    return "[ " + this.getStateJson() + ", " + this.managerTrace + " ]";
+    return "[ " + this.getStateJson() + ", [" + this.managerTrace + "] ]";
   }
 }

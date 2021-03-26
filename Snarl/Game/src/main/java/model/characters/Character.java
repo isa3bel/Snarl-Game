@@ -42,6 +42,14 @@ public abstract class Character implements Interactable {
   }
 
   /**
+   * Is this character still playing in the game?
+   * @return whether the character is still playing
+   */
+  public boolean isInGame() {
+    return this.currentLocation != null;
+  }
+
+  /**
    * Move this character to the given location.
    * @param location the location to move to
    */

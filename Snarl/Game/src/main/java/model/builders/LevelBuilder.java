@@ -74,7 +74,7 @@ public class LevelBuilder {
    * @throws IllegalArgumentException if the exit is not on the room's boundary
    */
   public LevelBuilder addExit(Location exitLocation) throws IllegalStateException {
-    return this.addExit(exitLocation, false);
+    return this.addExit(exitLocation, true);
   }
 
   /**

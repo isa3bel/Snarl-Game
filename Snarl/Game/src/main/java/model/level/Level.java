@@ -1,10 +1,12 @@
 package model.level;
 
+import model.characters.Adversary;
 import model.ruleChecker.Interaction;
 import model.item.Item;
 import model.ruleChecker.IsValidStartingLocation;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.function.BiPredicate;
@@ -19,6 +21,7 @@ public class Level {
 
   private final ArrayList<ArrayList<Space>> spaces;
   private final ArrayList<Item> items;
+  private final ArrayList<Adversary> adversaries;
 
   /**
    * Constructor for this Level
@@ -27,6 +30,15 @@ public class Level {
   public Level(ArrayList<ArrayList<Space>> spaces, ArrayList<Item> items) {
     this.spaces = spaces;
     this.items = items;
+    this.adversaries = new ArrayList<>();
+  }
+
+  /**
+   * Adds adversaries to this level.
+   * @param adversaries the adversaries to add to this level
+   */
+  public void addAdversaries(Collection<Adversary> adversaries) {
+    if (adversaries != null) this.adversaries.addAll(adversaries);
   }
 
   /**
@@ -49,6 +61,7 @@ public class Level {
    * @param interaction the interaction that is occurring
    */
   public void interact(Location location, Interaction interaction) {
+    this.adversaries.forEach(adversary -> adversary.acceptVisitor(interaction));
     this.items.forEach(item -> item.acceptVisitor(interaction));
     if (location != null) this.get(location).acceptVisitor(interaction);
   }
@@ -103,6 +116,15 @@ public class Level {
   }
 
   /**
+   * Maps the given consumer across all of these adversaries.
+   * @param adversaryConsumer the function object to apply to all the adversaries
+   */
+  public void mapAdversaries(Consumer<Adversary> adversaryConsumer) {
+    // TODO: if we do keep this as is, then we should combine this better with this.interact
+    this.adversaries.forEach(adversaryConsumer);
+  }
+
+  /**
    * Find all available locations in the room with the "most" something tile in the level.
    * @param comparator how to sort the tiles to find the "most"
    * @return all the available tiles in that room
@@ -140,5 +162,4 @@ public class Level {
         ? location2.getColumn() - location1.getColumn()
         : location2.getRow() - location1.getRow());
   }
-
 }

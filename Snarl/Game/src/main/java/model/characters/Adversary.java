@@ -16,7 +16,7 @@ public abstract class Adversary extends Character {
    * @param name arbitrary unused string for the name of the adversary
    */
   Adversary(Location location, String name) {
-    super(location, name);
+    super(location, name, null);
   }
 
   /**
@@ -24,8 +24,9 @@ public abstract class Adversary extends Character {
    * @param player the player to attack
    */
   public void attack(Player player) {
-    if (this.currentLocation.equals(player.getCurrentLocation()))
+    if (this.currentLocation.equals(player.getCurrentLocation())) {
       player.defend();
+    }
   }
 
   @Override
@@ -41,8 +42,9 @@ public abstract class Adversary extends Character {
 
   @Override
   public AdversaryMoveValidator getNextMove() {
-    // TODO: update the controller with the view of the game manager?
-    //  if that happens here?
+    // TODO: take this out when adversary is fully implemented
+    if (this.controller == null) return new AdversaryMoveValidator(this, this.currentLocation);
+
     Location nextLocation = this.controller.getNextMove();
     return new AdversaryMoveValidator(this, nextLocation);
   }
@@ -54,6 +56,9 @@ public abstract class Adversary extends Character {
 
   @Override
   public void updateController(GameManager gameManager) {
+    // TODO: take this out when adversary is fully implemented
+    if (this.controller == null) return;
+
     AdversaryView view = new AdversaryView();
     this.controller.update(view);
   }

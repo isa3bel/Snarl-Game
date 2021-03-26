@@ -20,9 +20,9 @@ public class MockPlayerControllerDeserializer implements JsonDeserializer<MockPl
     }
     JsonArray jsonArray = jsonElement.getAsJsonArray();
     Location[] locations = new Location[jsonArray.size()];
-    for (int i = 0; i < locations.length; i++) {
-      JsonObject object = getObject(jsonElement);
-      locations[i] = object.get("to") != null
+    for (int idx = 0; idx < locations.length; idx++) {
+      JsonObject object = getObject(jsonArray.get(idx));
+      locations[idx] = object.get("to") != null
           ? context.deserialize(object.get("to"), Location.class)
           : null;
     }

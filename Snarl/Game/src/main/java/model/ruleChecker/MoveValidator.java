@@ -1,6 +1,7 @@
 package model.ruleChecker;
 
 import model.characters.Character;
+import model.characters.Player;
 import model.level.Level;
 import model.level.Location;
 
@@ -30,6 +31,6 @@ public abstract class MoveValidator {
    * Is the nextMove valid for this character?
    * @return if the move is valid
    */
-  public abstract boolean isValid(Level level, List<Character> characters);
+  public abstract boolean isValid(Level level, List<Player> players);
 
 }

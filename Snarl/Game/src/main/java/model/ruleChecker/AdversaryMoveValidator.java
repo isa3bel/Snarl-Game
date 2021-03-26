@@ -1,7 +1,7 @@
 package model.ruleChecker;
 
 import model.characters.Adversary;
-import model.characters.Character;
+import model.characters.Player;
 import model.level.Level;
 import model.level.Location;
 
@@ -14,7 +14,7 @@ public class AdversaryMoveValidator extends MoveValidator {
   }
 
   @Override
-  public boolean isValid(Level level, List<Character> characters) {
+  public boolean isValid(Level level, List<Player> players) {
     return true;
   }
 

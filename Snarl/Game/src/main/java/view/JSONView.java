@@ -1,8 +1,10 @@
 package view;
 
 import java.util.List;
-import model.characters.Character;
+
+import model.characters.*;
 import model.level.Level;
+import model.level.Location;
 
 public class JSONView implements View{
 
@@ -21,28 +23,37 @@ public class JSONView implements View{
   @Override
   public void renderLevel(Level level) {
     StringBuilder objectsStringBuilder = new StringBuilder();
+    StringBuilder adversaryStringBuilder = new StringBuilder();
     StringBuilder isLocked = new StringBuilder();
     level.filter((a, b) -> true).keySet().forEach(location -> {
-          JSONObject jsonObject = new JSONObject(location, objectsStringBuilder, isLocked);
-          level.interact(location, jsonObject);
-        });
+      JSONInteraction jsonObject = new JSONInteraction(location, objectsStringBuilder, adversaryStringBuilder, isLocked);
+      level.interact(location, jsonObject);
+    });
 
     this.exitLockedString = isLocked.toString();
     this.levelString = "{\n  \"type\": \"level\",\n"
         + "  \"rooms\": " + this.roomString + ",\n"
         + "  \"objects\": " + "[ " + objectsStringBuilder + " ],\n"
         + "  \"hallways\": " + this.hallwayString + "\n}";
+
+    this.adversaryString = adversaryStringBuilder.toString();
   }
 
   @Override
-  public void placeCharacters(List<Character> characters) {
-    StringBuilder playerString = new StringBuilder();
-    StringBuilder adversaryString = new StringBuilder();
+  public void placePlayers(List<Player> players) {
+    StringBuilder playerStringBuilder = new StringBuilder();
 
-    characters.forEach(character ->
-        character.acceptVisitor(new JSONCharacter(playerString, adversaryString)));
-    this.playerString = playerString.toString();
-    this.adversaryString = adversaryString.toString();
+    players.forEach(player -> {
+      String delimiter = playerStringBuilder.length() == 0 ? "" : ",\n";
+      Location location = player.getCurrentLocation();
+      if (location == null) return;
+
+      String playerJson = "{\n  \"type\": \"player\",\n  \"name\": \"" + player.getName() + "\",\n  \"position\": [ "
+          + location.getRow() + ", " + location.getColumn() + " ]\n}";
+      playerStringBuilder.append(delimiter).append(playerJson);
+    });
+
+    this.playerString = playerStringBuilder.toString();
   }
 
   @Override
@@ -57,5 +68,22 @@ public class JSONView implements View{
         + "\"players\": [" + this.playerString + "],\n"
         + "\"adversaries\": [" + this.adversaryString
         + "],\n\"exit-locked\": " + this.exitLockedString + "}";
+  }
+
+
+  /**
+   * The string of the type of this adversary.
+   */
+  private static class TypeString implements AdversaryVisitor<String> {
+
+    @Override
+    public String visitGhost(Ghost ghost) {
+      return "ghost";
+    }
+
+    @Override
+    public String visitZombie(Zombie zombie) {
+      return "zombie";
+    }
   }
 }
