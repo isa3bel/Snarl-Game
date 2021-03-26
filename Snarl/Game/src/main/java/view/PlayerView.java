@@ -27,7 +27,7 @@ public class PlayerView implements View {
     this.render = new ArrayList<>();
     this.objects = new StringBuilder();
     this.actors = new StringBuilder();
-
+    
     for (int row = 0; row < VIEW_DISTANCE * 2 + 1; row++) {
       this.render.add(new ArrayList<>(VIEW_DISTANCE * 2 + 1));
       for (int idx = 0; idx < VIEW_DISTANCE * 2 + 1; idx++) {

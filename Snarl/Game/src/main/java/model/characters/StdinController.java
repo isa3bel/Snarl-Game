@@ -1,5 +1,6 @@
 package model.characters;
 
+import java.util.Scanner;
 import model.level.Location;
 import view.View;
 
@@ -8,15 +9,19 @@ import view.View;
  */
 public class StdinController implements Controller {
 
-  // TODO: this is still a stub class until we know more about
-  //  player interactions
   @Override
   public Location getNextMove() {
-    return null;
+    while (true) {
+      System.out.print("Where would you like to go next? (int int)");
+      Scanner scanner = new Scanner(System.in);
+      int row = scanner.nextInt();
+      int col = scanner.nextInt();
+      return new Location(row, col);
+    }
   }
 
   @Override
   public void update(View view) {
-
+    view.draw();
   }
 }

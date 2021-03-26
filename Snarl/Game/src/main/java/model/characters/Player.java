@@ -49,7 +49,10 @@ public class Player extends Character {
   @Override
   public PlayerMoveValidator getNextMove() {
     Location nextLocation = this.controller.getNextMove();
-    return new PlayerMoveValidator(this, nextLocation);
+    return nextLocation == null
+        ? new PlayerMoveValidator(this, this.currentLocation)
+        : new PlayerMoveValidator(this, nextLocation);
+
   }
 
   @Override
@@ -60,6 +63,7 @@ public class Player extends Character {
   @Override
   public void updateController(GameManager gameManager) {
     PlayerView view = new PlayerView(this);
+    gameManager.buildView(view);
     this.controller.update(view);
   }
 

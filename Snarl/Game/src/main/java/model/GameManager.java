@@ -31,14 +31,6 @@ public class GameManager {
   }
 
   /**
-   * Adds an observer to the GameManager.
-   * @param observer the observer to add
-   */
-  public void addObserver(Observer observer) {
-    this.publisher.addObserver(observer);
-  }
-
-  /**
    * Advances the game through a round, which is a turn for every character in the game.
    * @return the status of the game at the end of the round
    */

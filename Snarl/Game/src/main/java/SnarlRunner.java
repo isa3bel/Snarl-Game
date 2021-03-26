@@ -17,11 +17,9 @@ public class SnarlRunner {
     View view = new ASCIIView();
     GameManager gameManager = makeGameManager();
     gameManager.buildView(view);
-
-    System.out.println("\n");
-
-    GameManager complicated = setupComplicatedLevel();
-    complicated.buildView(view);
+    while(true) {
+      gameManager.doRound();
+    }
   }
 
   /**
@@ -43,7 +41,7 @@ public class SnarlRunner {
         .addExit(new Location(0, 6))
         .build();
     Level[] levels = { level };
-    return new GameManagerBuilder(0, levels).build();
+    return new GameManagerBuilder(0, levels).addPlayer().build();
   }
 
   private static GameManager setupComplicatedLevel() {
