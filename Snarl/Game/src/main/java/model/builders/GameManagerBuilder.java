@@ -99,11 +99,7 @@ public class GameManagerBuilder {
     if (level >= this.levels.length) {
       throw new IllegalArgumentException("level does not exist in this game");
     }
-    ArrayList<Adversary> levelAdversaries = this.adversaries.get(level);
-    if (levelAdversaries == null) {
-      levelAdversaries = new ArrayList<>();
-      this.adversaries.put(level, levelAdversaries);
-    }
+    ArrayList<Adversary> levelAdversaries = this.adversaries.computeIfAbsent(level, key -> new ArrayList<>());
 
     levelAdversaries.add(new Ghost(location, "ghost" + levelAdversaries.size()));
     return this;

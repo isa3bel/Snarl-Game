@@ -1,5 +1,6 @@
 package model.ruleChecker;
 
+import model.item.Exit;
 import model.level.*;
 
 /**
@@ -11,11 +12,6 @@ public class IsValidStartingLocation implements SpaceVisitor<Boolean> {
 
   @Override
   public Boolean visitDoor(Door door) {
-    return false;
-  }
-
-  @Override
-  public Boolean visitExit(Exit exit) {
     return false;
   }
 

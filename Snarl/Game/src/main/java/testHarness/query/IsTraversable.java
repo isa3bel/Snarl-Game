@@ -1,5 +1,6 @@
 package testHarness.query;
 
+import model.item.Exit;
 import model.level.*;
 
 /**
@@ -14,16 +15,6 @@ public class IsTraversable implements SpaceVisitor<Boolean> {
    */
   @Override
   public Boolean visitDoor(Door door) {
-    return true;
-  }
-
-  /**
-   * An exit is traversable.
-   * @param exit the exit
-   * @return true
-   */
-  @Override
-  public Boolean visitExit(Exit exit) {
     return true;
   }
 

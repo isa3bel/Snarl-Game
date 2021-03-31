@@ -167,8 +167,8 @@ public class PlayerViewTest {
             "  \"position\": [5, 1],\n" +
             "  \"objects\": [{ \"type\": \"exit\", \"position\": [6, 0] },\n" +
             "{ \"type\": \"key\", \"position\": [6, 1] }],\n" +
-            "  \"actors\": [{\n  \"type\": \"ghost\",\n  \"name\": \"ghost\",\n  \"position\": [7, 1]\n},\n" +
-            "{\n  \"type\": \"zombie\",\n  \"name\": \"zombie\",\n  \"position\": [7, 2]\n},\n" +
+            "  \"actors\": [{\n  \"type\": \"zombie\",\n  \"name\": \"zombie\",\n  \"position\": [7, 2]\n},\n" +
+            "{\n  \"type\": \"ghost\",\n  \"name\": \"ghost\",\n  \"position\": [7, 1]\n},\n" +
             "{\n  \"type\": \"player\",\n  \"name\": \"dio\",\n  \"position\": [7, 3]\n}]\n} ]\n",
         view.toString());
   }

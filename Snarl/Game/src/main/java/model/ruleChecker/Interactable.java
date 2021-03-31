@@ -1,8 +1,10 @@
 package model.ruleChecker;
 
+import model.level.Location;
+
 public interface Interactable {
 
-  // TODO: consider if we want/need a getCurrentLocation or isAtLocation method
+  Location getCurrentLocation();
   void acceptVisitor(InteractableVisitor visitor);
 
 }

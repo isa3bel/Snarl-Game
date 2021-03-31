@@ -1,77 +1,74 @@
 package view;
 
 import model.characters.*;
-import model.characters.Character;
-import model.ruleChecker.Interaction;
-import model.item.Item;
-import model.item.ItemVisitor;
 import model.item.Key;
-import model.level.*;
-import model.level.Exit;
+import model.item.Exit;
+import model.level.Location;
+import model.ruleChecker.InteractableVisitor;
 
-public class JSONInteraction extends Interaction<Character> {
+import java.util.function.Predicate;
 
-  private final Location location;
+public class JSONInteraction implements InteractableVisitor<Void> {
+
   private final StringBuilder objectString;
-  private final StringBuilder actors;
-  private final StringBuilder isLocked;
+  private final StringBuilder actorString;
+  private final StringBuilder isLockedString;
+  private final Predicate<Location> shouldIncludeInView;
 
-  public JSONInteraction(Location location, StringBuilder objectString, StringBuilder actors) {
-    this(location, objectString, actors, null);
+  public JSONInteraction(StringBuilder objectString, StringBuilder actorString,
+      Predicate<Location> shouldIncludeInView) {
+    this(objectString, actorString, new StringBuilder(), shouldIncludeInView);
   }
 
-  public JSONInteraction(Location location, StringBuilder objectString, StringBuilder actors, StringBuilder isLocked) {
-    super(null);
-    this.location = location;
+  public JSONInteraction(StringBuilder objectString, StringBuilder actorString, StringBuilder isLockedString,
+      Predicate<Location> shouldIncludeInView) {
+    if (objectString == null || actorString == null || isLockedString == null) {
+      throw new IllegalArgumentException("all arguments must be non-null");
+    }
     this.objectString = objectString;
-    this.actors = actors;
-    this.isLocked = isLocked;
+    this.actorString = actorString;
+    this.isLockedString = isLockedString;
+    this.shouldIncludeInView = shouldIncludeInView;
   }
 
   @Override
-  public void visitItem(Item item) {
-    if (!this.location.equals(item.getCurrentLocation())) return;
-
+  public Void visitKey(Key key) {
+    if (!this.shouldIncludeInView.test(key.getCurrentLocation())) return null;
     String delimiter = this.objectString.length() == 0 ? "" : ",\n";
-    String itemString = item.acceptVisitor(new KeyObjectType(this.location));
-    this.objectString.append(delimiter).append(itemString);
+    String keyString = "{ \"type\": \"key\", \"position\": " + key.getCurrentLocation().toString() + " }";
+    this.objectString.append(delimiter).append(keyString);
+    return null;
   }
 
   @Override
-  public void visitExit(Exit exit) {
-    if (this.isLocked != null) this.isLocked.append(exit.isLocked());
-    String delimiter = this.objectString.length() == 0 ? "" : ",\n";
-    this.objectString
-        .append(delimiter)
-        .append("{ \"type\": \"exit\", \"position\": ")
-        .append(this.location.toString())
-        .append(" }");
+  public Void visitPlayer(Player player) {
+    if (!this.shouldIncludeInView.test(player.getCurrentLocation())) return null;
+    String delimiter = this.actorString.length() == 0 ? "" : ",\n";
+    String adversaryJson = "{\n  \"type\": \"player\",\n  \"name\": \"" + player.getName() +
+        "\",\n  \"position\": " + player.getCurrentLocation().toString()+ "\n}";
+    this.actorString.append(delimiter).append(adversaryJson);
+    return null;
   }
 
   @Override
-  public void visitAdversary(Adversary adversary) {
-    if (!this.location.equals(adversary.getCurrentLocation())) return;
-    String delimiter = this.actors.length() == 0 ? "" : ",\n";
+  public Void visitAdversary(Adversary adversary) {
+    if (!this.shouldIncludeInView.test(adversary.getCurrentLocation())) return null;
+    String delimiter = this.actorString.length() == 0 ? "" : ",\n";
     String type = adversary.acceptVisitor(new TypeString());
     String adversaryJson = "{\n  \"type\": \"" + type + "\",\n  \"name\": \"" + adversary.getName() +
-        "\",\n  \"position\": " + this.location.toString()+ "\n}";
-    this.actors.append(delimiter).append(adversaryJson);
+        "\",\n  \"position\": " + adversary.getCurrentLocation().toString()+ "\n}";
+    this.actorString.append(delimiter).append(adversaryJson);
+    return null;
   }
 
-  /**
-   * Calculates the object type for a key.
-   */
-  private static class KeyObjectType implements ItemVisitor<String> {
-    private final Location location;
-
-    public KeyObjectType(Location location) {
-      this.location = location;
-    }
-
-    @Override
-    public String visitKey(Key key) {
-      return "{ \"type\": \"key\", \"position\": " + this.location.toString() + " }";
-    }
+  @Override
+  public Void visitExit(Exit exit) {
+    if (!this.shouldIncludeInView.test(exit.getCurrentLocation())) return null;
+    String delimiter = this.objectString.length() == 0 ? "" : ",\n";
+    String exitString = "{ \"type\": \"exit\", \"position\": " + exit.getCurrentLocation().toString() + " }";
+    this.objectString.append(delimiter).append(exitString);
+    this.isLockedString.append(exit.isLocked());
+    return null;
   }
 
   /**

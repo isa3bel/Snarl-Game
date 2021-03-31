@@ -3,7 +3,7 @@ package model.builders;
 import model.item.Item;
 import model.item.Key;
 import model.level.Location;
-import model.level.Exit;
+import model.item.Exit;
 import model.level.Level;
 import model.level.Space;
 
@@ -94,50 +94,23 @@ public class LevelBuilder {
   }
 
   /**
-   * Sets the locked status of the exit in this level.
-   * @param locked is the exit locked?
-   * @return this game state with the updated exit status
-   * @throws IllegalStateException the state of the exit
-   */
-  public LevelBuilder setExitLocked(boolean locked) throws IllegalStateException {
-    if (this.exit == null) {
-      throw new IllegalStateException("an exit must be added to the level before its locked status can be set");
-    }
-    this.exitLocked = locked;
-    return this;
-  }
-
-  /**
-   * Creates the exit in spaces in and returns the result
-   * @param spaces the spaces to reset the exit in
-   * @return the exit created
-   * @throws IllegalStateException if the exit is null
-   * @throws IllegalArgumentException if this exit would be replacing an invalid tile
-   */
-  private Exit makeExit(ArrayList<ArrayList<Space>> spaces) throws IllegalStateException, IllegalArgumentException {
-    if (this.exit == null) {
-      throw new IllegalStateException("level must have exactly one level exit");
-    }
-    // TODO: exit doesn't have to be a wall space?
-    Space spaceToReplace = spaces.get(this.exit.getRow()).get(this.exit.getColumn());
-    Exit exit = new Exit(spaceToReplace, this.exitLocked);
-    spaces.get(this.exit.getRow()).set(this.exit.getColumn(), exit);
-    return exit;
-  }
-
-  /**
    * Creates the level that this RoomBuilder would create.
    * @return the Level built by this LevelBuilder
    * @throws IllegalStateException when the level has more than one exit
    */
   public Level build() throws IllegalStateException {
+    if (this.exit == null) {
+      throw new IllegalStateException("level must have exactly one level exit");
+    }
+
     ArrayList<ArrayList<Space>> spaces = new ArrayList<>();
     this.rooms.forEach(room -> room.build(spaces));
     this.hallways.forEach(hallway -> hallway.build(spaces));
-    Exit exit = this.makeExit(spaces);
+    Exit exit = new Exit(this.exit, this.exitLocked);
 
     ArrayList<Item> items = new ArrayList<>();
     Level level = new Level(spaces, items);
+    items.add(exit);
     if (this.key != null) items.add(new Key(this.key, exit));
     return level;
   }

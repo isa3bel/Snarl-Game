@@ -25,10 +25,9 @@ public class JSONView implements View{
     StringBuilder objectsStringBuilder = new StringBuilder();
     StringBuilder adversaryStringBuilder = new StringBuilder();
     StringBuilder isLocked = new StringBuilder();
-    level.filter((a, b) -> true).keySet().forEach(location -> {
-      JSONInteraction jsonObject = new JSONInteraction(location, objectsStringBuilder, adversaryStringBuilder, isLocked);
-      level.interact(location, jsonObject);
-    });
+    JSONInteraction jsonObject = new JSONInteraction(objectsStringBuilder, adversaryStringBuilder, isLocked,
+        location -> true);
+    level.interact(jsonObject);
 
     this.exitLockedString = isLocked.toString();
     this.levelString = "{\n  \"type\": \"level\",\n"

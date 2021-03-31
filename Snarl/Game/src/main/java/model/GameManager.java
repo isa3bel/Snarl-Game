@@ -62,7 +62,7 @@ public class GameManager {
     moveValidator.executeMove();
 
     Interaction interaction = currentCharacter.makeInteraction();
-    this.levels[this.currentLevel].interact(currentCharacter.getCurrentLocation(), interaction);
+    this.levels[this.currentLevel].interact(interaction);
     this.players.forEach(player -> player.updateController(this));
 
     this.publisher.update(this);

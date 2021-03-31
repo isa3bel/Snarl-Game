@@ -2,14 +2,14 @@ package model.ruleChecker;
 
 import model.characters.Adversary;
 import model.characters.Player;
-import model.level.Exit;
-import model.item.Item;
+import model.item.Exit;
+import model.item.Key;
 
-public interface InteractableVisitor {
+public interface InteractableVisitor<T> {
 
-  void visitItem(Item item);
-  void visitPlayer(Player player);
-  void visitAdversary(Adversary adversary);
-  void visitExit(Exit exit);
+  T visitKey(Key key);
+  T visitPlayer(Player player);
+  T visitAdversary(Adversary adversary);
+  T visitExit(Exit exit);
 
 }

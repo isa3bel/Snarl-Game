@@ -4,7 +4,7 @@ import java.util.function.Function;
 
 import model.level.*;
 import model.level.Door;
-import model.level.Exit;
+import model.item.Exit;
 import model.level.HallwayTile;
 
 /**
@@ -15,11 +15,6 @@ class ASCIISpace implements SpaceVisitor<String>, Function<Space, String> {
   @Override
   public String visitDoor(Door door) {
     return "D";
-  }
-
-  @Override
-  public String visitExit(Exit exit) {
-    return "E";
   }
 
   @Override

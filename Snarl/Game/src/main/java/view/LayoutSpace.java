@@ -1,5 +1,6 @@
 package view;
 
+import model.item.Exit;
 import model.level.*;
 
 /**
@@ -10,12 +11,6 @@ public class LayoutSpace implements SpaceVisitor<String> {
   @Override
   public String visitDoor(Door door) {
     return "2";
-  }
-
-  @Override
-  public String visitExit(Exit exit) {
-    // TODO: make exit have a composite space of the space it replaces
-    return "1";
   }
 
   @Override

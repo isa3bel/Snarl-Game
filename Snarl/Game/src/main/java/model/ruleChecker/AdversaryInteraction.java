@@ -13,8 +13,9 @@ public class AdversaryInteraction extends Interaction<Adversary> {
   }
 
   @Override
-  public void visitPlayer(Player player) {
+  public Void visitPlayer(Player player) {
     this.character.attack(player);
+    return null;
   }
 
 }

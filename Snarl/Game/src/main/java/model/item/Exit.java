@@ -1,25 +1,30 @@
-package model.level;
+package model.item;
 
+import model.level.Location;
 import model.ruleChecker.InteractableVisitor;
 
 /**
  * An exit from the level.
  */
-public class Exit extends Space {
+public class Exit extends Item {
 
   private boolean isLocked;
 
   /**
    * Creates an exit in the given room with a locked status.
-   * @param replacingSpace the space that this exit is replacing
    * @param isLocked the locked status of this exit
    */
-  public Exit(Space replacingSpace, boolean isLocked) {
-    this.group = replacingSpace.group;
+  public Exit(Location location, boolean isLocked) {
+    super(location);
     this.isLocked = isLocked;
   }
 
-  public <T> T acceptVisitor(SpaceVisitor<T> visitor) {
+  @Override
+  public void acceptVisitor(InteractableVisitor visitor) {
+    visitor.visitExit(this);
+  }
+
+  public <T> T acceptVisitor(ItemVisitor<T> visitor) {
     return visitor.visitExit(this);
   }
 
@@ -31,8 +36,4 @@ public class Exit extends Space {
     return this.isLocked;
   }
 
-  @Override
-  public void acceptVisitor(InteractableVisitor visitor) {
-    visitor.visitExit(this);
-  }
 }

@@ -56,8 +56,8 @@ public class PlayerView implements View {
       int actualRow = location.getRow() - this.playerLocation.getRow() + VIEW_DISTANCE;
       int actualColumn = location.getColumn() - this.playerLocation.getColumn() + VIEW_DISTANCE;
       this.render.get(actualRow).set(actualColumn, space.acceptVisitor(layout));
-      level.interact(location, new JSONInteraction(location, this.objects, this.actors));
     });
+    level.interact(new JSONInteraction(this.objects, this.actors, this::shouldBeInView));
   }
 
   @Override

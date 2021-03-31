@@ -1,8 +1,8 @@
 package model.item;
 
 import model.characters.Player;
-import model.level.Exit;
 import model.level.Location;
+import model.ruleChecker.InteractableVisitor;
 
 /**
  * A key for a level exit in the Snarl game.
@@ -14,6 +14,11 @@ public class Key extends Item {
   public Key(Location loc, Exit exit) {
     super(loc);
     this.exit = exit;
+  }
+
+  @Override
+  public void acceptVisitor(InteractableVisitor visitor) {
+    visitor.visitKey(this);
   }
 
   public <T> T acceptVisitor(ItemVisitor<T> visitor) {

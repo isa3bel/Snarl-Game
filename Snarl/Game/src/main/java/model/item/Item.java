@@ -18,10 +18,7 @@ public abstract class Item implements Interactable {
 
   public abstract <T> T acceptVisitor(ItemVisitor<T> visitor);
 
-  @Override
-  public void acceptVisitor(InteractableVisitor visitor) {
-    visitor.visitItem(this);
-  }
+  public abstract void acceptVisitor(InteractableVisitor visitor);
 
   public Location getCurrentLocation() {
     return this.currentLocation == null ? null : new Location(this.currentLocation);

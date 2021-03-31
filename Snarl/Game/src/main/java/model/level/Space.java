@@ -6,7 +6,7 @@ import model.ruleChecker.InteractableVisitor;
 /**
  * A space in the 2d plane of the dungeon crawler.
  */
-public abstract class Space implements Interactable {
+public abstract class Space {
 
   // the room or hallway identifier of this space
   protected String group;
@@ -17,8 +17,4 @@ public abstract class Space implements Interactable {
     return this.group != null && this.group.equals(that.group);
   }
 
-  @Override
-  public void acceptVisitor(InteractableVisitor visitor) {
-    // do nothing most of the time
-  }
 }

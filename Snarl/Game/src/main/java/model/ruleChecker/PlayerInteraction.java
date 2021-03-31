@@ -2,8 +2,8 @@ package model.ruleChecker;
 
 import model.characters.Adversary;
 import model.characters.Player;
-import model.level.Exit;
-import model.item.Item;
+import model.item.Exit;
+import model.item.Key;
 import model.level.Exited;
 
 /**
@@ -16,24 +16,27 @@ public class PlayerInteraction extends Interaction<Player> {
   }
 
   @Override
-  public void visitItem(Item item) {
-    if (item.getCurrentLocation() == null ||
-        !item.getCurrentLocation().equals(this.character.getCurrentLocation())) {
-      return;
+  public Void visitKey(Key key) {
+    if (key.getCurrentLocation() == null
+        || !key.getCurrentLocation().equals(this.character.getCurrentLocation())) {
+      return null;
     }
-    item.pickedUp(this.character);
+    key.pickedUp(this.character);
+    return null;
   }
 
   @Override
-  public void visitAdversary(Adversary adversary) {
+  public Void visitAdversary(Adversary adversary) {
     // self-elimination
     adversary.attack(this.character);
+    return null;
   }
 
   @Override
-  public void visitExit(Exit exit) {
-    if (exit.isLocked()) return;
+  public Void visitExit(Exit exit) {
+    if (exit.isLocked()) return null;
     this.character.moveTo(new Exited(this.character.getCurrentLocation()));
+    return null;
   }
 
 }
