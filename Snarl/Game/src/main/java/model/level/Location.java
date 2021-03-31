@@ -42,6 +42,22 @@ public class Location {
   }
 
   /**
+   * Is this location in a level?
+   * @return true
+   */
+  public boolean isInLevel() {
+    return true;
+  }
+
+  /**
+   * Was this player ejected from the level?
+   * @return false
+   */
+  public boolean isDead() {
+    return false;
+  }
+
+  /**
    * Gets the row of this location
    * @return int representing row
    */

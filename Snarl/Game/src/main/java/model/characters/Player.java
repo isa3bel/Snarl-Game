@@ -2,6 +2,7 @@ package model.characters;
 
 import model.GameManager;
 import model.item.Item;
+import model.level.Ejected;
 import model.ruleChecker.*;
 import model.level.Location;
 import view.PlayerView;
@@ -38,7 +39,7 @@ public class Player extends Character {
    * Updates the player after defending against an attack from an adversary.
    */
   public void defend() {
-    this.currentLocation = null;
+    this.currentLocation = new Ejected(this.currentLocation);
   }
 
   public void addToInventory(Item item) {

@@ -4,6 +4,7 @@ import model.characters.Adversary;
 import model.characters.Player;
 import model.level.Exit;
 import model.item.Item;
+import model.level.Exited;
 
 /**
  * Controls a player interaction with an Interactable - what happens and when.
@@ -32,7 +33,7 @@ public class PlayerInteraction extends Interaction<Player> {
   @Override
   public void visitExit(Exit exit) {
     if (exit.isLocked()) return;
-    this.character.moveTo(null);
+    this.character.moveTo(new Exited(this.character.getCurrentLocation()));
   }
 
 }

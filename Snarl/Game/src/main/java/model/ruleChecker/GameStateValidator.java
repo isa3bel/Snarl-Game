@@ -1,13 +1,9 @@
 package model.ruleChecker;
 
-import model.characters.Adversary;
-import model.characters.Character;
-import model.characters.CharacterVisitor;
 import model.characters.Player;
 import model.level.Level;
 
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * Validates the current game state.
@@ -31,9 +27,8 @@ public class GameStateValidator {
    * @return whether the game should advance to the next level
    */
   public boolean shouldAdvanceLevel(List<Player> players) {
-    // TODO: does the level advance if _any_ player has reached the exit?
-    //  what about if 1 player exited but others were ejected?
-    return false;
+    return players.stream().allMatch(player -> !player.getCurrentLocation().isInLevel())
+        && players.stream().anyMatch(player -> player.getCurrentLocation().isDead());
   }
 
   /**
@@ -45,7 +40,7 @@ public class GameStateValidator {
    */
   public GameStatus evaluateGameState(int currentLevel, Level[] levels, List<Player> players) {
     if (currentLevel == levels.length) return GameStatus.WON;
-    if (players.stream().allMatch(player -> player.getCurrentLocation() == null)) return GameStatus.LOST;
+    if (players.stream().allMatch(player -> player.getCurrentLocation().isDead())) return GameStatus.LOST;
     return GameStatus.PLAYING;
   }
 
