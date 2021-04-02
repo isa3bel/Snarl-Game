@@ -4,7 +4,7 @@
 
 - Input each player's name. This input cannot be blank
 
-- Each player's view will be displayed. The terminal will prompt each user for their choice of movement
+- Each player's view will be displayed. The terminal will prompt each user for their choice of movement. The view will display the first letter of each username to signify where that user is, an A for an adversary, an E for an exit, an X where a non-traversable tile, a K for the Key (one key per level), and a D for a door (cannot advance a level through a door).
 
 Important: A person's location is shown in the form [row, column], where higher rows are further down, and higher columns are further right. The row field essentially controls up and down motions, while the column field controls the left and right motion.
 
