@@ -5,6 +5,7 @@ import model.characters.Character;
 import model.characters.Player;
 import model.item.Exit;
 import model.item.Key;
+import model.level.Wall;
 
 public abstract class Interaction<T extends Character> implements InteractableVisitor<Void> {
 
@@ -34,6 +35,12 @@ public abstract class Interaction<T extends Character> implements InteractableVi
 
   @Override
   public Void visitExit(Exit exit) {
+    // nothing should happen
+    return null;
+  }
+
+  @Override
+  public Void visitWall(Wall wall) {
     // nothing should happen
     return null;
   }

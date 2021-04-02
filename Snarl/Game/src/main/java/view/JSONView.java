@@ -27,7 +27,7 @@ public class JSONView implements View{
     StringBuilder isLocked = new StringBuilder();
     JSONInteraction jsonObject = new JSONInteraction(objectsStringBuilder, adversaryStringBuilder, isLocked,
         location -> true);
-    level.interact(jsonObject);
+    level.interact(jsonObject, null);
 
     this.exitLockedString = isLocked.toString();
     this.levelString = "{\n  \"type\": \"level\",\n"

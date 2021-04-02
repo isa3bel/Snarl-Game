@@ -1,10 +1,10 @@
 package view;
 
-import model.characters.Adversary;
-import model.characters.Player;
+import model.characters.*;
 import model.item.Exit;
 import model.item.Key;
 import model.level.Location;
+import model.level.Wall;
 import model.ruleChecker.Interactable;
 import model.ruleChecker.InteractableVisitor;
 
@@ -46,6 +46,11 @@ public class ASCIIInteraction implements InteractableVisitor<Void> {
   }
 
   @Override
+  public Void visitWall(Wall wall) {
+    return null;
+  }
+
+  @Override
   public Void visitPlayer(Player player) {
     if(!player.isInGame()) return null;
     String playerString = player.getName().substring(0, 1);
@@ -55,7 +60,23 @@ public class ASCIIInteraction implements InteractableVisitor<Void> {
 
   @Override
   public Void visitAdversary(Adversary adversary) {
-    this.drawAt(adversary, "A");
+    this.drawAt(adversary, adversary.acceptVisitor(new ASCIIAdversary()));
     return null;
+  }
+
+  /**
+   * ASCII representation of each kind of adversary.
+   */
+  private static class ASCIIAdversary implements AdversaryVisitor<String> {
+
+    @Override
+    public String visitGhost(Ghost ghost) {
+      return "G";
+    }
+
+    @Override
+    public String visitZombie(Zombie zombie) {
+      return "Z";
+    }
   }
 }

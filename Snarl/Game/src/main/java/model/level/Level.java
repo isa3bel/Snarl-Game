@@ -2,7 +2,6 @@ package model.level;
 
 import model.GameManager;
 import model.characters.Adversary;
-import model.characters.Character;
 import model.ruleChecker.*;
 import model.item.Item;
 
@@ -84,9 +83,10 @@ public class Level {
    * Execute the given interaction on this level.
    * @param interaction the interaction that is occurring
    */
-  public void interact(InteractableVisitor<Void> interaction) {
+  public void interact(InteractableVisitor<Void> interaction, Location location) {
     this.adversaries.forEach(adversary -> adversary.acceptVisitor(interaction));
     this.items.forEach(item -> item.acceptVisitor(interaction));
+    if (location != null) this.get(location).acceptVisitor(interaction);
   }
 
   /**
@@ -135,7 +135,7 @@ public class Level {
    */
   public ArrayList<Location> calculateValidActorPositions() {
     IsValidStartingLocation isValidStartingLocation = new IsValidStartingLocation();
-    this.interact(isValidStartingLocation);
+    this.interact(isValidStartingLocation, null);
     ArrayList<Location> validLocations = new ArrayList<>(this.filter(isValidStartingLocation).keySet());
     Collections.shuffle(validLocations);
     return validLocations;

@@ -18,15 +18,11 @@ public class PlayerView implements View {
   private final String name;
   private final Location playerLocation;
   private final ArrayList<ArrayList<String>> render;
-  private final StringBuilder objects;
-  private final StringBuilder actors;
 
   public PlayerView(Player player) {
     this.name = player.getName();
     this.playerLocation = player.getCurrentLocation();
     this.render = new ArrayList<>();
-    this.objects = new StringBuilder();
-    this.actors = new StringBuilder();
     
     for (int row = 0; row < VIEW_DISTANCE * 2 + 1; row++) {
       this.render.add(new ArrayList<>(VIEW_DISTANCE * 2 + 1));
@@ -57,7 +53,9 @@ public class PlayerView implements View {
       int actualColumn = location.getColumn() - this.playerLocation.getColumn() + VIEW_DISTANCE;
       this.render.get(actualRow).set(actualColumn, space.acceptVisitor(layout));
     });
-    level.interact(new PlayerASCIIInteraction(this.render, this.playerLocation, (l) -> this.shouldBeInView(l), VIEW_DISTANCE));
+    // DECISION: if an adversary and a key are at the same location, the key shows over the adversary
+    level.interact(new PlayerASCIIInteraction(this.render, this.playerLocation, this::shouldBeInView,
+        VIEW_DISTANCE), this.playerLocation);
   }
 
   @Override
@@ -65,10 +63,9 @@ public class PlayerView implements View {
     players.forEach(player -> {
       Location location = player.getCurrentLocation();
 
-      // second part of this is to make sure that the player themselves is not included
-      // in the view (a different player can't be at the same location)
       if (this.shouldBeInView(location)) {
-        player.acceptVisitor(new PlayerASCIIInteraction(this.render, this.playerLocation, (l) -> this.shouldBeInView(l), VIEW_DISTANCE));
+        player.acceptVisitor(new PlayerASCIIInteraction(this.render, this.playerLocation,
+            this::shouldBeInView, VIEW_DISTANCE));
       }
     });
   }

@@ -4,6 +4,7 @@ import model.characters.Adversary;
 import model.characters.Player;
 import model.item.Exit;
 import model.item.Key;
+import model.level.Wall;
 
 public interface InteractableVisitor<T> {
 
@@ -11,5 +12,6 @@ public interface InteractableVisitor<T> {
   T visitPlayer(Player player);
   T visitAdversary(Adversary adversary);
   T visitExit(Exit exit);
+  T visitWall(Wall wall);
 
 }

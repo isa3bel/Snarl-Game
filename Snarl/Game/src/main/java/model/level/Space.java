@@ -1,6 +1,5 @@
 package model.level;
 
-import model.ruleChecker.Interactable;
 import model.ruleChecker.InteractableVisitor;
 
 /**
@@ -15,6 +14,10 @@ public abstract class Space {
 
   public boolean sameGroup(Space that) {
     return this.group != null && this.group.equals(that.group);
+  }
+
+  public <T> void acceptVisitor(InteractableVisitor<T> visitor) {
+    // should do nothing except for wall
   }
 
 }

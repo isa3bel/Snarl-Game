@@ -4,6 +4,7 @@ import model.characters.*;
 import model.item.Key;
 import model.item.Exit;
 import model.level.Location;
+import model.level.Wall;
 import model.ruleChecker.InteractableVisitor;
 
 import java.util.function.Predicate;
@@ -68,6 +69,11 @@ public class JSONInteraction implements InteractableVisitor<Void> {
     String exitString = "{ \"type\": \"exit\", \"position\": " + exit.getCurrentLocation().toString() + " }";
     this.objectString.append(delimiter).append(exitString);
     this.isLockedString.append(exit.isLocked());
+    return null;
+  }
+
+  @Override
+  public Void visitWall(Wall wall) {
     return null;
   }
 

@@ -296,7 +296,7 @@ public class ASCIIViewTest {
         + "XXXXXXXXXXXXXXXX XXXXX      XXXXXXXXXXXXXXXXXXX\n"
         + "XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n"
         + "XXXXXXXXXXXXXXXX XXXXXXXXXXX    XXXXXXXXXXXXXXX\n"
-        + "XXXXXXXXXXXXXXXX           D  AAXXXXXXXXXXXXXXX\n"
+        + "XXXXXXXXXXXXXXXX           D  ZZXXXXXXXXXXXXXXX\n"
         + "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n";
     assertEquals(expected, new String(out.toByteArray()));
   }
@@ -312,7 +312,7 @@ public class ASCIIViewTest {
         + "X X                  X\n"
         + "X                    X\n"
         + "X                    X\n"
-        + "EA   XX              X\n"
+        + "EZ   XX              X\n"
         + "X1   XX              X\n"
         + "X2   XX              X\n"
         + "XXXXXXXXXXXXXXXXXXXXXX\n";
@@ -327,7 +327,7 @@ public class ASCIIViewTest {
     String expected = "XEXXXX\n" +
         "X1X  D\n" +
         "X2X  X\n" +
-        "XDXAAX\n" +
+        "XDXZZX\n" +
         "XXXXXX\n";
     assertEquals(expected, new String(out.toByteArray()));
   }

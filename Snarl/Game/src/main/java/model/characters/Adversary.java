@@ -1,9 +1,12 @@
 package model.characters;
 
 import model.GameManager;
+import model.controller.Controller;
+import model.level.Level;
 import model.ruleChecker.*;
 import model.level.Location;
-import view.AdversaryView;
+
+import java.util.ArrayList;
 
 /**
  * An automated adversary in a Snarl game.
@@ -15,8 +18,8 @@ public abstract class Adversary extends Character {
    * @param location the location to initialize this adversary
    * @param name arbitrary unused string for the name of the adversary
    */
-  Adversary(Location location, String name) {
-    super(location, name, null);
+  Adversary(Location location, String name, Controller controller) {
+    super(location, name, controller);
   }
 
   /**
@@ -41,26 +44,13 @@ public abstract class Adversary extends Character {
   }
 
   @Override
-  public AdversaryMoveValidator getNextMove() {
-    // TODO: take this out when adversary is fully implemented
-    if (this.controller == null) return new AdversaryMoveValidator(this, this.currentLocation);
-
-    Location nextLocation = this.controller.getNextMove();
-    return new AdversaryMoveValidator(this, nextLocation);
-  }
+  public abstract MoveValidator getNextMove();
 
   @Override
-  public Interaction<Adversary> makeInteraction() {
+  public Interaction<Adversary> makeInteraction(Level level, ArrayList<Player> players) {
     return new AdversaryInteraction(this);
   }
 
   @Override
-  public void updateController(GameManager gameManager) {
-    // TODO: take this out when adversary is fully implemented
-    if (this.controller == null) return;
-
-    AdversaryView view = new AdversaryView();
-    this.controller.update(view);
-  }
-
+  public abstract void updateController(GameManager gameManager);
 }

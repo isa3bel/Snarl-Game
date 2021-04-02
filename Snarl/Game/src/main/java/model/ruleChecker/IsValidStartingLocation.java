@@ -60,12 +60,18 @@ public class IsValidStartingLocation implements InteractableVisitor<Void>, BiPre
     return null;
   }
 
+  @Override
+  public Void visitWall(Wall wall) {
+    return null;
+  }
+
   /**
    * Is the type of the given space a valid starting position?
    */
   private static class IsValidStartingSpace implements SpaceVisitor<Boolean> {
     @Override
     public Boolean visitDoor(Door door) {
+      // DECISION: doors are not valid starting locations
       return false;
     }
 

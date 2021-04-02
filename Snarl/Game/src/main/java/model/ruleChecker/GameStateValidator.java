@@ -26,7 +26,7 @@ public class GameStateValidator {
    * @param players the characters that are in the game
    * @return whether the game should advance to the next level
    */
-  public boolean shouldAdvanceLevel(List<Player> players) {
+  private boolean shouldAdvanceLevel(List<Player> players) {
     return players.stream().noneMatch(player -> player.getCurrentLocation().isInLevel())
         && players.stream().anyMatch(player -> !player.getCurrentLocation().isDead());
   }
@@ -40,7 +40,9 @@ public class GameStateValidator {
    */
   public GameStatus evaluateGameState(int currentLevel, Level[] levels, List<Player> players) {
     if (players.stream().allMatch(player -> player.getCurrentLocation().isDead())) return GameStatus.LOST;
-    if (currentLevel == levels.length) return GameStatus.WON;
+    if (this.shouldAdvanceLevel(players)) {
+      return currentLevel == levels.length - 1 ? GameStatus.WON : GameStatus.ADVANCE;
+    }
     return GameStatus.PLAYING;
   }
 }

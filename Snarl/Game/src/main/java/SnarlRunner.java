@@ -107,7 +107,7 @@ public class SnarlRunner {
     GameStatus status;
     do {
       status = gameManager.doRound();
-    } while (status.equals(GameStatus.PLAYING));
+    } while (status.equals(GameStatus.PLAYING) || status.equals(GameStatus.ADVANCE));
   }
 
   private static GameManager setupGame(Scanner scanner, Level[] levels) {

@@ -4,9 +4,12 @@ import model.GameManager;
 import model.controller.Controller;
 import model.item.Item;
 import model.level.Ejected;
+import model.level.Level;
 import model.ruleChecker.*;
 import model.level.Location;
 import view.PlayerView;
+
+import java.util.ArrayList;
 
 /**
  * A player controller by a user in the Snarl dungeon crawler.
@@ -70,7 +73,7 @@ public class Player extends Character implements Comparable<Player>{
   }
 
   @Override
-  public Interaction<Player> makeInteraction() {
+  public Interaction<Player> makeInteraction(Level level, ArrayList<Player> players) {
     return new PlayerInteraction(this);
   }
 

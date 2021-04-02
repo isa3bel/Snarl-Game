@@ -21,7 +21,7 @@ public class ASCIIView implements View {
   public void renderLevel(Level level) {
     this.render = level.map(new ASCIISpace());
     ASCIIInteraction asciiInteraction = new ASCIIInteraction(this.render);
-    level.interact(asciiInteraction);
+    level.interact(asciiInteraction, null);
   }
 
   /**

@@ -55,13 +55,34 @@ public class GameManager {
   }
 
   /**
+   * Does this character's turn in the game.
+   * @param currentCharacter the character whose turn it is
+   */
+  public GameStatus doTurn(Character currentCharacter) {
+    if (!currentCharacter.isInGame()) return GameStatus.PLAYING;
+
+    MoveValidator moveValidator;
+    do {
+      moveValidator = currentCharacter.getNextMove();
+    } while (!this.isMoveValid(moveValidator));
+    moveValidator.executeMove();
+
+    Interaction interaction = currentCharacter.makeInteraction(this.levels[this.currentLevel], players);
+    this.levels[this.currentLevel].interact(interaction, currentCharacter.getCurrentLocation());
+    this.players.forEach(player -> {
+      player.acceptVisitor(interaction);
+      if (player.isInGame()) player.updateController(this);
+    });
+    this.publisher.update(this);
+
+    return checkGameStatus();
+  }
+
+  /**
    * If the players have exited, advance the level and reset their locations.
    */
-  private void maybeAdvanceLevel() {
-    if (!this.gameStateValidator.shouldAdvanceLevel(this.players)) return;
-
-    if (++this.currentLevel == this.levels.length) return;
-
+  private void advanceLevel() {
+    this.currentLevel++;
     ArrayList<Location> validPlayerStartingLocations = this.levels[this.currentLevel].calculateValidActorPositions();
 
     if (validPlayerStartingLocations.size() < this.players.size()) {
@@ -87,6 +108,8 @@ public class GameManager {
         Collections.sort(this.players);
         this.players.forEach(player -> System.out.println(player.leaderBoard()));
         break;
+      case ADVANCE:
+        this.advanceLevel();
     }
 
     return status;
@@ -97,30 +120,6 @@ public class GameManager {
    */
   public void updatePlayers() {
     this.players.forEach(character -> character.updateController(this));
-  }
-
-  /**
-   * Does this character's turn in the game.
-   * @param currentCharacter the character whose turn it is
-   */
-  public GameStatus doTurn(Character currentCharacter) {
-    if (!currentCharacter.isInGame()) return GameStatus.PLAYING;
-
-    MoveValidator moveValidator;
-    do {
-      moveValidator = currentCharacter.getNextMove();
-    } while (!this.isMoveValid(moveValidator));
-    moveValidator.executeMove();
-
-    Interaction interaction = currentCharacter.makeInteraction();
-    this.levels[this.currentLevel].interact(interaction);
-    this.players.forEach(player -> {
-      if (player.isInGame()) player.updateController(this);
-    });
-    this.publisher.update(this);
-
-    this.maybeAdvanceLevel();
-    return checkGameStatus();
   }
 
   /**

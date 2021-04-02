@@ -89,15 +89,11 @@ public class PlayerViewTest {
     GameManager gameManager = new GameManager(0, new Level[]{level}, players);
     View view = new PlayerView(player);
     gameManager.buildView(view);
-    assertEquals("[ \"ferd\", {\n  \"type\": \"player-update\",\n" +
-            "  \"layout\": [[ 1, 1, 1, 1, 1 ],\n" +
-            "[ 1, 0, 1, 1, 1 ],\n" +
-            "[ 1, 0, 1, 1, 1 ],\n" +
-            "[ 1, 1, 1, 1, 1 ],\n" +
-            "[ 1, 1, 1, 1, 1 ]],\n" +
-            "  \"position\": [3, 3],\n" +
-            "  \"objects\": [],\n" +
-            "  \"actors\": []\n} ]\n",
+    assertEquals("     \n" +
+            " X   \n" +
+            " Xf  \n" +
+            "     \n" +
+            "     \n",
         view.toString());
   }
 
@@ -110,15 +106,11 @@ public class PlayerViewTest {
     GameManager gameManager = new GameManager(0, new Level[]{level}, players);
     View view = new PlayerView(player);
     gameManager.buildView(view);
-    assertEquals("[ \"ferd\", {\n  \"type\": \"player-update\",\n" +
-            "  \"layout\": [[ 1, 1, 1, 1, 1 ],\n" +
-            "[ 0, 1, 1, 1, 1 ],\n" +
-            "[ 0, 1, 1, 1, 1 ],\n" +
-            "[ 1, 1, 1, 1, 1 ],\n" +
-            "[ 1, 1, 1, 1, 1 ]],\n" +
-            "  \"position\": [3, 4],\n" +
-            "  \"objects\": [{ \"type\": \"key\", \"position\": [3, 6] }],\n" +
-            "  \"actors\": []\n} ]\n",
+    assertEquals("     \n" +
+            "X    \n" +
+            "X f K\n" +
+            "     \n" +
+            "     \n",
         view.toString());
   }
 
@@ -131,18 +123,11 @@ public class PlayerViewTest {
     GameManager gameManager = new GameManager(0, new Level[]{level}, players);
     View view = new PlayerView(player);
     gameManager.buildView(view);
-    // EXPECTED FAILURE BECAUSE RIGHT NOW EXITS ARE DRAWN AS WALKABLE
-    // TILES - this needs to be replaced by either 1) making exits objects
-    // or 2) making exits have the composite space that they are replacing
-    assertEquals("[ \"ferd\", {\n  \"type\": \"player-update\",\n" +
-            "  \"layout\": [[ 0, 0, 1, 0, 1 ],\n" +
-            "[ 0, 0, 1, 1, 1 ],\n" +
-            "[ 0, 0, 1, 1, 1 ],\n" +
-            "[ 0, 0, 1, 1, 1 ],\n" +
-            "[ 0, 0, 1, 1, 1 ]],\n" +
-            "  \"position\": [5, 1],\n" +
-            "  \"objects\": [{ \"type\": \"exit\", \"position\": [6, 0] }],\n" +
-            "  \"actors\": []\n} ]\n",
+    assertEquals("XX X \n" +
+            "XX   \n" +
+            "XXf  \n" +
+            "XE   \n" +
+            "XX   \n",
         view.toString());
   }
 
@@ -157,21 +142,11 @@ public class PlayerViewTest {
     GameManager gameManager = new GameManager(0, new Level[]{level}, players);
     View view = new PlayerView(player1);
     gameManager.buildView(view);
-    // EXPECTED FAILURE BECAUSE RIGHT NOW EXITS ARE DRAWN AS WALKABLE
-    // TILES - this needs to be replaced by either 1) making exits objects
-    // or 2) making exits have the composite space that they are replacing
-    assertEquals("[ \"ferd\", {\n  \"type\": \"player-update\",\n" +
-            "  \"layout\": [[ 0, 0, 1, 0, 1 ],\n" +
-            "[ 0, 0, 1, 1, 1 ],\n" +
-            "[ 0, 0, 1, 1, 1 ],\n" +
-            "[ 0, 0, 1, 1, 1 ],\n" +
-            "[ 0, 0, 1, 1, 1 ]],\n" +
-            "  \"position\": [5, 1],\n" +
-            "  \"objects\": [{ \"type\": \"exit\", \"position\": [6, 0] },\n" +
-            "{ \"type\": \"key\", \"position\": [6, 1] }],\n" +
-            "  \"actors\": [{\n  \"type\": \"zombie\",\n  \"name\": \"zombie\",\n  \"position\": [7, 2]\n},\n" +
-            "{\n  \"type\": \"ghost\",\n  \"name\": \"ghost\",\n  \"position\": [7, 1]\n},\n" +
-            "{\n  \"type\": \"player\",\n  \"name\": \"dio\",\n  \"position\": [7, 3]\n}]\n} ]\n",
+    assertEquals("XX X \n" +
+            "XX   \n" +
+            "XXf  \n" +
+            "XEK  \n" +
+            "XXGZd\n",
         view.toString());
   }
 
@@ -186,15 +161,11 @@ public class PlayerViewTest {
     GameManager gameManager = new GameManager(0, new Level[]{level}, players);
     View view = new PlayerView(player2);
     gameManager.buildView(view);
-    assertEquals("[ \"dio\", {\n  \"type\": \"player-update\",\n" +
-            "  \"layout\": [[ 0, 0, 0, 0, 0 ],\n" +
-            "[ 0, 0, 0, 0, 1 ],\n" +
-            "[ 2, 1, 1, 2, 1 ],\n" +
-            "[ 0, 0, 0, 0, 1 ],\n" +
-            "[ 0, 0, 0, 0, 0 ]],\n" +
-            "  \"position\": [4, 23],\n" +
-            "  \"objects\": [],\n" +
-            "  \"actors\": []\n} ]\n",
+    assertEquals("XXXXX\n" +
+            "XXXX \n" +
+            "D dD \n" +
+            "XXXX \n" +
+            "XXXXX\n",
         view.toString());
   }
 

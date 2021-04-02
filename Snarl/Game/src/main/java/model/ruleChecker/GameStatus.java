@@ -1,5 +1,5 @@
 package model.ruleChecker;
 
 public enum GameStatus {
-  WON, LOST, PLAYING
+  WON, LOST, PLAYING, ADVANCE
 }

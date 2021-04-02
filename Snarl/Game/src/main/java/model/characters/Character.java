@@ -3,10 +3,13 @@ package model.characters;
 import model.*;
 import model.controller.Controller;
 import model.controller.StdinController;
+import model.level.Level;
 import model.ruleChecker.Interactable;
 import model.ruleChecker.Interaction;
 import model.level.Location;
 import model.ruleChecker.MoveValidator;
+
+import java.util.ArrayList;
 
 /**
  * A mobile character in the Snarl game.
@@ -78,8 +81,13 @@ public abstract class Character implements Interactable {
 
   /**
    * Makes a character interaction for this character.
+   * @param level the level of the interaction
+   * @param players potential players in the interaction
    * @return the interaction object of this character
    */
-  public abstract Interaction makeInteraction();
+  // TODO: hate that the interaction needs this, but it is to generate a random locatiton
+  //  for the ghost - is there a better way to do this?
+  //  other ideas: add a "generateRandomValidLocation" to controller
+  public abstract Interaction makeInteraction(Level level, ArrayList<Player> players);
 
 }
