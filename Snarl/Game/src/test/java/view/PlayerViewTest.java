@@ -28,12 +28,11 @@ public class PlayerViewTest {
         .addWall(new Location(6,6))
         .addWall(new Location(7, 6))
         .addWall(new Location(8, 6));
-    Level singleRoomLevel = new LevelBuilder()
+    return new LevelBuilder()
         .addRoom(singleRoomBuilder)
         .addKey(new Location(3, 6))
         .addExit(new Location(6, 0))
         .build();
-    return singleRoomLevel;
   }
 
   private Level setupMultiRoomLevelWithAdversaries() {
@@ -67,7 +66,7 @@ public class PlayerViewTest {
         .addExit(new Location(6, 0))
         .build();
 
-    Zombie zombie = new Zombie(new Location(7, 2), "zombie");
+    Zombie zombie = new Zombie(null, "zombie");
     Ghost ghost = new Ghost(new Location(7, 1), "ghost");
     Ghost ghostOutOfRange = new Ghost(new Location(8, 1), "ghost out of range");
     ArrayList<Adversary> adversaries = new ArrayList<>();
@@ -75,12 +74,15 @@ public class PlayerViewTest {
     adversaries.add(ghost);
     adversaries.add(ghostOutOfRange);
     complicatedLevel.addAdversaries(adversaries);
+    zombie.moveTo(new Location(7, 2));
+    ghost.moveTo(new Location(7, 1));
+    ghostOutOfRange.moveTo(new Location(8, 1));
     return complicatedLevel;
   }
 
   @Test
   public void testSimplePlayer() {
-    Player player = new Player(new Location(3, 3), 1, "ferd");
+    Player player = new Player(new Location(3, 3), "ferd");
     ArrayList<Player> players = new ArrayList<>();
     players.add(player);
     Level level = this.setupSimpleLevel();
@@ -101,7 +103,7 @@ public class PlayerViewTest {
 
   @Test
   public void testSimplePlayerWithKey() {
-    Player player = new Player(new Location(3, 4), 1, "ferd");
+    Player player = new Player(new Location(3, 4), "ferd");
     ArrayList<Player> players = new ArrayList<>();
     players.add(player);
     Level level = this.setupSimpleLevel();
@@ -122,7 +124,7 @@ public class PlayerViewTest {
 
   @Test
   public void testSimplePlayerWithExit() {
-    Player player = new Player(new Location(5, 1), 1, "ferd");
+    Player player = new Player(new Location(5, 1), "ferd");
     ArrayList<Player> players = new ArrayList<>();
     players.add(player);
     Level level = this.setupSimpleLevel();
@@ -146,8 +148,8 @@ public class PlayerViewTest {
 
   @Test
   public void testNearOtherPlayersAndAdversaries() {
-    Player player1 = new Player(new Location(5, 1), 1, "ferd");
-    Player player2 = new Player(new Location(7, 3), 1, "dio");
+    Player player1 = new Player(new Location(5, 1), "ferd");
+    Player player2 = new Player(new Location(7, 3), "dio");
     ArrayList<Player> players = new ArrayList<>();
     players.add(player1);
     players.add(player2);
@@ -175,8 +177,8 @@ public class PlayerViewTest {
 
   @Test
   public void testInHallway() {
-    Player player1 = new Player(new Location(5, 1), 1, "ferd");
-    Player player2 = new Player(new Location(4, 23), 1, "dio");
+    Player player1 = new Player(new Location(5, 1), "ferd");
+    Player player2 = new Player(new Location(4, 23), "dio");
     ArrayList<Player> players = new ArrayList<>();
     players.add(player1);
     players.add(player2);

@@ -1,6 +1,6 @@
 package testHarness.query;
 
-import model.characters.Controller;
+import model.controller.Controller;
 import model.level.Location;
 import view.View;
 

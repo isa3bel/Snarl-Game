@@ -2,8 +2,12 @@ package model;
 
 import java.util.ArrayList;
 
+import java.util.Collections;
+import model.observer.Observer;
+import model.observer.Publisher;
 import model.characters.Character;
 import model.characters.Player;
+import model.level.Location;
 import model.ruleChecker.GameStateValidator;
 import model.ruleChecker.GameStatus;
 import model.ruleChecker.MoveValidator;
@@ -31,17 +35,65 @@ public class GameManager {
   }
 
   /**
+   * Adds an observer to the publisher field
+   * @param observer the observer to be added
+   */
+  public void addObserver(Observer observer) {
+    this.publisher.addObserver(observer);
+  }
+
+  /**
    * Advances the game through a round, which is a turn for every character in the game.
    * @return the status of the game at the end of the round
    */
   public GameStatus doRound() {
-    this.players.forEach(this::doTurn);
-    // this.levels[this.currentLevel].moveAdversaries();
-    return this.gameStateValidator.evaluateGameState(this.currentLevel, this.levels, this.players);
+    for(Player player : this.players) {
+      GameStatus status = this.doTurn(player);
+      if (status != GameStatus.PLAYING) return status;
+    }
+    return this.levels[this.currentLevel].doAdversaryTurns(this);
   }
 
   /**
-   * Updates all the players in this game - TODO: explicit method should only be for testing task of milestone 7.
+   * If the players have exited, advance the level and reset their locations.
+   */
+  private void maybeAdvanceLevel() {
+    if (!this.gameStateValidator.shouldAdvanceLevel(this.players)) return;
+
+    if (++this.currentLevel == this.levels.length) return;
+
+    ArrayList<Location> validPlayerStartingLocations = this.levels[this.currentLevel].calculateValidActorPositions();
+
+    if (validPlayerStartingLocations.size() < this.players.size()) {
+      throw new IllegalStateException("level does not have enough valid starting positions for players");
+    }
+
+    this.players.forEach(player -> player.moveTo(validPlayerStartingLocations.remove(0)));
+    this.updatePlayers();
+  }
+
+  /**
+   * Determines the current game status and potentially updates the game or players accordingly.
+   * @return the status of the game
+   */
+  private GameStatus checkGameStatus() {
+    GameStatus status = this.gameStateValidator.evaluateGameState(this.currentLevel, this.levels, this.players);
+    switch (status) {
+      case LOST:
+        System.out.println("You lost at level " + this.currentLevel);
+        break;
+      case WON:
+        System.out.println("You won!");
+        Collections.sort(this.players);
+        this.players.forEach(player -> System.out.println(player.leaderBoard()));
+        break;
+    }
+
+    return status;
+  }
+
+  /**
+   * Updates all the players in this game with the game state.
    */
   public void updatePlayers() {
     this.players.forEach(character -> character.updateController(this));
@@ -51,21 +103,24 @@ public class GameManager {
    * Does this character's turn in the game.
    * @param currentCharacter the character whose turn it is
    */
-  public void doTurn(Character currentCharacter) {
-    if (!currentCharacter.isInGame()) return;
+  public GameStatus doTurn(Character currentCharacter) {
+    if (!currentCharacter.isInGame()) return GameStatus.PLAYING;
 
     MoveValidator moveValidator;
     do {
       moveValidator = currentCharacter.getNextMove();
-      // TODO: number of retries?
     } while (!this.isMoveValid(moveValidator));
     moveValidator.executeMove();
 
     Interaction interaction = currentCharacter.makeInteraction();
     this.levels[this.currentLevel].interact(interaction);
-    this.players.forEach(player -> player.updateController(this));
-
+    this.players.forEach(player -> {
+      if (player.isInGame()) player.updateController(this);
+    });
     this.publisher.update(this);
+
+    this.maybeAdvanceLevel();
+    return checkGameStatus();
   }
 
   /**
@@ -85,5 +140,4 @@ public class GameManager {
   public boolean isMoveValid(MoveValidator moveValidator) {
     return moveValidator.isValid(this.levels[this.currentLevel], this.players);
   }
-
 }

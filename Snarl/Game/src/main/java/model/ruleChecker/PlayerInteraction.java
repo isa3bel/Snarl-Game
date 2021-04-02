@@ -22,6 +22,7 @@ public class PlayerInteraction extends Interaction<Player> {
       return null;
     }
     key.pickedUp(this.character);
+    System.out.println("Player " + this.character.getName() + " found the key");
     return null;
   }
 
@@ -34,8 +35,10 @@ public class PlayerInteraction extends Interaction<Player> {
 
   @Override
   public Void visitExit(Exit exit) {
-    if (exit.isLocked()) return null;
+    if (exit.isLocked() || !exit.getCurrentLocation().equals(this.character.getCurrentLocation())) return null;
     this.character.moveTo(new Exited(this.character.getCurrentLocation()));
+    System.out.println("Player " + this.character.getName() + " exited");
+    this.character.incrementTimesExited();
     return null;
   }
 

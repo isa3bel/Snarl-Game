@@ -70,7 +70,7 @@ public class GameQueryDeserializer implements JsonDeserializer<GameAnswer> {
     for (int idx = 0; idx < locations.length; idx++) {
       if (idx < nameArray.length) {
         mockControllers[idx].setTestOutput(testOutput);
-        players.add(new MockPlayer(locations[idx], idx, nameArray[idx], mockControllers[idx], testOutput));
+        players.add(new MockPlayer(locations[idx], nameArray[idx], mockControllers[idx], testOutput));
       } else {
         adversaries.add(new Ghost(locations[idx], "ghost" + adversaries.size()));
       }

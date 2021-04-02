@@ -1,14 +1,16 @@
-package model;
+package model.observer;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import model.GameManager;
 import view.ObserverView;
 import view.View;
 
 public class Publisher {
   List<Observer> observers;
 
-  Publisher() {
+  public Publisher() {
     observers = new ArrayList<>();
   }
 

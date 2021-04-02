@@ -60,13 +60,12 @@ public class GameManagerBuilderTest {
   public void testTooManyPlayers() {
     try {
       this.gameManagerBuilder
-          .addPlayer(new Location(4,4))
-          .addPlayer(new Location(3,4))
-          .addPlayer(new Location(2,4))
-          .addPlayer(new Location(1,4))
-          .addPlayer(new Location(5,4))
-          .build();
-    } catch (IllegalArgumentException e) {
+          .addPlayer("a")
+          .addPlayer("b")
+          .addPlayer("c")
+          .addPlayer("d")
+          .addPlayer("e");
+    } catch (IllegalStateException e) {
       assertEquals("cannot have more than 4 players in a Snarl game", e.getMessage());
     }
   }

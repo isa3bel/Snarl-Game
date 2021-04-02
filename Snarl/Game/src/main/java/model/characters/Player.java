@@ -1,6 +1,7 @@
 package model.characters;
 
 import model.GameManager;
+import model.controller.Controller;
 import model.item.Item;
 import model.level.Ejected;
 import model.ruleChecker.*;
@@ -10,41 +11,53 @@ import view.PlayerView;
 /**
  * A player controller by a user in the Snarl dungeon crawler.
  */
-public class Player extends Character {
+public class Player extends Character implements Comparable<Player>{
 
-  // TODO: do we want this to be public?
-  public int id;
+  private int timesExited;
+  private int keysFound;
 
   /**
    * Creates a player at the given location with the given id.
    * @param location the location to initialize the player at
-   * @param id the player's id
+   * @param name the player's name
    */
-  public Player(Location location, int id, String name) {
+  public Player(Location location, String name) {
     super(location, name);
-    this.id = id;
+    this.timesExited = 0;
+    this.keysFound = 0;
+  }
+
+  public String leaderBoard() {
+    return this.getName() + " found " + this.keysFound + " keys. Exited " + this.timesExited + " times.";
   }
 
   /**
    * Creates a player at the given location with the given id and controller.
    * @param location the location to initialize the player at
-   * @param id the player's id
+   * @param name the player's name
    */
-  public Player(Location location, int id, String name, Controller controller) {
+  public Player(Location location, String name, Controller controller) {
     super(location, name, controller);
-    this.id = id;
+    this.timesExited = 0;
+    this.keysFound = 0;
   }
 
   /**
    * Updates the player after defending against an attack from an adversary.
    */
   public void defend() {
+    System.out.println("Player " + this.getName() + " was expelled");
     this.currentLocation = new Ejected(this.currentLocation);
   }
 
   public void addToInventory(Item item) {
     // right now a player doesn't need an inventory, so this isn't necessary
     // TODO: THIS IS ONLY USED IN THE MILESTONE 7 TESTING TASK
+    this.keysFound++;
+  }
+
+  public void incrementTimesExited() {
+    this.timesExited++;
   }
 
   @Override
@@ -73,9 +86,12 @@ public class Player extends Character {
     return visitor.visitPlayer(this);
   }
 
-  @Override
   public void acceptVisitor(InteractableVisitor visitor) {
     visitor.visitPlayer(this);
   }
 
+  @Override
+  public int compareTo(Player otherPlayer) {
+    return otherPlayer.timesExited - this.timesExited;
+  }
 }

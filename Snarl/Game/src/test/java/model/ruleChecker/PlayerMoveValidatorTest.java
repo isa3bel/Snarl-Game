@@ -62,7 +62,7 @@ public class PlayerMoveValidatorTest {
 
   @Test
   public void testSameLocationIsValid() {
-    Player player = new Player(new Location(5, 1), 0, "player");
+    Player player = new Player(new Location(5, 1), "player");
     ArrayList<Player> players = new ArrayList<>();
     players.add(player);
     PlayerMoveValidator validator = new PlayerMoveValidator(player, new Location(5, 1));
@@ -72,7 +72,7 @@ public class PlayerMoveValidatorTest {
 
   @Test
   public void testTwoUnitsAwayIsValid() {
-    Player player = new Player(new Location(5, 1), 0, "player");
+    Player player = new Player(new Location(5, 1), "player");
     ArrayList<Player> players = new ArrayList<>();
     players.add(player);
     PlayerMoveValidator validator = new PlayerMoveValidator(player, new Location(3, 1));
@@ -82,7 +82,7 @@ public class PlayerMoveValidatorTest {
 
   @Test
   public void testKeyIsValid() {
-    Player player = new Player(new Location(5, 1), 0, "player");
+    Player player = new Player(new Location(5, 1), "player");
     ArrayList<Player> players = new ArrayList<>();
     players.add(player);
     PlayerMoveValidator validator = new PlayerMoveValidator(player, new Location(6, 1));
@@ -92,7 +92,7 @@ public class PlayerMoveValidatorTest {
 
   @Test
   public void testExitIsValid() {
-    Player player = new Player(new Location(5, 1), 0, "player");
+    Player player = new Player(new Location(5, 1), "player");
     ArrayList<Player> players = new ArrayList<>();
     players.add(player);
     PlayerMoveValidator validator = new PlayerMoveValidator(player, new Location(6, 0));
@@ -102,7 +102,7 @@ public class PlayerMoveValidatorTest {
 
   @Test
   public void testAdversaryIsValid() {
-    Player player = new Player(new Location(5, 1), 0, "player");
+    Player player = new Player(new Location(5, 1), "player");
     ArrayList<Player> players = new ArrayList<>();
     players.add(player);
     PlayerMoveValidator validator = new PlayerMoveValidator(player, new Location(7, 1));
@@ -112,7 +112,7 @@ public class PlayerMoveValidatorTest {
 
   @Test
   public void testWallIsNotValid() {
-    Player player = new Player(new Location(5, 1), 0, "player");
+    Player player = new Player(new Location(5, 1), "player");
     ArrayList<Player> players = new ArrayList<>();
     players.add(player);
     PlayerMoveValidator validator = new PlayerMoveValidator(player, new Location(5, 0));
@@ -122,8 +122,8 @@ public class PlayerMoveValidatorTest {
 
   @Test
   public void testPlayerIsNotValid() {
-    Player player = new Player(new Location(5, 1), 0, "player");
-    Player otherPlayer = new Player(new Location(4, 1), 0, "other");
+    Player player = new Player(new Location(5, 1), "player");
+    Player otherPlayer = new Player(new Location(4, 1), "other");
     ArrayList<Player> players = new ArrayList<>();
     players.add(player);
     players.add(otherPlayer);
@@ -134,7 +134,7 @@ public class PlayerMoveValidatorTest {
 
   @Test
   public void testEuclidianDistance3IsNotValid() {
-    Player player = new Player(new Location(5, 1), 0, "player");
+    Player player = new Player(new Location(5, 1), "player");
     ArrayList<Player> players = new ArrayList<>();
     players.add(player);
     PlayerMoveValidator validator = new PlayerMoveValidator(player, new Location(4, 3));

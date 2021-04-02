@@ -1,10 +1,12 @@
 package view;
 
 import model.*;
-import model.builders.GameManagerBuilder;
 import model.builders.HallwayBuilder;
 import model.builders.LevelBuilder;
 import model.builders.RoomBuilder;
+import model.characters.Adversary;
+import model.characters.Player;
+import model.characters.Zombie;
 import model.level.Level;
 import model.level.Location;
 import org.junit.Before;
@@ -12,6 +14,7 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
@@ -49,7 +52,7 @@ public class ASCIIViewTest {
         .addExit(new Location(6, 0))
         .build();
     Level[] levels = { singleRoomLevel };
-    this.singleRoom = new GameManagerBuilder(0, levels).build();
+    this.singleRoom = new GameManager(0, levels, new ArrayList<>());
   }
 
   private void setupRoomWithPlayersAndAdversaries() {
@@ -68,11 +71,17 @@ public class ASCIIViewTest {
         .addExit(new Location(6, 0))
         .build();
     Level[] levels = { singleRoomLevelWithCharacters };
-    this.singleRoomWithCharacters = new GameManagerBuilder(0, levels)
-        .addAdversary(0, new Location(6, 1))
-        .addPlayer(new Location(7, 1))
-        .addPlayer(new Location(8, 1))
-        .build();
+
+    ArrayList<Adversary> adversaries = new ArrayList<>();
+    Zombie zombie1 = new Zombie(null, "zombie1");
+    adversaries.add(zombie1);
+    singleRoomLevelWithCharacters.addAdversaries(adversaries);
+    zombie1.moveTo(new Location(6, 1));
+
+    ArrayList<Player> players = new ArrayList<>();
+    players.add(new Player(new Location(7, 1), "1"));
+    players.add(new Player(new Location(8, 1), "2"));
+    this.singleRoomWithCharacters = new GameManager(0, levels, players);
   }
 
   private void setupTwoRooms() {
@@ -88,8 +97,7 @@ public class ASCIIViewTest {
         .addExit(new Location(6, 0))
         .build();
     Level[] levels = { twoRoomsLevel };
-    this.twoRooms = new GameManagerBuilder(0, levels)
-        .build();
+    this.twoRooms = new GameManager(0, levels, new ArrayList<>());
   }
 
   private void setupComplicatedLevel() {
@@ -123,8 +131,7 @@ public class ASCIIViewTest {
         .addExit(new Location(6, 0))
         .build();
     Level[] levels = { complicatedLevel };
-    this.complicated = new GameManagerBuilder(0, levels)
-        .build();
+    this.complicated = new GameManager(0, levels, new ArrayList<>());
   }
 
   private void setupAnotherComplicatedLevelWithPlayer() {
@@ -168,13 +175,21 @@ public class ASCIIViewTest {
         .addHallway(hallway5to4)
         .build();
     Level[] levels = { anotherComplicatedLevel };
-    this.anotherComplicated = new GameManagerBuilder(0, levels)
-        .addPlayer()
-        .addPlayer()
-        .addPlayer()
-        .addAdversary(0)
-        .addAdversary(0)
-        .build();
+
+    ArrayList<Adversary> adversaries = new ArrayList<>();
+    Zombie zombie1 = new Zombie(null, "zombie1");
+    Zombie zombie2 = new Zombie(null, "zombie2");
+    adversaries.add(zombie1);
+    adversaries.add(zombie2);
+    anotherComplicatedLevel.addAdversaries(adversaries);
+    zombie1.moveTo(new Location(13, 30));
+    zombie2.moveTo(new Location(13, 31));
+
+    ArrayList<Player> players = new ArrayList<>();
+    players.add(new Player(new Location(1, 1), "1"));
+    players.add(new Player(new Location(1, 2), "2"));
+    players.add(new Player(new Location(1, 3), "3"));
+    this.anotherComplicated = new GameManager(0, levels, players);
   }
 
   private void setupTwoRoomsTopRight() {
@@ -188,12 +203,20 @@ public class ASCIIViewTest {
         .addExit(new Location(0, 1))
         .build();
     Level[] levels = { level };
-    this.twoRoomsTopRight = new GameManagerBuilder(0, levels)
-        .addPlayer()
-        .addPlayer()
-        .addAdversary(0)
-        .addAdversary(0)
-        .build();
+
+    ArrayList<Adversary> adversaries = new ArrayList<>();
+    Zombie zombie1 = new Zombie(null, "zombie1");
+    Zombie zombie2 = new Zombie(null, "zombie2");
+    adversaries.add(zombie1);
+    adversaries.add(zombie2);
+    level.addAdversaries(adversaries);
+    zombie1.moveTo(new Location(3, 4));
+    zombie2.moveTo(new Location(3, 3));
+
+    ArrayList<Player> players = new ArrayList<>();
+    players.add(new Player(new Location(1, 1), "1"));
+    players.add(new Player(new Location(2, 1), "2"));
+    this.twoRoomsTopRight = new GameManager(0, levels, players);
   }
 
   @Test

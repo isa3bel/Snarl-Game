@@ -6,7 +6,7 @@ import model.characters.*;
 import model.level.Level;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.stream.Collectors;
 
 /**
  * Builds a Snarl game.
@@ -15,10 +15,7 @@ public class GameManagerBuilder {
 
   private final int currentLevel;
   private final Level[] levels;
-  private final ArrayList<Location> playerLocations;
-  private final HashMap<Integer, ArrayList<Location>> adversaryLocations;
-  private final ArrayList<Player> players;
-  private final HashMap<Integer, ArrayList<Adversary>> adversaries;
+  private final ArrayList<String> playerNames;
 
   /**
    * Initializes a game manager with the bare minimum required - the level.
@@ -36,72 +33,22 @@ public class GameManagerBuilder {
       throw new IllegalArgumentException("current level must point to a level in levels," +
           " expected a number in range [0, " + levels.length + "), got: " + currentLevel);
     }
+
     this.currentLevel = currentLevel;
     this.levels = levels;
-    this.playerLocations = levels[currentLevel].calculatePlayerLocations();
-    this.players = new ArrayList<>();
-
-    this.adversaryLocations = new HashMap<>();
-    for (int levelIdx = 0; levelIdx < levels.length; levelIdx++) {
-      this.adversaryLocations.put(levelIdx, levels[levelIdx].calculateAdversaryLocations());
-    }
-    this.adversaries = new HashMap<>();
+    this.playerNames = new ArrayList<>();
   }
 
   /**
    * Adds a player with a generated game location (the most top left available space in the level).
    * @return this builder with the player
+   * @throws IllegalStateException if there are already 4 players registered
    */
-  public GameManagerBuilder addPlayer() throws IllegalStateException {
-    if (this.playerLocations.size() < 1) {
-      throw new IllegalStateException("top left room does not have enough available tiles" +
-          " for automatic player placement");
+  public GameManagerBuilder addPlayer(String name) throws IllegalStateException {
+    if (this.playerNames.size() >= 4) {
+      throw new IllegalStateException("cannot have more than 4 players in a Snarl game");
     }
-    return this.addPlayer(this.playerLocations.remove(0));
-  }
-
-  /**
-   * Adds a player with the given location.
-   * @param location the location where the player should be added
-   * @return this builder with the player
-   * @throws IllegalArgumentException if there are already 4 players in the game
-   */
-  public GameManagerBuilder addPlayer(Location location) throws IllegalArgumentException {
-    if (this.players.size() >= 4) {
-      throw new IllegalArgumentException("cannot have more than 4 players in a Snarl game");
-    }
-    this.players.add(new Player(location, this.players.size() + 1, null));
-    return this;
-  }
-
-  /**
-   * Adds a player with a generated game location (the most top left available space in the level).
-   * @return this builder with the player
-   */
-  public GameManagerBuilder addAdversary(int level) throws IllegalStateException {
-    if (level >= this.levels.length) {
-      throw new IllegalArgumentException("level does not exist in this game");
-    }
-    if (this.adversaryLocations.get(level).size() < 1) {
-      throw new IllegalStateException("top left room does not have enough available tiles" +
-          " for automatic adversary placement");
-    }
-    return this.addAdversary(level, this.adversaryLocations.get(level).remove(0));
-  }
-
-  /**
-   * Adds a player with the given location.
-   * @param location the location where the player should be added
-   * @return this builder with the player
-   * @throws IllegalArgumentException if there are already 4 players in the game
-   */
-  public GameManagerBuilder addAdversary(int level, Location location) throws IllegalArgumentException {
-    if (level >= this.levels.length) {
-      throw new IllegalArgumentException("level does not exist in this game");
-    }
-    ArrayList<Adversary> levelAdversaries = this.adversaries.computeIfAbsent(level, key -> new ArrayList<>());
-
-    levelAdversaries.add(new Ghost(location, "ghost" + levelAdversaries.size()));
+    this.playerNames.add(name);
     return this;
   }
 
@@ -111,8 +58,43 @@ public class GameManagerBuilder {
    */
   public GameManager build() throws IllegalStateException {
     for (int levelIdx = 0; levelIdx < this.levels.length; levelIdx++) {
-      this.levels[levelIdx].addAdversaries(this.adversaries.get(levelIdx));
+      ArrayList<Adversary> adversaries = this.makeAdversaryList(levelIdx);
+      this.levels[levelIdx].addAdversaries(adversaries);
     }
-    return new GameManager(this.currentLevel, this.levels, this.players);
+    ArrayList<Location> validPlayerStartingLocations = this.levels[this.currentLevel].calculateValidActorPositions();
+
+    if (validPlayerStartingLocations.size() < playerNames.size()) {
+      throw new IllegalStateException("level does not have enough valid starting positions for players");
+    }
+
+    ArrayList<Player> players = this.playerNames.stream()
+        .map(name -> new Player(validPlayerStartingLocations.remove(0), name))
+        .collect(Collectors.toCollection(ArrayList::new));
+    return new GameManager(this.currentLevel, this.levels, players);
+  }
+
+  /**
+   * Make a list of adversaries to add at the level given.
+   * @param levelIdx the number of the level given
+   * @return a list of adversaries that will be places in that level
+   */
+  private ArrayList<Adversary> makeAdversaryList(int levelIdx) {
+    ArrayList<Adversary> adversaries = new ArrayList<>();
+
+    // We add one to levelIdx because the arrays are 0-indexed,
+    // but calculating the number of adversaries requires the level to start at 1-indexed.
+
+    int numZombies = ((levelIdx + 1) / 2) + 1;
+    for (int zombieIdx = 0; zombieIdx < numZombies; zombieIdx++) {
+      // location is set in level.addAdversary
+      adversaries.add(new Zombie(null, "zombie" + zombieIdx));
+    }
+
+    int numGhost = ((levelIdx + 1) - 1) / 2;
+    for (int ghostIdx = 0; ghostIdx < numGhost; ghostIdx++) {
+      // location is set in level.addAdversary
+      adversaries.add(new Ghost(null, "ghost" + ghostIdx));
+    }
+    return adversaries;
   }
 }

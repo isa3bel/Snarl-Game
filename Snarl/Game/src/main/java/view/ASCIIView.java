@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import model.characters.Player;
 import model.level.Level;
-import model.level.Location;
 
 import java.util.ArrayList;
 
@@ -21,18 +20,8 @@ public class ASCIIView implements View {
    */
   public void renderLevel(Level level) {
     this.render = level.map(new ASCIISpace());
-
-    level.mapItems(item -> {
-      Location location = item.getCurrentLocation();
-      if (location == null) return;
-      this.render.get(location.getRow()).set(location.getColumn(), item.acceptVisitor(new ASCIIItem()));
-    });
-
-    level.mapAdversaries(adversary -> {
-      Location location = adversary.getCurrentLocation();
-      if (location == null) return;
-      this.render.get(location.getRow()).set(location.getColumn(), adversary.acceptVisitor(new ASCIICharacter()));
-    });
+    ASCIIInteraction asciiInteraction = new ASCIIInteraction(this.render);
+    level.interact(asciiInteraction);
   }
 
   /**
@@ -40,11 +29,8 @@ public class ASCIIView implements View {
    * @param players the players to place
    */
   public void placePlayers(List<Player> players) {
-    players.forEach(player -> {
-      Location location = player.getCurrentLocation();
-      if (location == null) return;
-      this.render.get(location.getRow()).set(location.getColumn(), player.acceptVisitor(new ASCIICharacter()));
-    });
+    ASCIIInteraction asciiInteraction = new ASCIIInteraction(this.render);
+    players.forEach(player -> player.acceptVisitor(asciiInteraction));
   }
 
   /**

@@ -1,6 +1,8 @@
 package model.characters;
 
 import model.*;
+import model.controller.Controller;
+import model.controller.StdinController;
 import model.ruleChecker.Interactable;
 import model.ruleChecker.Interaction;
 import model.level.Location;
@@ -16,7 +18,7 @@ public abstract class Character implements Interactable {
   protected Controller controller;
 
   Character(Location location, String name) {
-    this(location, name, new StdinController());
+    this(location, name, new StdinController(name));
   }
 
   Character(Location location, String name, Controller controller) {
@@ -38,7 +40,7 @@ public abstract class Character implements Interactable {
    * @return the location of the character
    */
   public Location getCurrentLocation() {
-    return this.currentLocation == null ? null : new Location(this.currentLocation);
+    return this.currentLocation;
   }
 
   /**
@@ -46,7 +48,7 @@ public abstract class Character implements Interactable {
    * @return whether the character is still playing
    */
   public boolean isInGame() {
-    return this.currentLocation != null;
+    return this.currentLocation.isInLevel();
   }
 
   /**

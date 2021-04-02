@@ -1,6 +1,7 @@
 package model.item;
 
 import model.characters.Player;
+import model.level.Ejected;
 import model.level.Location;
 import model.ruleChecker.InteractableVisitor;
 
@@ -28,7 +29,7 @@ public class Key extends Item {
   @Override
   public void pickedUp(Player player) {
     super.pickedUp(player);
-    this.currentLocation = null;
+    this.currentLocation = new Ejected(this.currentLocation);
     this.exit.unlock();
   }
 

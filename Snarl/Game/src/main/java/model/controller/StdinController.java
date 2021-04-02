@@ -1,6 +1,7 @@
-package model.characters;
+package model.controller;
 
 import java.util.Scanner;
+
 import model.level.Location;
 import view.View;
 
@@ -9,10 +10,15 @@ import view.View;
  */
 public class StdinController implements Controller {
 
+  private String name;
+  public StdinController(String name) {
+    this.name = name;
+  }
+
   @Override
   public Location getNextMove() {
     while (true) {
-      System.out.print("Where would you like to go next? (int int)");
+      System.out.print(this.name + ", where would you like to go next? (int int)");
       Scanner scanner = new Scanner(System.in);
       int row = scanner.nextInt();
       int col = scanner.nextInt();

@@ -1,4 +1,4 @@
-package model.characters;
+package model.controller;
 
 import model.level.Location;
 import view.View;

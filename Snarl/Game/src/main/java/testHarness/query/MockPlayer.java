@@ -16,9 +16,9 @@ public class MockPlayer extends Player {
 
   private final ArrayList<String> testOutput;
 
-  public MockPlayer(Location location, int id, String name, MockPlayerController controller,
+  public MockPlayer(Location location, String name, MockPlayerController controller,
                     ArrayList<String> testOutput) {
-    super(location, id, name, controller);
+    super(location, name, controller);
     this.testOutput = testOutput;
   }
 

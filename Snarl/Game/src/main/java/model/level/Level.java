@@ -1,20 +1,16 @@
 package model.level;
 
+import model.GameManager;
 import model.characters.Adversary;
 import model.characters.Character;
-import model.ruleChecker.InteractableVisitor;
-import model.ruleChecker.Interaction;
+import model.ruleChecker.*;
 import model.item.Item;
-import model.ruleChecker.IsValidStartingLocation;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.function.BiPredicate;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * A level in the Snarl dungeon crawler.
@@ -36,11 +32,38 @@ public class Level {
   }
 
   /**
-   * Adds adversaries to this level.
+   * Adds adversaries to this level and assigns them random locations inside the level.
    * @param adversaries the adversaries to add to this level
    */
-  public void addAdversaries(Collection<Adversary> adversaries) {
-    if (adversaries != null) this.adversaries.addAll(adversaries);
+  public void addAdversaries(ArrayList<Adversary> adversaries) {
+    if (adversaries == null) return;
+
+    ArrayList<Location> validStartingLocations = calculateValidActorPositions();
+
+    if (validStartingLocations.size() < adversaries.size()) {
+      throw new IllegalStateException("level does not have enough valid positions for adversaries");
+    }
+
+    this.adversaries.addAll(adversaries);
+    for (int idx = 0; idx < this.adversaries.size(); idx++) {
+      this.adversaries.get(idx).moveTo(validStartingLocations.get(idx));
+    }
+  }
+
+  /**
+   * Make all the adversaries do their turn in the given GameManager.
+   * @param gameManager the game manager which is running this
+   * @return the status of the game after all the adversaries have their turn
+   */
+  public GameStatus doAdversaryTurns(GameManager gameManager) {
+    GameStatus status = GameStatus.PLAYING;
+    for (Adversary adversary : this.adversaries) {
+      adversary.updateController(gameManager);
+      status = gameManager.doTurn(adversary);
+
+      if (status != GameStatus.PLAYING) return status;
+    }
+    return status;
   }
 
   /**
@@ -107,59 +130,14 @@ public class Level {
   }
 
   /**
-   * Maps the given consumer across all of these items.
-   * @param itemConsumer the function object to apply to all the items
+   * Make a list of all the possible positions where an actor could be in the level.
+   * @return a list of all the locations in this level where an actor could start
    */
-  public void mapItems(Consumer<Item> itemConsumer) {
-    // TODO: if we do keep this as is, then we should combine this better with this.interact
-    this.items.forEach(itemConsumer);
-  }
-
-  /**
-   * Maps the given consumer across all of these adversaries.
-   * @param adversaryConsumer the function object to apply to all the adversaries
-   */
-  public void mapAdversaries(Consumer<Adversary> adversaryConsumer) {
-    // TODO: if we do keep this as is, then we should combine this better with this.interact
-    this.adversaries.forEach(adversaryConsumer);
-  }
-
-  /**
-   * Find all available locations in the room with the "most" something tile in the level.
-   * @param comparator how to sort the tiles to find the "most"
-   * @return all the available tiles in that room
-   */
-  private ArrayList<Location> calculateCharacterLocations(Comparator<Location> comparator) {
-    ArrayList<Location> roomTiles = this
-        .filter((space, location) -> space.acceptVisitor(new IsValidStartingLocation()))
-        .keySet()
-        .stream()
-        .sorted(comparator)
-        .collect(Collectors.toCollection(ArrayList::new));
-    Space firstTile = this.get(roomTiles.get(0));
-    return roomTiles
-        .stream()
-        .filter(location -> firstTile.sameGroup(this.get(location)))
-        .collect(Collectors.toCollection(ArrayList::new));
-  }
-
-  /**
-   * Calculate the locations for automatically placing players in top left room.
-   * @return the list of available locations in the top left room
-   */
-  public ArrayList<Location> calculatePlayerLocations() {
-    return this.calculateCharacterLocations((location1, location2) -> location1.getRow() == location2.getRow()
-        ? location1.getColumn() - location2.getColumn()
-        : location1.getRow() - location2.getRow());
-  }
-
-  /**
-   * Calculate the locations for automatically placing adversaries in bottom right room.
-   * @return the list of available locations in the bottom right room
-   */
-  public ArrayList<Location> calculateAdversaryLocations() {
-    return this.calculateCharacterLocations((location1, location2) -> location1.getRow() == location2.getRow()
-        ? location2.getColumn() - location1.getColumn()
-        : location2.getRow() - location1.getRow());
+  public ArrayList<Location> calculateValidActorPositions() {
+    IsValidStartingLocation isValidStartingLocation = new IsValidStartingLocation();
+    this.interact(isValidStartingLocation);
+    ArrayList<Location> validLocations = new ArrayList<>(this.filter(isValidStartingLocation).keySet());
+    Collections.shuffle(validLocations);
+    return validLocations;
   }
 }

@@ -1,4 +1,4 @@
-package model;
+package model.observer;
 
 import view.View;
 

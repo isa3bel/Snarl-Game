@@ -4,6 +4,9 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import model.observer.Observer;
+import model.observer.LocalObserver;
+import model.observer.Publisher;
 import model.builders.GameManagerBuilder;
 import model.builders.LevelBuilder;
 import model.builders.RoomBuilder;
@@ -11,7 +14,6 @@ import model.level.Level;
 import model.level.Location;
 import org.junit.Before;
 import org.junit.*;
-import view.ASCIIView;
 import view.ObserverView;
 
 public class PublisherTest {

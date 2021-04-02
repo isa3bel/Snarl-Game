@@ -31,7 +31,7 @@ public class PlayerView implements View {
     for (int row = 0; row < VIEW_DISTANCE * 2 + 1; row++) {
       this.render.add(new ArrayList<>(VIEW_DISTANCE * 2 + 1));
       for (int idx = 0; idx < VIEW_DISTANCE * 2 + 1; idx++) {
-        this.render.get(row).add("0");
+        this.render.get(row).add("X");
       }
     }
   }
@@ -42,14 +42,14 @@ public class PlayerView implements View {
    * @return is this location in the VIEW_DISTANCE range
    */
   private boolean shouldBeInView(Location location) {
-    return location != null &&
+    return location.isInLevel() &&
         Math.abs(this.playerLocation.getRow() - location.getRow()) <= VIEW_DISTANCE &&
         Math.abs(this.playerLocation.getColumn() - location.getColumn()) <= VIEW_DISTANCE;
   }
 
   @Override
   public void renderLevel(Level level) {
-    SpaceVisitor<String> layout = new LayoutSpace();
+    SpaceVisitor<String> layout = new ASCIISpace();
     level.filter((space, location) ->
       this.shouldBeInView(location)
     ).forEach((location, space) -> {
@@ -57,7 +57,7 @@ public class PlayerView implements View {
       int actualColumn = location.getColumn() - this.playerLocation.getColumn() + VIEW_DISTANCE;
       this.render.get(actualRow).set(actualColumn, space.acceptVisitor(layout));
     });
-    level.interact(new JSONInteraction(this.objects, this.actors, this::shouldBeInView));
+    level.interact(new PlayerASCIIInteraction(this.render, this.playerLocation, (l) -> this.shouldBeInView(l), VIEW_DISTANCE));
   }
 
   @Override
@@ -67,30 +67,23 @@ public class PlayerView implements View {
 
       // second part of this is to make sure that the player themselves is not included
       // in the view (a different player can't be at the same location)
-      if (this.shouldBeInView(location) && !location.equals(this.playerLocation)) {
-        String delimiter = this.actors.length() == 0 ? "" : ",\n";
-        String playerJson = "{\n  \"type\": \"player\",\n  \"name\": \"" + player.getName() + "\",\n  \"position\": "
-            + location.toString() + "\n}";
-        this.actors.append(delimiter).append(playerJson);
+      if (this.shouldBeInView(location)) {
+        player.acceptVisitor(new PlayerASCIIInteraction(this.render, this.playerLocation, (l) -> this.shouldBeInView(l), VIEW_DISTANCE));
       }
     });
   }
 
   @Override
   public void draw() {
+    System.out.println(this.name + " is at location " + this.playerLocation);
     System.out.println(this.toString());
   }
 
   @Override
   public String toString() {
-    String layout = render.stream()
-        .map(row -> "[ " + String.join(", ", row) + " ]")
-        .collect(Collectors.joining(",\n"));
-
-    return "[ \"" + this.name + "\", {\n  \"type\": \"player-update\",\n" +
-        "  \"layout\": [" + layout + "],\n" +
-        "  \"position\": " + this.playerLocation.toString() + ",\n" +
-        "  \"objects\": [" + String.join(", ", this.objects) + "],\n" +
-        "  \"actors\": [" + String.join(", ", this.actors) + "]\n} ]\n";
+    String outputString = render.stream()
+        .map(row -> String.join("", row))
+        .collect(Collectors.joining("\n"));
+    return outputString + "\n";
   }
 }
