@@ -48,7 +48,22 @@
   X     X  -> X     X
   X  Z EX     X   ZEX
   XXXXXXX     XXXXXXX
-  ``` 
+  ```  
+
+## Edge Cases
+* If a player is on the other side of a door, a zombie would inevitably have to move away from the player because it cannot stay on the same place.
+  e.g.
+  ```
+  XXXXXXX     XXXXXXX
+  XXX XXX     XXX XXX
+  XXXDXXX     XXXDXXX
+  XXXPXXX     XXXPXXX
+  XXXDXXX     XXXDXXX
+  X  Z  X     X Z   X
+  X     X  -> X     X
+  X     X     X     X
+  XXXXXXX     XXXXXXX
+  ```
 
 # Ghost Strategy
 1. If the player is within 8 tiles of the ghost, go the valid move that will result in the ghost being closest to the player.  
@@ -56,8 +71,8 @@
   ```
   XXXXXXX     XXXXXXX
   X  P  X     X  P  X
-  X     X  -> X  Z  X
-  XK Z EX     XK   EX
+  X     X  -> X  G  X
+  XK G EX     XK   EX
   XXXXXXX     XXXXXXX
   ```
 2. Otherwise, if the key is still in the game and within 5 tiles, go to the valid move that will result in the ghost being closest to the key.  
@@ -91,4 +106,20 @@
   X     X  -> X     X
   X  G EX     X    EX
   XXXXXXX     XXXGXXX  // note: this will move the ghost to some other random location in the level
-  ``` 
+  ```
+
+
+## Edge Cases
+* A ghost may end up being moved to a random location if the "closest" move to a player is a wall.
+  e.g.
+  ```
+           (imaginary middle
+            state where ghost
+            is in wall before
+            random respawn)
+  XXXXXXX       XXXXXXX      XXXXXXX
+  X  P  X       X  P  X      X  P  X
+  X  X  X  ---> X  G  X ---> X  X  X
+  X  G  X       X     X      XG    X
+  XXXXXXX       XXXXXXX      XXXXXXX
+  ```
