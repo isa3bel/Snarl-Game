@@ -16,4 +16,4 @@ Important: A person's location is shown in the form [row, column], where higher 
 
 - When a level advances the process will continue and will show both users an updated view as well as prompt them for new moves
 
-- When the game ends the program will terminate and display an appropriate message for the users
+- When the game ends the program will terminate and display an appropriate message for the users. Note: levels start at index 0
