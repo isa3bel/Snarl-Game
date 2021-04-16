@@ -1,19 +1,31 @@
-# How to play the Snarl Game
+# How to play the Snarl Game this Server
 
-- Run the executable, the game can be played in the terminal
+- Run the `snarlServer` executable with the arguments that you require (specified under [Testing Task > snarlServer](https://course.ccs.neu.edu/cs4500sp21/p09.html))
 
-- Input each player's name. This input cannot be blank
+- Connect with your client before the maximum wait time has passed (defaults to 60 seconds if not specified in program arguments)
 
-- Each player's view will be displayed. The terminal will prompt each user for their choice of movement. The view will display the first letter of each username to signify where that user is, an Z for a zombie, a G for a ghost, an E for an exit, an X for a non-traversable tile, a K for the Key (one key per level), and a D for a door (cannot advance a level through a door).
+- After the wait time has passed with no new clients or if the max number of clients connects, the game will begin. The server will begin sending messages as specified by the protocol [here](https://course.ccs.neu.edu/cs4500sp21/protocol.html). Client messages are expected to follow the same format.
 
-Important: A person's location is shown in the form [row, column], where higher rows are further down, and higher columns are further right. The row field essentially controls up and down motions, while the column field controls the left and right motion.
+# How to play the Snarl Game with this Client
 
-- If a player choses an invalid move, the terminal will re-prompt the user for their move and will not re-show the view
+- Run the `snarlClient` executable with the arguments that you require (specified under [Testing Task > snarlServer](https://course.ccs.neu.edu/cs4500sp21/p09.html))
 
-- If a player is "ejected" by an adversary, they cannot make additional moves for that round, and their view will not be displayed
+- Connect your client to the Snarl Server which is hosting the game.
 
-- A player can move to an exit before it's unlocked, but nothing will happen and the player's icon will show instead of the exit until they move away from the exit space
+- The client will then prompt you for your name. Input an alphanumeric name for the game.
 
-- When a level advances the process will continue and will show both users an updated view as well as prompt them for new moves
-
-- When the game ends the program will terminate and display an appropriate message for the users. Note: levels start at index 0
+- When game play begins, the messages from the server will align with the protocol outlined [here](https://course.ccs.neu.edu/cs4500sp21/protocol.html).
+  - When you are prompted for a move, the move input must be specified as two integers, the global row and column e.g. `3 1`.
+  - If your move is invalid, the client will continue to prompt you for a move until it is valid.
+  - When you receive a `player-update-message`, the level layout will be printed as an ASCII map of the players visible spaces. Your current location as well as any potential messages from the server will be dispayed alongside this map. _(Please note: the map can only represent one thing at each location - this means that if an adversary or a player is stading on top of the key or exit, the key or exit will not be visible and it will appear that only the actor is standing at that location)._
+    - Walls are `X`
+    - Walkable tiles are ` `
+    - Doors are `D`
+    - Other players are `P`
+    - Zombies are `Z`
+    - Ghosts are `G`
+    - The key is `K`
+    - The exit is `E`
+    - You are `+`
+    
+- When the game ends, the client will print the results provided by the server and end the program.
