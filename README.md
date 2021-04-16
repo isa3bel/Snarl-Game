@@ -8,6 +8,8 @@
 
 # How to play the Snarl Game with this Client
 
+- This program can be played entirely from the terminal, not extra GUI required.
+
 - Run the `snarlClient` executable with the arguments that you require (specified under [Testing Task > snarlServer](https://course.ccs.neu.edu/cs4500sp21/p09.html))
 
 - Connect your client to the Snarl Server which is hosting the game.
