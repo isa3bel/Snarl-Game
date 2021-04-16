@@ -2,7 +2,9 @@ package model.controller;
 
 import java.util.Scanner;
 
+import model.characters.Character;
 import model.level.Location;
+import view.PlayerASCIIView;
 import view.View;
 
 /**
@@ -11,8 +13,14 @@ import view.View;
 public class StdinController implements Controller {
 
   private String name;
+
   public StdinController(String name) {
     this.name = name;
+  }
+
+  @Override
+  public View getDefaultView(Character character) {
+    return new PlayerASCIIView(character);
   }
 
   @Override

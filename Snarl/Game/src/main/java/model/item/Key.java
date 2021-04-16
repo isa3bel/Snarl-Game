@@ -11,6 +11,7 @@ import model.ruleChecker.InteractableVisitor;
 public class Key extends Item {
 
   private final Exit exit;
+  private String retrievedBy;
 
   public Key(Location loc, Exit exit) {
     super(loc);
@@ -18,8 +19,8 @@ public class Key extends Item {
   }
 
   @Override
-  public void acceptVisitor(InteractableVisitor visitor) {
-    visitor.visitKey(this);
+  public <T> T acceptVisitor(InteractableVisitor<T> visitor) {
+    return visitor.visitKey(this);
   }
 
   public <T> T acceptVisitor(ItemVisitor<T> visitor) {
@@ -31,6 +32,15 @@ public class Key extends Item {
     super.pickedUp(player);
     this.currentLocation = new Ejected(this.currentLocation);
     this.exit.unlock();
+    this.retrievedBy = player.getName();
+  }
+
+  /**
+   * Who this key was retrieved by.
+   * @return the retriever of this key
+   */
+  public String getRetrievedBy() {
+    return this.retrievedBy;
   }
 
 }

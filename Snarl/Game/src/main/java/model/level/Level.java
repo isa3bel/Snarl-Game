@@ -8,7 +8,9 @@ import model.item.Item;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.function.BiPredicate;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
 /**
@@ -82,11 +84,29 @@ public class Level {
   /**
    * Execute the given interaction on this level.
    * @param interaction the interaction that is occurring
+   * @param location the location where the interaction is occurring
    */
-  public void interact(InteractableVisitor<Void> interaction, Location location) {
-    this.adversaries.forEach(adversary -> adversary.acceptVisitor(interaction));
-    this.items.forEach(item -> item.acceptVisitor(interaction));
+  public <T> void interact(InteractableVisitor<T> interaction, Location location) {
+    this.interact(interaction, (a, b) -> null, location);
+  }
+
+  /**
+   * Execute the given interaction on this level.
+   * @param interaction the interaction that is occurring
+   */
+  public <T> T interact(InteractableVisitor<T> interaction, BinaryOperator<T> collector, Location location) {
+    T actorResult = this.adversaries.stream()
+        .map(adversary -> adversary.acceptVisitor(interaction))
+        .filter(Objects::nonNull)
+        .reduce(collector)
+        .orElse(null);
+    T itemResult = this.items.stream()
+        .map(item -> item.acceptVisitor(interaction))
+        .filter(Objects::nonNull)
+        .reduce(collector)
+        .orElse(null);
     if (location != null) this.get(location).acceptVisitor(interaction);
+    return collector.apply(actorResult, itemResult);
   }
 
   /**

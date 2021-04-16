@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
-public class PlayerViewTest {
+public class PlayerASCIIViewTest {
 
   private Level setupSimpleLevel() {
     RoomBuilder singleRoomBuilder = new RoomBuilder(new Location(0, 0),22,10)
@@ -87,7 +87,7 @@ public class PlayerViewTest {
     players.add(player);
     Level level = this.setupSimpleLevel();
     GameManager gameManager = new GameManager(0, new Level[]{level}, players);
-    View view = new PlayerView(player);
+    View view = new PlayerASCIIView(player);
     gameManager.buildView(view);
     assertEquals("     \n" +
             " X   \n" +
@@ -104,7 +104,7 @@ public class PlayerViewTest {
     players.add(player);
     Level level = this.setupSimpleLevel();
     GameManager gameManager = new GameManager(0, new Level[]{level}, players);
-    View view = new PlayerView(player);
+    View view = new PlayerASCIIView(player);
     gameManager.buildView(view);
     assertEquals("     \n" +
             "X    \n" +
@@ -121,7 +121,7 @@ public class PlayerViewTest {
     players.add(player);
     Level level = this.setupSimpleLevel();
     GameManager gameManager = new GameManager(0, new Level[]{level}, players);
-    View view = new PlayerView(player);
+    View view = new PlayerASCIIView(player);
     gameManager.buildView(view);
     assertEquals("XX X \n" +
             "XX   \n" +
@@ -140,7 +140,7 @@ public class PlayerViewTest {
     players.add(player2);
     Level level = this.setupMultiRoomLevelWithAdversaries();
     GameManager gameManager = new GameManager(0, new Level[]{level}, players);
-    View view = new PlayerView(player1);
+    View view = new PlayerASCIIView(player1);
     gameManager.buildView(view);
     assertEquals("XX X \n" +
             "XX   \n" +
@@ -159,7 +159,7 @@ public class PlayerViewTest {
     players.add(player2);
     Level level = this.setupMultiRoomLevelWithAdversaries();
     GameManager gameManager = new GameManager(0, new Level[]{level}, players);
-    View view = new PlayerView(player2);
+    View view = new PlayerASCIIView(player2);
     gameManager.buildView(view);
     assertEquals("XXXXX\n" +
             "XXXX \n" +

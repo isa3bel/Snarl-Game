@@ -68,21 +68,4 @@ public class JSONView implements View{
         + "\"adversaries\": [" + this.adversaryString
         + "],\n\"exit-locked\": " + this.exitLockedString + "}";
   }
-
-
-  /**
-   * The string of the type of this adversary.
-   */
-  private static class TypeString implements AdversaryVisitor<String> {
-
-    @Override
-    public String visitGhost(Ghost ghost) {
-      return "ghost";
-    }
-
-    @Override
-    public String visitZombie(Zombie zombie) {
-      return "zombie";
-    }
-  }
 }

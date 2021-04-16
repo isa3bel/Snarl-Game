@@ -1,5 +1,6 @@
 package testHarness.query;
 
+import model.characters.Character;
 import model.controller.Controller;
 import model.level.Location;
 import view.View;
@@ -26,6 +27,11 @@ public class MockPlayerController implements Controller {
    */
   public void setTestOutput(ArrayList<String> testOutput) {
     this.testOutput = testOutput;
+  }
+
+  @Override
+  public View getDefaultView(Character character) {
+    return null;
   }
 
   /**

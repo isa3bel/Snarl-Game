@@ -17,8 +17,8 @@ public class GhostInteraction extends AdversaryInteraction {
   }
 
   @Override
-  public Void visitWall(Wall wall) {
-    this.character.moveTo(this.randomValidLocation);
+  public MoveResult visitWall(Wall wall) {
+    this.adversary.moveTo(this.randomValidLocation);
     return null;
   }
 

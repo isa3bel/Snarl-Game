@@ -5,6 +5,7 @@ import model.controller.Controller;
 import model.level.Level;
 import model.ruleChecker.*;
 import model.level.Location;
+import view.View;
 
 import java.util.ArrayList;
 
@@ -18,18 +19,20 @@ public abstract class Adversary extends Character {
    * @param location the location to initialize this adversary
    * @param name arbitrary unused string for the name of the adversary
    */
-  Adversary(Location location, String name, Controller controller) {
-    super(location, name, controller);
+  protected Adversary(Location location, String name) {
+    super(location, name);
   }
 
   /**
    * Attacks the given character.
    * @param player the player to attack
    */
-  public void attack(Player player) {
+  public MoveResult attack(Player player) {
     if (this.currentLocation.equals(player.getCurrentLocation())) {
       player.defend();
+      return MoveResult.EJECTED;
     }
+    return MoveResult.OK;
   }
 
   @Override
@@ -39,18 +42,18 @@ public abstract class Adversary extends Character {
   public abstract <T> T acceptVisitor(AdversaryVisitor<T> visitor);
 
   @Override
-  public void acceptVisitor(InteractableVisitor visitor) {
-    visitor.visitAdversary(this);
+  public <T> T acceptVisitor(InteractableVisitor<T> visitor) {
+    return visitor.visitAdversary(this);
   }
 
   @Override
-  public abstract MoveValidator getNextMove();
-
-  @Override
-  public Interaction<Adversary> makeInteraction(Level level, ArrayList<Player> players) {
+  public Interaction makeInteraction(Level level, ArrayList<Player> players) {
     return new AdversaryInteraction(this);
   }
 
   @Override
-  public abstract void updateController(GameManager gameManager);
+  public void updateController(View view) {
+    // Adversaries are not controlled by a user of the snarl game,
+    // therefore they do not need this updateController method
+  }
 }

@@ -5,13 +5,17 @@ import java.util.function.Predicate;
 import model.level.Location;
 import model.ruleChecker.Interactable;
 
+/**
+ * Draws an interactable in the render 2D array using the ASCIIInteraction.
+ */
 public class PlayerASCIIInteraction extends ASCIIInteraction {
 
   private Location playerLoc;
-  Predicate<Location> shouldBeInView;
+  private Predicate<Location> shouldBeInView;
   private int viewDistance;
 
-  PlayerASCIIInteraction(ArrayList<ArrayList<String>> render, Location playerLoc, Predicate<Location> shouldBeInView, int viewDistance) {
+  PlayerASCIIInteraction(ArrayList<ArrayList<String>> render, Location playerLoc,
+                         Predicate<Location> shouldBeInView, int viewDistance) {
     super(render);
     this.playerLoc = playerLoc;
     this.shouldBeInView = shouldBeInView;

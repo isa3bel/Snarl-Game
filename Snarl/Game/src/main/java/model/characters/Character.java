@@ -8,6 +8,7 @@ import model.ruleChecker.Interactable;
 import model.ruleChecker.Interaction;
 import model.level.Location;
 import model.ruleChecker.MoveValidator;
+import view.View;
 
 import java.util.ArrayList;
 
@@ -69,9 +70,18 @@ public abstract class Character implements Interactable {
   public String getName() { return this.name; }
 
   /**
-   * Updates this character with the current game state.
+   * Updates this character with the given view.
    */
-  public abstract void updateController(GameManager gameManager);
+  public void updateController(GameManager gameManager) {
+    View view = this.controller.getDefaultView(this);
+    gameManager.buildView(view);
+    this.controller.update(view);
+  }
+
+  /**
+   * Updates this character with the given view.
+   */
+  public abstract void updateController(View view);
 
   /**
    * Gets the next move as validated by this characters rules.

@@ -1,5 +1,6 @@
 package model.controller;
 
+import model.characters.Character;
 import model.level.Location;
 import view.View;
 
@@ -8,6 +9,12 @@ import view.View;
  * a connection to a user over TCP or STDIN, or something else.
  */
 public interface Controller {
+
+  /**
+   * The default view required for this controller.
+   * @return the view for the controller
+   */
+  View getDefaultView(Character character);
 
   /**
    * Queries whatever is controlling a Snarl character for the next move.

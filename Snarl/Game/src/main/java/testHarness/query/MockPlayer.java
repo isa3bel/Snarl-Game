@@ -5,7 +5,7 @@ import model.characters.Player;
 import model.item.Item;
 import model.level.Location;
 import model.ruleChecker.PlayerMoveValidator;
-import view.PlayerView;
+import view.PlayerASCIIView;
 
 import java.util.ArrayList;
 
@@ -34,7 +34,7 @@ public class MockPlayer extends Player {
     // don't update this player if they are not currently playing
     if (this.currentLocation == null) return;
 
-    PlayerView view = new PlayerView(this);
+    PlayerASCIIView view = new PlayerASCIIView(this);
     gameManager.buildView(view);
     this.controller.update(view);
   }

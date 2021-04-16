@@ -1,8 +1,12 @@
 package model.controller;
 
+import model.characters.Ghost;
 import model.characters.Player;
+import model.characters.Zombie;
 import model.level.Level;
 import model.level.Location;
+import model.ruleChecker.GhostMoveValidator;
+import model.ruleChecker.ZombieMoveValidator;
 import org.junit.Test;
 import view.View;
 
@@ -14,7 +18,9 @@ public class AdversaryAIControllerTest {
 
   @Test
   public void testZombieAttacksPlayer() {
-    AdversaryAIController aiController = new AdversaryAIController(ZombieAI.class);
+    Zombie zombie = new Zombie(new Location(7, 2), "zombie1");
+    AdversaryAIController aiController = new AdversaryAIController(ZombieAI.class,
+        (loc) -> new ZombieMoveValidator(zombie, loc));
     aiController.update(new MockView("{\"validMoves\": [[8, 2], [6, 2], [7, 3]],\n" +
         "\"nearestPlayerLocation\": [7, 3],\n" +
         "\"keyLocation\": [6, 1],\n" +
@@ -25,7 +31,9 @@ public class AdversaryAIControllerTest {
 
   @Test
   public void testZombieGoesToPlayer() {
-    AdversaryAIController aiController = new AdversaryAIController(ZombieAI.class);
+    Zombie zombie = new Zombie(new Location(7, 2), "zombie1");
+    AdversaryAIController aiController = new AdversaryAIController(ZombieAI.class,
+        (loc) -> new ZombieMoveValidator(zombie, loc));
     aiController.update(new MockView("{\"validMoves\": [[8, 2], [6, 2], [7, 3]],\n" +
         "\"nearestPlayerLocation\": [7, 7],\n" +
         "\"keyLocation\": [6, 1],\n" +
@@ -36,7 +44,9 @@ public class AdversaryAIControllerTest {
 
   @Test
   public void testZombieGoesToKeyIfPlayerIsFar() {
-    AdversaryAIController aiController = new AdversaryAIController(ZombieAI.class);
+    Zombie zombie = new Zombie(new Location(7, 2), "zombie1");
+    AdversaryAIController aiController = new AdversaryAIController(ZombieAI.class,
+        (loc) -> new ZombieMoveValidator(zombie, loc));
     aiController.update(new MockView("{\"validMoves\": [[8, 2], [6, 2], [7, 3]],\n" +
         "\"nearestPlayerLocation\": [5, 20],\n" +
         "\"keyLocation\": [6, 1],\n" +
@@ -47,7 +57,9 @@ public class AdversaryAIControllerTest {
 
   @Test
   public void testZombieGoesToExitIfKeyIsNullAndPlayerIsFar() {
-    AdversaryAIController aiController = new AdversaryAIController(ZombieAI.class);
+    Zombie zombie = new Zombie(new Location(7, 2), "zombie1");
+    AdversaryAIController aiController = new AdversaryAIController(ZombieAI.class,
+        (loc) -> new ZombieMoveValidator(zombie, loc));
     aiController.update(new MockView("{\"validMoves\": [[8, 2], [6, 2], [7, 3]],\n" +
         "\"nearestPlayerLocation\": [5, 20],\n" +
         "\"keyLocation\": null,\n" +
@@ -58,7 +70,9 @@ public class AdversaryAIControllerTest {
 
   @Test
   public void testGhostAttacksPlayer() {
-    AdversaryAIController aiController = new AdversaryAIController(GhostAI.class);
+    Ghost ghost = new Ghost(new Location(7, 2), "ghost1");
+    AdversaryAIController aiController = new AdversaryAIController(GhostAI.class,
+        (loc) -> new GhostMoveValidator(ghost, loc));
     aiController.update(new MockView("{\"validMoves\": [[8, 2], [6, 2], [7, 3]],\n" +
         "\"nearestPlayerLocation\": [7, 3],\n" +
         "\"keyLocation\": [6, 1],\n" +
@@ -69,7 +83,9 @@ public class AdversaryAIControllerTest {
 
   @Test
   public void testGhostGoesToPlayer() {
-    AdversaryAIController aiController = new AdversaryAIController(GhostAI.class);
+    Ghost ghost = new Ghost(new Location(7, 2), "ghost1");
+    AdversaryAIController aiController = new AdversaryAIController(GhostAI.class,
+        (loc) -> new GhostMoveValidator(ghost, loc));
     aiController.update(new MockView("{\"validMoves\": [[8, 2], [6, 2], [7, 3]],\n" +
         "\"nearestPlayerLocation\": [7, 7],\n" +
         "\"keyLocation\": [6, 1],\n" +
@@ -80,7 +96,9 @@ public class AdversaryAIControllerTest {
 
   @Test
   public void testGhostGoesToKeyIfPlayerIsFar() {
-    AdversaryAIController aiController = new AdversaryAIController(GhostAI.class);
+    Ghost ghost = new Ghost(new Location(7, 2), "ghost1");
+    AdversaryAIController aiController = new AdversaryAIController(GhostAI.class,
+        (loc) -> new GhostMoveValidator(ghost, loc));
     aiController.update(new MockView("{\"validMoves\": [[8, 2], [6, 2], [7, 3]],\n" +
         "\"nearestPlayerLocation\": [5, 20],\n" +
         "\"keyLocation\": [6, 1],\n" +
@@ -91,7 +109,9 @@ public class AdversaryAIControllerTest {
 
   @Test
   public void testGhostGoesToWallIfKeyIsNullAndPlayerIsFar() {
-    AdversaryAIController aiController = new AdversaryAIController(GhostAI.class);
+    Ghost ghost = new Ghost(new Location(7, 2), "ghost1");
+    AdversaryAIController aiController = new AdversaryAIController(GhostAI.class,
+        (loc) -> new GhostMoveValidator(ghost, loc));
     aiController.update(new MockView("{\"validMoves\": [[8, 2], [6, 2], [7, 1]],\n" +
         "\"nearestPlayerLocation\": [5, 20],\n" +
         "\"keyLocation\": null,\n" +

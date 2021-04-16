@@ -9,37 +9,35 @@ import model.level.Exited;
 /**
  * Controls a player interaction with an Interactable - what happens and when.
  */
-public class PlayerInteraction extends Interaction<Player> {
+public class PlayerInteraction extends Interaction {
+
+  private final Player player;
 
   public PlayerInteraction(Player player) throws IllegalArgumentException {
-    super(player);
+    this.player = player;
   }
 
   @Override
-  public Void visitKey(Key key) {
+  public MoveResult visitKey(Key key) {
     if (key.getCurrentLocation() == null
-        || !key.getCurrentLocation().equals(this.character.getCurrentLocation())) {
+        || !key.getCurrentLocation().equals(this.player.getCurrentLocation())) {
       return null;
     }
-    key.pickedUp(this.character);
-    System.out.println("Player " + this.character.getName() + " found the key");
-    return null;
+    key.pickedUp(this.player);
+    return MoveResult.KEY;
   }
 
   @Override
-  public Void visitAdversary(Adversary adversary) {
+  public MoveResult visitAdversary(Adversary adversary) {
     // self-elimination
-    adversary.attack(this.character);
-    return null;
+    return adversary.attack(this.player);
   }
 
   @Override
-  public Void visitExit(Exit exit) {
-    if (exit.isLocked() || !exit.getCurrentLocation().equals(this.character.getCurrentLocation())) return null;
-    this.character.moveTo(new Exited(this.character.getCurrentLocation()));
-    System.out.println("Player " + this.character.getName() + " exited");
-    this.character.incrementTimesExited();
-    return null;
+  public MoveResult visitExit(Exit exit) {
+    if (exit.isLocked() || !exit.getCurrentLocation().equals(this.player.getCurrentLocation())) return null;
+    this.player.exit();
+    return MoveResult.EXITED;
   }
 
 }

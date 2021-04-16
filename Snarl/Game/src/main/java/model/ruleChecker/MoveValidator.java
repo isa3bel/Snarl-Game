@@ -47,7 +47,11 @@ public abstract class MoveValidator {
   protected boolean isTraversable(Level level, SpaceVisitor<Boolean> isTraversable) {
     // DECISION: automatically including exits here because right now all types can move onto exits
     IsExit isExit = new IsExit(this.nextMove);
-    level.interact(isExit, this.nextMove);
+    try {
+      level.interact(isExit, this.nextMove);
+    } catch (IndexOutOfBoundsException exception) {
+      return false;
+    }
     boolean isLocationAtExit = isExit.getIsLocationAtExit();
 
     return level.get(this.nextMove).acceptVisitor(isTraversable) || isLocationAtExit;
@@ -79,7 +83,7 @@ public abstract class MoveValidator {
    */
   private static class IsExit implements InteractableVisitor<Void> {
 
-    private Location location;
+    private final Location location;
     private boolean isLocationAtExit;
 
     private IsExit(Location location) {
@@ -123,7 +127,7 @@ public abstract class MoveValidator {
    */
   private static class OccupiedByAdversary implements InteractableVisitor<Void> {
 
-    private Location location;
+    private final Location location;
     private boolean isOccupiedByAdversary;
 
     private OccupiedByAdversary(Location location) {

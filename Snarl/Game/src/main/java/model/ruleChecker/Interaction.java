@@ -1,46 +1,42 @@
 package model.ruleChecker;
 
 import model.characters.Adversary;
-import model.characters.Character;
 import model.characters.Player;
 import model.item.Exit;
 import model.item.Key;
 import model.level.Wall;
 
-public abstract class Interaction<T extends Character> implements InteractableVisitor<Void> {
-
-  protected T character;
-
-  public Interaction(T character) {
-    this.character = character;
-  }
+/**
+ * An interaction for any character and something in the level.
+ */
+public abstract class Interaction implements InteractableVisitor<MoveResult> {
 
   @Override
-  public Void visitKey(Key key) {
+  public MoveResult visitKey(Key key) {
     // nothing should happen
     return null;
   }
 
   @Override
-  public Void visitPlayer(Player player) {
+  public MoveResult visitPlayer(Player player) {
     // nothing should happen
     return null;
   }
 
   @Override
-  public Void visitAdversary(Adversary adversary) {
+  public MoveResult visitAdversary(Adversary adversary) {
     // nothing should happen
     return null;
   }
 
   @Override
-  public Void visitExit(Exit exit) {
+  public MoveResult visitExit(Exit exit) {
     // nothing should happen
     return null;
   }
 
   @Override
-  public Void visitWall(Wall wall) {
+  public MoveResult visitWall(Wall wall) {
     // nothing should happen
     return null;
   }

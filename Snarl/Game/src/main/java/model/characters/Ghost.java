@@ -6,7 +6,6 @@ import model.level.Location;
 import model.controller.AdversaryAIController;
 import model.controller.GhostAI;
 import model.ruleChecker.*;
-import view.AdversaryAIView;
 
 import java.util.ArrayList;
 
@@ -21,7 +20,8 @@ public class Ghost extends Adversary {
    * @param location the location to initialize this adversary
    */
   public Ghost(Location location, String name) {
-    super(location, name, new AdversaryAIController(GhostAI.class));
+    super(location, name);
+    this.controller = new AdversaryAIController(GhostAI.class, loc -> new GhostMoveValidator(this, loc));
   }
 
   @Override
@@ -36,15 +36,7 @@ public class Ghost extends Adversary {
   }
 
   @Override
-  public void updateController(GameManager gameManager) {
-    AdversaryAIView view = new AdversaryAIView(this.currentLocation,
-        location -> new GhostMoveValidator(this, location));
-    gameManager.buildView(view);
-    this.controller.update(view);
-  }
-
-  @Override
-  public Interaction<Adversary> makeInteraction(Level level, ArrayList<Player> players) {
+  public Interaction makeInteraction(Level level, ArrayList<Player> players) {
     Location randomLocation = level.calculateValidActorPositions().stream()
         .filter(location -> !location.equals(this.currentLocation)
             && !players.stream().anyMatch(player -> player.getCurrentLocation().equals(location)))

@@ -1,6 +1,5 @@
 package view;
 
-import model.item.Exit;
 import model.level.*;
 
 /**

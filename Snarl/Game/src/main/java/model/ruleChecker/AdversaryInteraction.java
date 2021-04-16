@@ -6,16 +6,18 @@ import model.characters.Player;
 /**
  * Controls an adversary interaction with an Interactable - what happens and under what conditions.
  */
-public class AdversaryInteraction extends Interaction<Adversary> {
+public class AdversaryInteraction extends Interaction {
+
+  protected final Adversary adversary;
 
   public AdversaryInteraction(Adversary adversary) {
-    super(adversary);
+    this.adversary = adversary;
   }
 
   @Override
-  public Void visitPlayer(Player player) {
-    this.character.attack(player);
-    return null;
+  public MoveResult visitPlayer(Player player) {
+    this.adversary.attack(player);
+    return MoveResult.EJECTED;
   }
 
 }

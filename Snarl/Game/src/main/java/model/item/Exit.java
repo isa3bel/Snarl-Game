@@ -20,11 +20,12 @@ public class Exit extends Item {
   }
 
   @Override
-  public void acceptVisitor(InteractableVisitor visitor) {
-    visitor.visitExit(this);
+  public <T> T acceptVisitor(ItemVisitor<T> visitor) {
+    return visitor.visitExit(this);
   }
 
-  public <T> T acceptVisitor(ItemVisitor<T> visitor) {
+  @Override
+  public <T> T acceptVisitor(InteractableVisitor<T> visitor) {
     return visitor.visitExit(this);
   }
 

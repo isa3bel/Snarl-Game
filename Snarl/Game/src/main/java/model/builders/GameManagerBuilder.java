@@ -1,6 +1,9 @@
 package model.builders;
 
+import java.util.HashMap;
 import model.GameManager;
+import model.controller.Controller;
+import model.controller.StdinController;
 import model.level.Location;
 import model.characters.*;
 import model.level.Level;
@@ -15,7 +18,7 @@ public class GameManagerBuilder {
 
   private final int currentLevel;
   private final Level[] levels;
-  private final ArrayList<String> playerNames;
+  private final HashMap<String, Controller> playerNames;
 
   /**
    * Initializes a game manager with the bare minimum required - the level.
@@ -36,7 +39,7 @@ public class GameManagerBuilder {
 
     this.currentLevel = currentLevel;
     this.levels = levels;
-    this.playerNames = new ArrayList<>();
+    this.playerNames = new HashMap<>();
   }
 
   /**
@@ -48,7 +51,20 @@ public class GameManagerBuilder {
     if (this.playerNames.size() >= 4) {
       throw new IllegalStateException("cannot have more than 4 players in a Snarl game");
     }
-    this.playerNames.add(name);
+    this.playerNames.put(name, new StdinController(name));
+    return this;
+  }
+
+  /**
+   * Adds a player with a generated game location (the most top left available space in the level).
+   * @return this builder with the player
+   * @throws IllegalStateException if there are already 4 players registered
+   */
+  public GameManagerBuilder addPlayer(String name, Controller controller) throws IllegalStateException {
+    if (this.playerNames.size() >= 4) {
+      throw new IllegalStateException("cannot have more than 4 players in a Snarl game");
+    }
+    this.playerNames.put(name, controller);
     return this;
   }
 
@@ -67,8 +83,8 @@ public class GameManagerBuilder {
       throw new IllegalStateException("level does not have enough valid starting positions for players");
     }
 
-    ArrayList<Player> players = this.playerNames.stream()
-        .map(name -> new Player(validPlayerStartingLocations.remove(0), name))
+    ArrayList<Player> players = this.playerNames.keySet().stream()
+        .map(name -> new Player(validPlayerStartingLocations.remove(0), name, this.playerNames.get(name)))
         .collect(Collectors.toCollection(ArrayList::new));
     return new GameManager(this.currentLevel, this.levels, players);
   }
