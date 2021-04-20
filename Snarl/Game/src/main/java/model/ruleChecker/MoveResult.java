@@ -2,7 +2,12 @@ package model.ruleChecker;
 
 public enum MoveResult {
 
-  OK("Ok"), INVALID("Invalid"), EJECTED("Eject"), EXITED("Exit"), KEY("Key");
+  OK("Ok"),
+  INVALID("Invalid"),
+  EJECTED("Eject"),
+  EXITED("Exit"),
+  KEY("Key"),
+  ATTACK("Attack");
 
   private final String value;
 
@@ -28,6 +33,7 @@ public enum MoveResult {
     if (a.equals(EJECTED) || b.equals(EJECTED)) return EJECTED;
     if (a.equals(EXITED) || b.equals(EXITED)) return EXITED;
     if (a.equals(KEY) || b.equals(KEY)) return KEY;
+    if (a.equals(ATTACK) || b.equals(ATTACK)) return ATTACK;
     return OK;
   }
 }

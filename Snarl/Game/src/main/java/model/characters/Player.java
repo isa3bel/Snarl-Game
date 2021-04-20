@@ -1,8 +1,8 @@
 package model.characters;
 
 import model.controller.Controller;
+import model.controller.StdinController;
 import model.item.Item;
-import model.level.Ejected;
 import model.level.Exited;
 import model.level.Level;
 import model.ruleChecker.*;
@@ -26,9 +26,7 @@ public class Player extends Character implements Comparable<Player>{
    * @param name the player's name
    */
   public Player(Location location, String name) {
-    super(location, name);
-    this.timesExited = 0;
-    this.keysFound = 0;
+    this(location, name, new StdinController(name));
   }
 
   /**
@@ -37,7 +35,7 @@ public class Player extends Character implements Comparable<Player>{
    * @param name the player's name
    */
   public Player(Location location, String name, Controller controller) {
-    super(location, name, controller);
+    super(location, name, 8, 2, controller);
     this.timesExited = 0;
     this.keysFound = 0;
   }
@@ -45,9 +43,10 @@ public class Player extends Character implements Comparable<Player>{
   /**
    * Updates the player after defending against an attack from an adversary.
    */
-  public void defend() {
-    this.currentLocation = new Ejected(this.currentLocation);
-    this.timesEjected++;
+  public MoveResult defend(int attack) {
+    MoveResult result = super.defend(attack);
+    if (result.equals(MoveResult.EJECTED)) this.timesEjected++;
+    return result;
   }
 
   /**
@@ -90,8 +89,8 @@ public class Player extends Character implements Comparable<Player>{
   }
 
   @Override
-  public Interaction makeInteraction(Level level, ArrayList<Player> players) {
-    return new PlayerInteraction(this);
+  public Interaction makeInteraction(Level level, ArrayList<Player> players, Location initialLocation) {
+    return new PlayerInteraction(this, initialLocation);
   }
 
   @Override

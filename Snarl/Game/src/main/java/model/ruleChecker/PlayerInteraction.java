@@ -4,7 +4,7 @@ import model.characters.Adversary;
 import model.characters.Player;
 import model.item.Exit;
 import model.item.Key;
-import model.level.Exited;
+import model.level.Location;
 
 /**
  * Controls a player interaction with an Interactable - what happens and when.
@@ -12,9 +12,14 @@ import model.level.Exited;
 public class PlayerInteraction extends Interaction {
 
   private final Player player;
+  private final Location initialLocation;
 
-  public PlayerInteraction(Player player) throws IllegalArgumentException {
+  public PlayerInteraction(Player player, Location initialLocation) throws IllegalArgumentException {
+    if (player == null) {
+      throw new IllegalArgumentException("player cannot be null");
+    }
     this.player = player;
+    this.initialLocation = initialLocation;
   }
 
   @Override
@@ -29,8 +34,7 @@ public class PlayerInteraction extends Interaction {
 
   @Override
   public MoveResult visitAdversary(Adversary adversary) {
-    // self-elimination
-    return adversary.attack(this.player);
+    return this.player.attack(adversary, this.initialLocation);
   }
 
   @Override

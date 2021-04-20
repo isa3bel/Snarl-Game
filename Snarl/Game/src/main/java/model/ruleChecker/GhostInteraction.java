@@ -9,10 +9,10 @@ import model.level.Wall;
  */
 public class GhostInteraction extends AdversaryInteraction {
 
-  Location randomValidLocation;
+  private final Location randomValidLocation;
 
-  public GhostInteraction(Ghost ghost, Location randomValidLocation) {
-    super(ghost);
+  public GhostInteraction(Ghost ghost, Location initialLocation, Location randomValidLocation) {
+    super(ghost, initialLocation);
     this.randomValidLocation = randomValidLocation;
   }
 
@@ -21,5 +21,4 @@ public class GhostInteraction extends AdversaryInteraction {
     this.adversary.moveTo(this.randomValidLocation);
     return null;
   }
-
 }

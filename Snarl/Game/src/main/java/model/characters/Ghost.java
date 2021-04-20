@@ -16,11 +16,10 @@ public class Ghost extends Adversary {
 
   /**
    * The location of this adversary.
-   *
    * @param location the location to initialize this adversary
    */
   public Ghost(Location location, String name) {
-    super(location, name);
+    super(location, name, 6, 1);
     this.controller = new AdversaryAIController(GhostAI.class, loc -> new GhostMoveValidator(this, loc));
   }
 
@@ -36,12 +35,13 @@ public class Ghost extends Adversary {
   }
 
   @Override
-  public Interaction makeInteraction(Level level, ArrayList<Player> players) {
+  public Interaction makeInteraction(Level level, ArrayList<Player> players, Location initialLocation) {
     Location randomLocation = level.calculateValidActorPositions().stream()
         .filter(location -> !location.equals(this.currentLocation)
+            && !location.equals(initialLocation)
             && !players.stream().anyMatch(player -> player.getCurrentLocation().equals(location)))
         .findFirst()
         .orElseThrow(() -> new IllegalStateException("no valid locations that ghost can teleport to"));
-    return new GhostInteraction(this, randomLocation);
+    return new GhostInteraction(this, initialLocation, randomLocation);
   }
 }

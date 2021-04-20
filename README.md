@@ -28,6 +28,16 @@
     - Ghosts are `G`
     - The key is `K`
     - The exit is `E`
-    - You are `+`
+    - You are the first letter of the name you specified for your player
     
 - When the game ends, the client will print the results provided by the server and end the program.
+
+# Combat/Hit System
+
+- In this version of the game, adversaries and players can "attack" each other. To attack an adversary, simply choose a space that an advesary is located at. This will "attack" the adversary. When an adversary is attacked, their health points will decrement by the amount of points that a player can cause damage to._
+	- Players start with 8 points and cause 2 points worth of damage
+	- Zombies have 4 points and cause 2 points worth of damage
+	- Ghosts have 6 points and cause 1 point worth of damage
+
+- When a character is attacked, the program will print the amount of points that it has left. Once a character has no more health points left, they are ejected from the game. For adversaries, it means that they will no longer be making moves, and will not be shown in the view. For playeres, it means that they are ejected, and can no longer choose additional moves until the game advances levels.
+

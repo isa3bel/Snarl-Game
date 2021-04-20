@@ -59,6 +59,7 @@ public class GameManager {
    */
   public GameStatus doTurn(Character currentCharacter) {
     if (!currentCharacter.isInGame()) return GameStatus.PLAYING;
+    Location initialLocation = currentCharacter.getCurrentLocation();
 
     MoveValidator moveValidator;
     while (true) {
@@ -68,7 +69,8 @@ public class GameManager {
     }
     moveValidator.executeMove();
 
-    Interaction interaction = currentCharacter.makeInteraction(this.levels[this.currentLevel], players);
+    Interaction interaction = currentCharacter.makeInteraction(this.levels[this.currentLevel], players,
+        initialLocation);
     MoveResult levelResult = this.levels[this.currentLevel].interact(interaction, MoveResult::combine,
         currentCharacter.getCurrentLocation());
     MoveResult playerResult = this.players.stream()
@@ -79,9 +81,9 @@ public class GameManager {
 
     // update with move result
     currentCharacter.updateController(new MoveResultView(MoveResult.combine(levelResult, playerResult)));
-    this.players.forEach(player -> {
-      if (player.isInGame()) player.updateController(this);
-    });
+    this.players.stream()
+        .filter(Character::isInGame)
+        .forEach(player -> player.updateController(this));
     this.publisher.update(this);
 
     return checkGameStatus();

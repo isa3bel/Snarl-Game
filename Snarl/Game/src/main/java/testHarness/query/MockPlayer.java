@@ -39,11 +39,10 @@ public class MockPlayer extends Player {
     this.controller.update(view);
   }
 
-  @Override
   public void defend() {
     String keyResult = this.testOutput.remove(this.testOutput.size() - 1).replace("OK", "Eject");
     this.testOutput.add(keyResult);
-    super.defend();
+//    super.defend();
   }
 
   public void addToInventory(Item item) {
@@ -62,7 +61,7 @@ public class MockPlayer extends Player {
     }
     else {
       boolean didPass = location.equals(this.getCurrentLocation());
-      this.testOutput.add(this.getMoveResponse(didPass ? null : location, "OK"));
+      this.testOutput.add(this.getMoveResponse(didPass ? null : location));
     }
 
     super.moveTo(location);
@@ -71,12 +70,11 @@ public class MockPlayer extends Player {
   /**
    * Formats the string for the test output of a move response.
    * @param location the location of the move
-   * @param result the result of the move
    * @return the formatted string
    */
-  private String getMoveResponse(Location location, String result) {
+  private String getMoveResponse(Location location) {
     return "[ \"" + this.getName() + "\", { \"type\": \"move\", \"to\": " +
-        (location == null ? "null" : location.toString()) + " }, \"" + result + "\"]";
+        (location == null ? "null" : location.toString()) + " }, \"OK\"]";
   }
 
 }

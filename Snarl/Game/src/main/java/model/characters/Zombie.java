@@ -12,7 +12,7 @@ import model.ruleChecker.ZombieMoveValidator;
 public class Zombie extends Adversary {
 
   public Zombie(Location location, String name) {
-    super(location, name);
+    super(location, name, 4, 2);
     this.controller = new AdversaryAIController(ZombieAI.class,
         loc -> new ZombieMoveValidator(this, loc));
   }
