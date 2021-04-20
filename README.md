@@ -28,7 +28,7 @@
     - Ghosts are `G`
     - The key is `K`
     - The exit is `E`
-    - You are the first letter of the name you specified for your player
+    - You are `+` when playing over TCP and the first letter of your username when playing locally
     
 - When the game ends, the client will print the results provided by the server and end the program.
 
