@@ -66,7 +66,7 @@ public class PlayerMoveValidatorTest {
     ArrayList<Player> players = new ArrayList<>();
     players.add(player);
     PlayerMoveValidator validator = new PlayerMoveValidator(player, new Location(5, 1));
-    boolean isValid = validator.isValid(this.setupMultiRoomLevelWithAdversaries(), players);
+    boolean isValid = validator.isValid(player.getCurrentLocation(), this.setupMultiRoomLevelWithAdversaries(), players);
     assertTrue(isValid);
   }
 
@@ -76,7 +76,7 @@ public class PlayerMoveValidatorTest {
     ArrayList<Player> players = new ArrayList<>();
     players.add(player);
     PlayerMoveValidator validator = new PlayerMoveValidator(player, new Location(3, 1));
-    boolean isValid = validator.isValid(this.setupMultiRoomLevelWithAdversaries(), players);
+    boolean isValid = validator.isValid(player.getCurrentLocation(), this.setupMultiRoomLevelWithAdversaries(), players);
     assertTrue(isValid);
   }
 
@@ -86,7 +86,7 @@ public class PlayerMoveValidatorTest {
     ArrayList<Player> players = new ArrayList<>();
     players.add(player);
     PlayerMoveValidator validator = new PlayerMoveValidator(player, new Location(6, 1));
-    boolean isValid = validator.isValid(this.setupMultiRoomLevelWithAdversaries(), players);
+    boolean isValid = validator.isValid(player.getCurrentLocation(), this.setupMultiRoomLevelWithAdversaries(), players);
     assertTrue(isValid);
   }
 
@@ -96,7 +96,7 @@ public class PlayerMoveValidatorTest {
     ArrayList<Player> players = new ArrayList<>();
     players.add(player);
     PlayerMoveValidator validator = new PlayerMoveValidator(player, new Location(6, 0));
-    boolean isValid = validator.isValid(this.setupMultiRoomLevelWithAdversaries(), players);
+    boolean isValid = validator.isValid(player.getCurrentLocation(), this.setupMultiRoomLevelWithAdversaries(), players);
     assertTrue(isValid);
   }
 
@@ -106,7 +106,7 @@ public class PlayerMoveValidatorTest {
     ArrayList<Player> players = new ArrayList<>();
     players.add(player);
     PlayerMoveValidator validator = new PlayerMoveValidator(player, new Location(7, 1));
-    boolean isValid = validator.isValid(this.setupMultiRoomLevelWithAdversaries(), players);
+    boolean isValid = validator.isValid(player.getCurrentLocation(), this.setupMultiRoomLevelWithAdversaries(), players);
     assertTrue(isValid);
   }
 
@@ -116,7 +116,7 @@ public class PlayerMoveValidatorTest {
     ArrayList<Player> players = new ArrayList<>();
     players.add(player);
     PlayerMoveValidator validator = new PlayerMoveValidator(player, new Location(5, 0));
-    boolean isValid = validator.isValid(this.setupMultiRoomLevelWithAdversaries(), players);
+    boolean isValid = validator.isValid(player.getCurrentLocation(), this.setupMultiRoomLevelWithAdversaries(), players);
     assertFalse(isValid);
   }
 
@@ -128,7 +128,7 @@ public class PlayerMoveValidatorTest {
     players.add(player);
     players.add(otherPlayer);
     PlayerMoveValidator validator = new PlayerMoveValidator(player, new Location(4, 1));
-    boolean isValid = validator.isValid(this.setupMultiRoomLevelWithAdversaries(), players);
+    boolean isValid = validator.isValid(player.getCurrentLocation(), this.setupMultiRoomLevelWithAdversaries(), players);
     assertFalse(isValid);
   }
 
@@ -138,7 +138,7 @@ public class PlayerMoveValidatorTest {
     ArrayList<Player> players = new ArrayList<>();
     players.add(player);
     PlayerMoveValidator validator = new PlayerMoveValidator(player, new Location(4, 3));
-    boolean isValid = validator.isValid(this.setupMultiRoomLevelWithAdversaries(), players);
+    boolean isValid = validator.isValid(player.getCurrentLocation(), this.setupMultiRoomLevelWithAdversaries(), players);
     assertFalse(isValid);
   }
 }

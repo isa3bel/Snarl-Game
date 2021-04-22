@@ -118,7 +118,7 @@ public class Client {
       }
       System.out.println("Registering: " + nameInput);
       // Sending user's name to Server
-      socketReader.sendMessage(nameInput);
+      socketReader.sendMessage("{\"type\": \"player\", \"name\": \"" + nameInput + "\" }");
     }
     else {
       throw new IllegalStateException("Server expected to send \"name\". Got: " + received);

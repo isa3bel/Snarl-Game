@@ -64,7 +64,7 @@ public class GameManager {
     MoveValidator moveValidator;
     while (true) {
       moveValidator = currentCharacter.getNextMove();
-      if (this.isMoveValid(moveValidator)) break;
+      if (this.isMoveValid(currentCharacter.getCurrentLocation(), moveValidator)) break;
       currentCharacter.updateController(new MoveResultView(MoveResult.INVALID));
     }
     moveValidator.executeMove();
@@ -153,11 +153,12 @@ public class GameManager {
 
   /**
    * Are the rules of the given moveValidator valid for this game state?
+   * @param currentLocation the current location of this player
    * @param moveValidator the move validator to validate the move
    * @return whether this game state is compatible with the given move validator
    */
-  public boolean isMoveValid(MoveValidator moveValidator) {
-    return moveValidator.isValid(this.levels[this.currentLevel], this.players);
+  public boolean isMoveValid(Location currentLocation, MoveValidator moveValidator) {
+    return moveValidator.isValid(currentLocation, this.levels[this.currentLevel], this.players);
   }
 
   /**

@@ -18,8 +18,8 @@ public class MockPlayerMoveValidator extends PlayerMoveValidator {
   }
 
   @Override
-  public boolean isValid(Level level, List<Player> players) {
-    boolean isValid = super.isValid(level, players);
+  public boolean isValid(Location currentLocation, Level level, List<Player> players) {
+    boolean isValid = super.isValid(currentLocation, level, players);
 
     if (!isValid) {
       String invalidMove = "[ \"" + this.character.getName() + "\", { \"to\": " + this.nextMove.toString() +

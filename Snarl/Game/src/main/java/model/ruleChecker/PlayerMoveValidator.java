@@ -19,12 +19,12 @@ public class PlayerMoveValidator extends MoveValidator {
   }
 
   @Override
-  public boolean isValid(Level level, List<Player> players) {
+  public boolean isValid(Location currentLocation, Level level, List<Player> players) {
     boolean tileIsTraversable = this.isTraversable(level, new IsTraversable());
     boolean noPlayersOnSpace = players.stream()
             .filter(c -> !c.equals(this.character))
             .noneMatch(c -> this.nextMove.equals(c.getCurrentLocation()));
-    boolean isWithin2Squares = this.isValidDistance(MOVE_DISTANCE);
+    boolean isWithin2Squares = this.isValidDistance(currentLocation, MOVE_DISTANCE);
     return tileIsTraversable && noPlayersOnSpace && isWithin2Squares;
   }
 }

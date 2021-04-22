@@ -19,6 +19,8 @@ public class GameManagerBuilder {
   private final int currentLevel;
   private final Level[] levels;
   private final HashMap<String, Controller> playerNames;
+  private final ArrayList<Controller> zombies;
+  private final ArrayList<Controller> ghosts;
 
   /**
    * Initializes a game manager with the bare minimum required - the level.
@@ -40,6 +42,8 @@ public class GameManagerBuilder {
     this.currentLevel = currentLevel;
     this.levels = levels;
     this.playerNames = new HashMap<>();
+    this.zombies = new ArrayList<>();
+    this.ghosts = new ArrayList<>();
   }
 
   /**
@@ -57,6 +61,7 @@ public class GameManagerBuilder {
 
   /**
    * Adds a player with a generated game location (the most top left available space in the level).
+   * @param controller the controller for this playere
    * @return this builder with the player
    * @throws IllegalStateException if there are already 4 players registered
    */
@@ -65,6 +70,26 @@ public class GameManagerBuilder {
       throw new IllegalStateException("cannot have more than 4 players in a Snarl game");
     }
     this.playerNames.put(name, controller);
+    return this;
+  }
+
+  /**
+   * Adds a player with a generated game location (the most top left available space in the level).
+   * @param controller the controller that will control the added zombie
+   * @return this builder with the player
+   */
+  public GameManagerBuilder addZombie(Controller controller) {
+    this.zombies.add(controller);
+    return this;
+  }
+
+  /**
+   * Adds a player with a generated game location (the most top left available space in the level).
+   * @param controller the controller that will control the added ghost
+   * @return this builder with the player
+   */
+  public GameManagerBuilder addGhost(Controller controller) {
+    this.ghosts.add(controller);
     return this;
   }
 
@@ -103,13 +128,19 @@ public class GameManagerBuilder {
     int numZombies = ((levelIdx + 1) / 2) + 1;
     for (int zombieIdx = 0; zombieIdx < numZombies; zombieIdx++) {
       // location is set in level.addAdversary
-      adversaries.add(new Zombie(null, "zombie" + zombieIdx));
+      Zombie zombie = this.zombies.size() == 0
+          ? new Zombie(null, "zombie" + zombieIdx)
+          : new Zombie(null, "zombie" + zombieIdx, this.zombies.remove(0));
+      adversaries.add(zombie);
     }
 
     int numGhost = ((levelIdx + 1) - 1) / 2;
     for (int ghostIdx = 0; ghostIdx < numGhost; ghostIdx++) {
       // location is set in level.addAdversary
-      adversaries.add(new Ghost(null, "ghost" + ghostIdx));
+      Ghost ghost = this.ghosts.size() == 0
+          ? new Ghost(null, "ghost" + ghostIdx)
+          : new Ghost(null, "ghost" + ghostIdx, this.ghosts.remove(0));
+      adversaries.add(ghost);
     }
     return adversaries;
   }

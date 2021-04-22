@@ -38,7 +38,7 @@ public class AdversaryAIView implements View {
   public void renderLevel(Level level) {
     this.validMoves = level.filter((space, location) -> {
       MoveValidator moveValidator = this.moveValidatorCreator.apply(location);
-      return moveValidator.isValid(level, new ArrayList<>());
+      return moveValidator.isValid(this.currentLocation, level, new ArrayList<>());
     }).keySet().toArray(new Location[0]);
     this.closestWall = level.filter(new IsWall()).keySet().stream()
         .min(Comparator.comparingInt(location -> location.euclidianDistance(this.currentLocation)))
@@ -61,11 +61,12 @@ public class AdversaryAIView implements View {
   }
 
   public String toString() {
-    return "{\"validMoves\": " + Arrays.toString(validMoves) + ",\n" +
+    return "{ \"type\": \"adversary-update\",\n" +
+        "\"validMoves\": " + Arrays.toString(validMoves) + ",\n" +
         "\"nearestPlayerLocation\": " + this.nearestPlayerLocation + ",\n" +
         "\"keyLocation\": " + this.keyLocation +",\n" +
         "\"exitLocation\": " + this.exitLocation +",\n" +
-        "\"closestWall\": " + this.closestWall + "}";
+        "\"closestWall\": " + this.closestWall + " }";
   }
 
   /**

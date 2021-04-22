@@ -111,48 +111,48 @@ public class ZombieMoveValidatorTest {
   public void testCurrentLocationIsValidWhenNoOtherMovesAre() {
     GameManager gameManager = this.zombieNoValidMoves();
     MoveValidator moveValidator = new ZombieMoveValidator(this.zombie, new Location(7, 1));
-    assertTrue(gameManager.isMoveValid(moveValidator));
+    assertTrue(gameManager.isMoveValid(this.zombie.getCurrentLocation(), moveValidator));
   }
 
   @Test
   public void testAdversaryIsNotValid() {
     GameManager gameManager = this.zombieNoValidMoves();
     MoveValidator moveValidator = new ZombieMoveValidator(this.zombie, new Location(6, 1));
-    assertFalse(gameManager.isMoveValid(moveValidator));
+    assertFalse(gameManager.isMoveValid(this.zombie.getCurrentLocation(), moveValidator));
   }
 
   @Test
   public void test2AwayIsNotValid() {
     GameManager gameManager = this.zombieNoValidMoves();
     MoveValidator moveValidator = new ZombieMoveValidator(this.zombie, new Location(5, 1));
-    assertFalse(gameManager.isMoveValid(moveValidator));
+    assertFalse(gameManager.isMoveValid(this.zombie.getCurrentLocation(), moveValidator));
   }
 
   @Test
   public void testWallIsInvalid() {
     GameManager gameManager = this.zombieNoValidMoves();
     MoveValidator moveValidator = new ZombieMoveValidator(this.zombie, new Location(7, 0));
-    assertFalse(gameManager.isMoveValid(moveValidator));
+    assertFalse(gameManager.isMoveValid(this.zombie.getCurrentLocation(), moveValidator));
   }
 
   @Test
   public void testDoorIsInvalid() {
     GameManager gameManager = this.zombieHasValidMoves();
     MoveValidator moveValidator = new ZombieMoveValidator(this.zombie, new Location(4, 21));
-    assertFalse(gameManager.isMoveValid(moveValidator));
+    assertFalse(gameManager.isMoveValid(this.zombie.getCurrentLocation(), moveValidator));
   }
 
   @Test
   public void testPlayerIsValid() {
     GameManager gameManager = this.zombieHasValidMoves();
     MoveValidator moveValidator = new ZombieMoveValidator(this.zombie, new Location(4, 19));
-    assertTrue(gameManager.isMoveValid(moveValidator));
+    assertTrue(gameManager.isMoveValid(this.zombie.getCurrentLocation(), moveValidator));
   }
 
   @Test
   public void currentLocationIsInvalidIfOtherMoves() {
     GameManager gameManager = this.zombieHasValidMoves();
     MoveValidator moveValidator = new ZombieMoveValidator(this.zombie, new Location(4, 20));
-    assertFalse(gameManager.isMoveValid(moveValidator));
+    assertFalse(gameManager.isMoveValid(this.zombie.getCurrentLocation(), moveValidator));
   }
 }

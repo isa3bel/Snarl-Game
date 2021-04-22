@@ -1,5 +1,6 @@
 package model.characters;
 
+import model.controller.Controller;
 import model.level.Level;
 import model.ruleChecker.*;
 import model.level.Location;
@@ -11,6 +12,18 @@ import java.util.ArrayList;
  * An automated adversary in a Snarl game.
  */
 public abstract class Adversary extends Character {
+
+  /**
+   * The location of this adversary.
+   * @param location the location to initialize this adversary
+   * @param name arbitrary unused string for the name of the adversary
+   * @param health the the adversary's health
+   * @param attack the adversary's attack power
+   * @param controller the adversary's controller
+   */
+  protected Adversary(Location location, String name, int health, int attack, Controller controller) {
+    super(location, name, health, attack, controller);
+  }
 
   /**
    * The location of this adversary.

@@ -15,14 +15,14 @@ public class GhostMoveValidator extends MoveValidator {
   }
 
   @Override
-  public boolean isValid(Level level, List<Player> players) {
-    if (this.nextMove.equals(this.character.getCurrentLocation())) {
+  public boolean isValid(Location currentLocation, Level level, List<Player> players) {
+    if (this.nextMove.equals(currentLocation)) {
       return level.filter((space, location) -> location.isAdjacentTo(this.nextMove)
           && !this.isOccupiedByAdversary(level, location)).isEmpty();
     }
 
     // DECISION: ghosts cannot occupy the same tiles as other adversaries
-    boolean isWithinOneSquare = this.isValidDistance(1);
+    boolean isWithinOneSquare = this.isValidDistance(currentLocation, 1);
     boolean isOccupied = this.isOccupiedByAdversary(level, this.nextMove);
     return isWithinOneSquare && !isOccupied;
   }

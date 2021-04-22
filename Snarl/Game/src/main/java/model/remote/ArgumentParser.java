@@ -10,6 +10,7 @@ public class ArgumentParser {
   private static final String OBSERVE_ARGNAME = "observe";
   private static final String IP_ARG = "address";
   private static final String PORT_ARG = "port";
+  private static final String TYPE_ARG = "type";
 
   public String levelFile = "snarl.levels";
   public int maxNumPlayers = 4;
@@ -17,6 +18,7 @@ public class ArgumentParser {
   public String ip = "127.0.0.1";
   public boolean showObserverView = false;
   public int port = 45678;
+  public String type = "zombie";
 
   private static final Option LEVELS = Option.builder()
       .argName(String.valueOf(LEVELS_ARGNAME.charAt(0)))
@@ -72,33 +74,55 @@ public class ArgumentParser {
       .required(false)
       .build();
 
+  private static final Option TYPE = Option.builder()
+      .argName(String.valueOf(TYPE_ARG.charAt(0)))
+      .longOpt(TYPE_ARG)
+      .desc("The type of this adversary")
+      .hasArg()
+      .numberOfArgs(1)
+      .required(false)
+      .build();
+
   public ArgumentParser(String[] args) {
-    Options options = new Options();
-    options.addOption(LEVELS).addOption(CLIENTS).addOption(WAIT)
-        .addOption(OBSERVE).addOption(IP_ADDRESS).addOption(PORT_NUMBER);
+    Options options = new Options()
+        .addOption(LEVELS)
+        .addOption(CLIENTS)
+        .addOption(WAIT)
+        .addOption(OBSERVE)
+        .addOption(IP_ADDRESS)
+        .addOption(PORT_NUMBER)
+        .addOption(TYPE);
     CommandLineParser parser = new DefaultParser();
+    CommandLine commandLine;
     try {
-      CommandLine commandLine = parser.parse(options, args);
-      if (commandLine.hasOption(LEVELS_ARGNAME)) {
-        levelFile = commandLine.getOptionValue(LEVELS_ARGNAME);
-      }
-      if (commandLine.hasOption(CLIENT_ARGNAME)) {
-        maxNumPlayers = Integer.parseInt(commandLine.getOptionValue(CLIENT_ARGNAME));
-      }
-      if (commandLine.hasOption(WAIT_ARGNAME)) {
-        waitTime = Integer.parseInt(commandLine.getOptionValue(WAIT_ARGNAME));
-      }
-      if (commandLine.hasOption(OBSERVE_ARGNAME)) {
-        showObserverView = true;
-      }
-      if (commandLine.hasOption(IP_ARG)) {
-        ip = commandLine.getOptionValue(IP_ARG);
-      }
-      if (commandLine.hasOption(PORT_ARG)) {
-        port = Integer.parseInt(commandLine.getOptionValue(PORT_ARG));
-      }
-    } catch (ParseException exp) {
-      System.err.println( "Parsing failed.  Reason: " + exp.getMessage() );
+      commandLine = parser.parse(options, args);
+    }
+    catch (ParseException exp) {
+      throw new IllegalArgumentException("Parsing failed. Reason: " + exp.getMessage());
+    }
+
+    if (commandLine.hasOption(LEVELS_ARGNAME)) {
+      levelFile = commandLine.getOptionValue(LEVELS_ARGNAME);
+    }
+    if (commandLine.hasOption(CLIENT_ARGNAME)) {
+      maxNumPlayers = Integer.parseInt(commandLine.getOptionValue(CLIENT_ARGNAME));
+    }
+    if (commandLine.hasOption(WAIT_ARGNAME)) {
+      waitTime = Integer.parseInt(commandLine.getOptionValue(WAIT_ARGNAME));
+    }
+    if (commandLine.hasOption(OBSERVE_ARGNAME)) {
+      showObserverView = true;
+    }
+    if (commandLine.hasOption(IP_ARG)) {
+      ip = commandLine.getOptionValue(IP_ARG);
+    }
+    if (commandLine.hasOption(PORT_ARG)) {
+      port = Integer.parseInt(commandLine.getOptionValue(PORT_ARG));
+    }
+    if (commandLine.hasOption(TYPE_ARG)) {
+      type = commandLine.getOptionValue(TYPE_ARG);
+      if (!type.equals("zombie") && !type.equals("ghost"))
+        throw new IllegalArgumentException("type must be one of: [\"zombie\", \"ghost\"] ");
     }
   }
 }

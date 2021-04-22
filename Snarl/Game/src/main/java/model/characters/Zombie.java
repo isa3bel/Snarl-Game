@@ -1,5 +1,6 @@
 package model.characters;
 
+import model.controller.Controller;
 import model.level.Location;
 import model.controller.AdversaryAIController;
 import model.ruleChecker.MoveValidator;
@@ -15,6 +16,10 @@ public class Zombie extends Adversary {
     super(location, name, 4, 2);
     this.controller = new AdversaryAIController(ZombieAI.class,
         loc -> new ZombieMoveValidator(this, loc));
+  }
+
+  public Zombie(Location location, String name, Controller controller) {
+    super(location, name, 4, 2, controller);
   }
 
   @Override

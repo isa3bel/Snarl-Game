@@ -19,7 +19,7 @@ public class AdversaryAIController implements Controller {
 
   private final Type aiClass;
   private Location nextMove;
-  private Function<Location, MoveValidator> moveValidatorCreator;
+  private final Function<Location, MoveValidator> moveValidatorCreator;
   private final Gson gson = new GsonBuilder()
       .registerTypeAdapter(Location.class, new LocationDeserializer())
       .create();

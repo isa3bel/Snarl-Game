@@ -113,48 +113,48 @@ public class GhostMoveValidatorTest {
   public void testCurrentLocationIsValidWhenNoOtherMovesAre() {
     GameManager gameManager = this.ghostNoValidMoves();
     MoveValidator moveValidator = new GhostMoveValidator(this.ghost, new Location(7, 1));
-    assertTrue(gameManager.isMoveValid(moveValidator));
+    assertTrue(gameManager.isMoveValid(this.ghost.getCurrentLocation(), moveValidator));
   }
 
   @Test
   public void testAdversaryIsNotValid() {
     GameManager gameManager = this.ghostNoValidMoves();
     MoveValidator moveValidator = new GhostMoveValidator(this.ghost, new Location(6, 1));
-    assertFalse(gameManager.isMoveValid(moveValidator));
+    assertFalse(gameManager.isMoveValid(this.ghost.getCurrentLocation(), moveValidator));
   }
 
   @Test
   public void test2AwayIsNotValid() {
     GameManager gameManager = this.ghostNoValidMoves();
     MoveValidator moveValidator = new GhostMoveValidator(this.ghost, new Location(5, 1));
-    assertFalse(gameManager.isMoveValid(moveValidator));
+    assertFalse(gameManager.isMoveValid(this.ghost.getCurrentLocation(), moveValidator));
   }
 
   @Test
   public void testWallIsValid() {
     GameManager gameManager = this.ghostHasValidMoves();
     MoveValidator moveValidator = new GhostMoveValidator(this.ghost, new Location(3, 20));
-    assertTrue(gameManager.isMoveValid(moveValidator));
+    assertTrue(gameManager.isMoveValid(this.ghost.getCurrentLocation(), moveValidator));
   }
 
   @Test
   public void testDoorIsValid() {
     GameManager gameManager = this.ghostHasValidMoves();
     MoveValidator moveValidator = new GhostMoveValidator(this.ghost, new Location(4, 21));
-    assertTrue(gameManager.isMoveValid(moveValidator));
+    assertTrue(gameManager.isMoveValid(this.ghost.getCurrentLocation(), moveValidator));
   }
 
   @Test
   public void testPlayerIsValid() {
     GameManager gameManager = this.ghostHasValidMoves();
     MoveValidator moveValidator = new GhostMoveValidator(this.ghost, new Location(4, 19));
-    assertTrue(gameManager.isMoveValid(moveValidator));
+    assertTrue(gameManager.isMoveValid(this.ghost.getCurrentLocation(), moveValidator));
   }
 
   @Test
   public void currentLocationIsInvalidIfOtherMoves() {
     GameManager gameManager = this.ghostHasValidMoves();
     MoveValidator moveValidator = new GhostMoveValidator(this.ghost, new Location(4, 20));
-    assertFalse(gameManager.isMoveValid(moveValidator));
+    assertFalse(gameManager.isMoveValid(this.ghost.getCurrentLocation(), moveValidator));
   }
 }

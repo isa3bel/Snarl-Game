@@ -224,11 +224,12 @@ public class AdversaryAIViewTest {
     AdversaryAIView view = new AdversaryAIView(this.zombie.getCurrentLocation(),
         location -> new ZombieMoveValidator(this.zombie, location));
     gameManager.buildView(view);
-    assertEquals("{\"validMoves\": [[8, 2], [6, 2], [7, 3]],\n" +
+    assertEquals("{ \"type\": \"adversary-update\",\n" +
+        "\"validMoves\": [[8, 2], [6, 2], [7, 3]],\n" +
         "\"nearestPlayerLocation\": [7, 3],\n" +
         "\"keyLocation\": [6, 1],\n" +
         "\"exitLocation\": [6, 0],\n" +
-        "\"closestWall\": [7, 0]}", view.toString());
+        "\"closestWall\": [7, 0] }", view.toString());
   }
 
   @Test
@@ -237,11 +238,12 @@ public class AdversaryAIViewTest {
     AdversaryAIView view = new AdversaryAIView(this.ghost.getCurrentLocation(),
         location -> new GhostMoveValidator(this.ghost, location));
     gameManager.buildView(view);
-    assertEquals("{\"validMoves\": [[7, 0], [6, 1]],\n" +
+    assertEquals("{ \"type\": \"adversary-update\",\n" +
+        "\"validMoves\": [[7, 0], [6, 1]],\n" +
         "\"nearestPlayerLocation\": [5, 1],\n" +
         "\"keyLocation\": [6, 1],\n" +
         "\"exitLocation\": [6, 0],\n" +
-        "\"closestWall\": [7, 0]}", view.toString());
+        "\"closestWall\": [7, 0] }", view.toString());
   }
 
   @Test
@@ -250,11 +252,12 @@ public class AdversaryAIViewTest {
     AdversaryAIView view = new AdversaryAIView(this.zombie.getCurrentLocation(),
         location -> new ZombieMoveValidator(this.zombie, location));
     gameManager.buildView(view);
-    assertEquals("{\"validMoves\": [[4, 20]],\n" +
+    assertEquals("{ \"type\": \"adversary-update\",\n" +
+        "\"validMoves\": [[4, 20]],\n" +
         "\"nearestPlayerLocation\": [5, 1],\n" +
         "\"keyLocation\": [6, 1],\n" +
         "\"exitLocation\": [6, 0],\n" +
-        "\"closestWall\": [4, 19]}", view.toString());
+        "\"closestWall\": [4, 19] }", view.toString());
   }
 
   @Test
@@ -263,11 +266,12 @@ public class AdversaryAIViewTest {
     AdversaryAIView view = new AdversaryAIView(this.ghost.getCurrentLocation(),
         location -> new GhostMoveValidator(this.ghost, location));
     gameManager.buildView(view);
-    assertEquals("{\"validMoves\": [[7, 1]],\n" +
+    assertEquals("{ \"type\": \"adversary-update\",\n" +
+        "\"validMoves\": [[7, 1]],\n" +
         "\"nearestPlayerLocation\": [5, 1],\n" +
         "\"keyLocation\": [6, 1],\n" +
         "\"exitLocation\": [6, 0],\n" +
-        "\"closestWall\": [7, 0]}", view.toString());
+        "\"closestWall\": [7, 0] }", view.toString());
   }
 
   @Test
@@ -276,10 +280,11 @@ public class AdversaryAIViewTest {
     AdversaryAIView view = new AdversaryAIView(this.ghost.getCurrentLocation(),
         location -> new GhostMoveValidator(this.ghost, location));
     gameManager.buildView(view);
-    assertEquals("{\"validMoves\": [[7, 1]],\n" +
+    assertEquals("{ \"type\": \"adversary-update\",\n" +
+        "\"validMoves\": [[7, 1]],\n" +
         "\"nearestPlayerLocation\": [5, 1],\n" +
         "\"keyLocation\": null,\n" +
         "\"exitLocation\": [6, 0],\n" +
-        "\"closestWall\": [7, 0]}", view.toString());
+        "\"closestWall\": [7, 0] }", view.toString());
   }
 }

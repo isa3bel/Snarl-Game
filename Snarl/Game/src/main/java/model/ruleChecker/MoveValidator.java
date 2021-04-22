@@ -34,9 +34,12 @@ public abstract class MoveValidator {
 
   /**
    * Is the nextMove valid for this character?
+   * @param currentLocation the current location of this character
+   * @param level the level that this move is happening in
+   * @param players the players in this game
    * @return if the move is valid
    */
-  public abstract boolean isValid(Level level, List<Player> players);
+  public abstract boolean isValid(Location currentLocation, Level level, List<Player> players);
 
   /**
    * Is the space a valid type for this move validator?
@@ -59,11 +62,12 @@ public abstract class MoveValidator {
 
   /**
    * Is the nextMove within the max distance that this validator allows?
+   * @param currentLocation the current location of this character
    * @param moveDistance the max euclidian distance to the next move
    * @return whether the players location is within the given distance of the nextMove
    */
-  protected boolean isValidDistance(int moveDistance) {
-    return this.nextMove.euclidianDistance(this.character.getCurrentLocation()) <= moveDistance;
+  protected boolean isValidDistance(Location currentLocation, int moveDistance) {
+    return this.nextMove.euclidianDistance(currentLocation) <= moveDistance;
   }
 
   /**
