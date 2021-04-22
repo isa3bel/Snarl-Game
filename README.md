@@ -40,4 +40,29 @@
 	- Ghosts have 6 points and cause 1 point worth of damage
 
 - When a character is attacked, the program will print the amount of points that it has left. Once a character has no more health points left, they are ejected from the game. For adversaries, it means that they will no longer be making moves, and will not be shown in the view. For playeres, it means that they are ejected, and can no longer choose additional moves until the game advances levels.
+  
+# Remote Adversaries
 
+- For each adversary you want to run remotely, run an instance of the `snarlAdversaryClient` executable.
+- In addition to the `--port` and `--address` arguments, the adversary client also accepts a `--type` argument which must be one of "zombie" or "ghost" for the type of adversary this remove client will control.
+- Adversaries still only exist in a single level. Remote adversary clients will be used in the earliest levels first. If there are more remote adversaries provided than adveraries in the game, nothing will happen (the extra adversaries will just not be used).
+- Actor registration has updated to still request the registration with `"name"` message. Now, the server expects a response in the form:
+```
+{
+  "type": (actor-type),
+  "name": string
+}
+```
+where `(actor-type)` represents one of "player", "zombie", or "ghost".
+- The `snarlServer` sends "adversary-update" messages to the client when the adversary is updated. These updates come in the form:
+```
+{
+  "type": "adversary-update",
+  "validMoves": (location-list),
+  "nearestPlayerLocation": (location),
+  "keyLocation": (location),
+  "exitLocation": (location),
+  "closestWall": (location)
+}
+```
+- When the server is requesting a move from the client, it will send a `"move"` message and expect a returned message `{ "type": "move", "to": (location) }`
